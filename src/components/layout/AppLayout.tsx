@@ -8,6 +8,7 @@ import {
   LogoutOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
+  GoogleOutlined,
 } from '@ant-design/icons'
 import { useAuth } from '../../hooks/useAuth'
 import { useAppStore } from '../../stores'
@@ -18,7 +19,7 @@ function AppLayout() {
   const { sidebarCollapsed: collapsed, toggleSidebar } = useAppStore()
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading, signIn, signOut } = useAuth()
+  const { user, loading, signIn, signInAnonymous, signOut } = useAuth()
 
   const menuItems = [
     {
@@ -40,10 +41,33 @@ function AppLayout() {
 
   const userMenuItems = [
     {
+      key: 'profile',
+      label: user?.displayName || user?.email || (user?.isAnonymous ? 'Anonymous User' : 'User'),
+      disabled: true,
+    },
+    {
+      type: 'divider' as const,
+    },
+    {
       key: 'signout',
       icon: <LogoutOutlined />,
       label: 'Sign Out',
       onClick: signOut,
+    },
+  ]
+
+  const signInMenuItems = [
+    {
+      key: 'google',
+      icon: <GoogleOutlined />,
+      label: 'Sign in with Google',
+      onClick: signIn,
+    },
+    {
+      key: 'anonymous',
+      icon: <UserOutlined />,
+      label: 'Continue as Guest',
+      onClick: signInAnonymous,
     },
   ]
 
@@ -111,9 +135,11 @@ function AppLayout() {
                 />
               </Dropdown>
             ) : (
-              <Button type="primary" onClick={signIn}>
-                Sign In with Google
-              </Button>
+              <Dropdown menu={{ items: signInMenuItems }} placement="bottomRight">
+                <Button type="primary">
+                  Sign In
+                </Button>
+              </Dropdown>
             )}
           </div>
         </Header>
