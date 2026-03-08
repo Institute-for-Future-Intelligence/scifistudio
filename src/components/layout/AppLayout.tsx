@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { Layout, Menu, Button, Avatar, Dropdown, Spin } from 'antd'
 import {
@@ -11,11 +10,12 @@ import {
   MenuUnfoldOutlined,
 } from '@ant-design/icons'
 import { useAuth } from '../../hooks/useAuth'
+import { useAppStore } from '../../stores'
 
 const { Header, Sider, Content } = Layout
 
 function AppLayout() {
-  const [collapsed, setCollapsed] = useState(false)
+  const { sidebarCollapsed: collapsed, toggleSidebar } = useAppStore()
   const navigate = useNavigate()
   const location = useLocation()
   const { user, loading, signIn, signOut } = useAuth()
@@ -99,7 +99,7 @@ function AppLayout() {
           <Button
             type="text"
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
+            onClick={toggleSidebar}
           />
           <div>
             {user ? (
