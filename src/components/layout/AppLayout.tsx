@@ -12,6 +12,7 @@ import {
 } from '@ant-design/icons'
 import { useAuth } from '../../hooks/useAuth'
 import { useAppStore } from '../../stores'
+import Logo from '../common/Logo'
 
 const { Header, Sider, Content } = Layout
 
@@ -95,12 +96,16 @@ function AppLayout() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: 8,
             borderBottom: '1px solid #f0f0f0',
           }}
         >
-          <h1 style={{ margin: 0, fontSize: collapsed ? 16 : 20, fontWeight: 600 }}>
-            {collapsed ? 'SF' : 'Sci-Fi Studio'}
-          </h1>
+          <Logo size={collapsed ? 28 : 32} />
+          {!collapsed && (
+            <h1 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: '#4f46e5' }}>
+              Sci-Fi Studio
+            </h1>
+          )}
         </div>
         <Menu
           mode="inline"
