@@ -1,0 +1,52 @@
+import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import { storage } from './firebase'
+
+export const uploadBase64Image = async (
+  base64Data: string,
+  path: string
+): Promise<string> => {
+  // Remove data URL prefix if present
+  const base64Content = base64Data.includes(',')
+    ? base64Data.split(',')[1]
+    : base64Data
+
+  const storageRef = ref(storage, path)
+  await uploadString(storageRef, base64Content, 'base64', {
+    contentType: 'image/png',
+  })
+
+  const downloadUrl = await getDownloadURL(storageRef)
+  return downloadUrl
+}
+
+export const uploadStorybookImages = async (
+  userId: string,
+  storybookId: string,
+  frames: Array<{ caption: string; imageUrl: string }>
+): Promise<Array<{ caption: string; imageUrl: string }>> => {
+  const uploadedFrames = await Promise.all(
+    frames.map(async (frame, index) => {
+      if (!frame.imageUrl || !frame.imageUrl.startsWith('data:')) {
+        // Already a URL or empty, keep as is
+        return frame
+      }
+
+      try {
+        const path = `storybooks/${userId}/${storybookId}/frame_${index}.png`
+        const downloadUrl = await uploadBase64Image(frame.imageUrl, path)
+        return {
+          caption: frame.caption,
+          imageUrl: downloadUrl,
+        }
+      } catch (error) {
+        console.error(`Failed to upload frame ${index}:`, error)
+        return {
+          caption: frame.caption,
+          imageUrl: '', // Clear failed image
+        }
+      }
+    })
+  )
+
+  return uploadedFrames
+}

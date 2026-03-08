@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(npx tsc:*)",
-      "Bash(npm run deploy:*)"
+      "Bash(npm run deploy:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(npm run dev:*)"
     ]
   }
 }
