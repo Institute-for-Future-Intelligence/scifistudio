@@ -13,8 +13,9 @@ import {
 import { useAuth } from '../../hooks/useAuth'
 import { useAppStore } from '../../stores'
 import Logo from '../common/Logo'
+import CookieConsent from '../common/CookieConsent'
 
-const { Header, Sider, Content } = Layout
+const { Header, Sider, Content, Footer } = Layout
 
 function AppLayout() {
   const { sidebarCollapsed: collapsed, toggleSidebar } = useAppStore()
@@ -151,7 +152,11 @@ function AppLayout() {
         <Content style={{ margin: 24, padding: 24, background: '#fff', borderRadius: 8 }}>
           <Outlet />
         </Content>
+        <Footer style={{ textAlign: 'center', color: '#999', background: 'transparent' }}>
+          &copy; {new Date().getFullYear()} Institute for Future Intelligence, Inc. All rights reserved.
+        </Footer>
       </Layout>
+      <CookieConsent />
     </Layout>
   )
 }

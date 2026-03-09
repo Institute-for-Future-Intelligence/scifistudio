@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List } from 'antd'
-import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined } from '@ant-design/icons'
+import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select } from 'antd'
+import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useAuth } from '../../hooks/useAuth'
 import { generateStorybook, enhanceStoryPrompt, StoryFrame } from '../../services/gemini'
 import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook } from '../../services/firestore'
@@ -28,6 +28,7 @@ function StoryEditor() {
   const [savedStorybooks, setSavedStorybooks] = useState<Storybook[]>([])
   const [showLoadModal, setShowLoadModal] = useState(false)
   const [loadingStorybooks, setLoadingStorybooks] = useState(false)
+  const [frameCount, setFrameCount] = useState(5)
 
   useEffect(() => {
     if (user) {
@@ -98,6 +99,10 @@ function StoryEditor() {
   }
 
   const handleGenerateStorybook = async () => {
+    if (!storyTitle.trim()) {
+      message.warning('Please enter a story title first')
+      return
+    }
     const finalPrompt = enhancedPrompt || prompt
     if (!finalPrompt.trim()) {
       message.warning('Please enter a story idea first')
@@ -112,7 +117,7 @@ function StoryEditor() {
     try {
       const generatedFrames = await generateStorybook(
         finalPrompt,
-        2,
+        frameCount,
         (statusMsg, frameNum) => {
           setStatus(statusMsg)
           if (frameNum > 0) setCurrentPage(frameNum - 1)
@@ -120,9 +125,6 @@ function StoryEditor() {
       )
       setFrames(generatedFrames)
       setCurrentPage(0)
-      if (!storyTitle) {
-        setStoryTitle(prompt.slice(0, 50) + (prompt.length > 50 ? '...' : ''))
-      }
       message.success('Storybook generated successfully!')
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate storybook'
@@ -275,10 +277,25 @@ function StoryEditor() {
           >
             {storybookId ? 'Update' : 'Save'}
           </Button>
+          <Button
+            icon={<ShareAltOutlined />}
+            onClick={() => {
+              if (storybookId) {
+                const shareUrl = `${window.location.origin}/view/${storybookId}`
+                navigator.clipboard.writeText(shareUrl)
+                message.success('Share link copied to clipboard!')
+              } else {
+                message.warning('Save the storybook first to get a share link')
+              }
+            }}
+            disabled={!storybookId}
+          >
+            Share
+          </Button>
         </Space>
       </div>
       <Paragraph style={{ color: '#666' }}>
-        Create a 2-page illustrated sci-fi storybook with AI.
+        Create an illustrated sci-fi storybook with AI.
       </Paragraph>
 
       {error && (
@@ -296,6 +313,17 @@ function StoryEditor() {
       <Card style={{ marginTop: 24 }}>
         <Space direction="vertical" style={{ width: '100%' }} size="large">
           <div>
+            <label style={{ fontWeight: 500 }}>Story Title <span style={{ color: '#ff4d4f' }}>*</span></label>
+            <Input
+              value={storyTitle}
+              onChange={(e) => setStoryTitle(e.target.value)}
+              placeholder="Enter a title for your storybook..."
+              style={{ marginTop: 8 }}
+              disabled={loading}
+            />
+          </div>
+
+          <div>
             <label style={{ fontWeight: 500 }}>Story Idea <span style={{ color: '#ff4d4f' }}>*</span></label>
             <TextArea
               rows={3}
@@ -308,13 +336,23 @@ function StoryEditor() {
           </div>
 
           <div>
-            <label style={{ fontWeight: 500 }}>Story Title <span style={{ color: '#999', fontWeight: 400 }}>(optional)</span></label>
-            <Input
-              value={storyTitle}
-              onChange={(e) => setStoryTitle(e.target.value)}
-              placeholder="Enter a title for your storybook..."
-              style={{ marginTop: 8 }}
+            <label style={{ fontWeight: 500 }}>Number of Pages</label>
+            <Select
+              value={frameCount}
+              onChange={(value) => setFrameCount(value)}
+              style={{ width: 120, marginLeft: 12 }}
               disabled={loading}
+              options={[
+                { value: 2, label: '2 pages' },
+                { value: 3, label: '3 pages' },
+                { value: 4, label: '4 pages' },
+                { value: 5, label: '5 pages' },
+                { value: 6, label: '6 pages' },
+                { value: 7, label: '7 pages' },
+                { value: 8, label: '8 pages' },
+                { value: 9, label: '9 pages' },
+                { value: 10, label: '10 pages' },
+              ]}
             />
           </div>
 
@@ -345,10 +383,10 @@ function StoryEditor() {
             icon={<BookOutlined />}
             onClick={handleGenerateStorybook}
             loading={loading}
-            disabled={!prompt.trim() && !enhancedPrompt.trim()}
+            disabled={!storyTitle.trim() || (!prompt.trim() && !enhancedPrompt.trim())}
             size="large"
           >
-            Generate 2-Page Storybook
+            Generate {frameCount}-Page Storybook
           </Button>
 
           {status && (

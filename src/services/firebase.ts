@@ -3,13 +3,14 @@ import { getAuth } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
 
+// Firebase config - public client-side values (protected by security rules)
 const firebaseConfig = {
-  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
-  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
-  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
-  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
-  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  apiKey: "AIzaSyAhY7pFGcL8GJM8auu4TTQGFs3TlBV2oS8",
+  authDomain: "sci-fi-studio.firebaseapp.com",
+  projectId: "sci-fi-studio",
+  storageBucket: "sci-fi-studio.firebasestorage.app",
+  messagingSenderId: "231343877943",
+  appId: "1:231343877943:web:1fc46e72331eb5e488f4b2",
 }
 
 const app = initializeApp(firebaseConfig)

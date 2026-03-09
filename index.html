@@ -4,16 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sci-Fi Studio</title>
-    <script>
-      // Handle SPA redirect from 404.html
-      (function() {
-        const redirect = sessionStorage.getItem('spa-redirect');
-        if (redirect) {
-          sessionStorage.removeItem('spa-redirect');
-          window.history.replaceState(null, '', '/scifistudio/' + redirect);
-        }
-      })();
-    </script>
   </head>
   <body>
     <div id="root"></div>
