@@ -26,12 +26,22 @@ export interface Project {
   updatedAt: Timestamp
 }
 
+export interface StorybookRating {
+  oderId: string
+  rating: number
+  createdAt: Timestamp
+}
+
 export interface Storybook {
   id?: string
   userId: string
+  authorName?: string
   title: string
   prompt: string
   frames: StoryFrame[]
+  ratings?: StorybookRating[]
+  averageRating?: number
+  ratingCount?: number
   createdAt: Timestamp
   updatedAt: Timestamp
 }
@@ -171,4 +181,53 @@ export const updateStorybook = async (
 export const deleteStorybook = async (id: string): Promise<void> => {
   const docRef = doc(db, 'storybooks', id)
   await deleteDoc(docRef)
+}
+
+export const rateStorybook = async (
+  storybookId: string,
+  oderId: string,
+  rating: number
+): Promise<{ averageRating: number; ratingCount: number }> => {
+  const docRef = doc(db, 'storybooks', storybookId)
+  const snapshot = await getDoc(docRef)
+
+  if (!snapshot.exists()) {
+    throw new Error('Storybook not found')
+  }
+
+  const data = snapshot.data() as Storybook
+  const existingRatings = data.ratings || []
+
+  // Check if user already rated
+  const existingIndex = existingRatings.findIndex(r => r.oderId === oderId)
+
+  const newRating: StorybookRating = {
+    oderId,
+    rating,
+    createdAt: Timestamp.now(),
+  }
+
+  let updatedRatings: StorybookRating[]
+  if (existingIndex >= 0) {
+    // Update existing rating
+    updatedRatings = [...existingRatings]
+    updatedRatings[existingIndex] = newRating
+  } else {
+    // Add new rating
+    updatedRatings = [...existingRatings, newRating]
+  }
+
+  // Calculate average
+  const totalRating = updatedRatings.reduce((sum, r) => sum + r.rating, 0)
+  const averageRating = totalRating / updatedRatings.length
+  const ratingCount = updatedRatings.length
+
+  await updateDoc(docRef, {
+    ratings: updatedRatings,
+    averageRating,
+    ratingCount,
+    updatedAt: Timestamp.now(),
+  })
+
+  return { averageRating, ratingCount }
 }

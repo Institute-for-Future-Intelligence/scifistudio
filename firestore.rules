@@ -1,0 +1,33 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Storybooks - public read, authenticated write for own documents
+    match /storybooks/{storybookId} {
+      // Anyone can read storybooks (for public sharing)
+      allow read: if true;
+
+      // Only authenticated users can create their own storybooks
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+
+      // Users can update their own storybooks, or anyone can update ratings
+      allow update: if request.auth != null
+        && resource.data.userId == request.auth.uid
+        || (request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['ratings', 'averageRating', 'ratingCount', 'updatedAt']));
+
+      // Only owners can delete
+      allow delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+    }
+
+    // Projects - only authenticated users can access their own
+    match /projects/{projectId} {
+      allow read, write: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+    }
+  }
+}

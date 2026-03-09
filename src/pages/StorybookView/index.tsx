@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Card, Button, Spin, Image } from 'antd'
-import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined } from '@ant-design/icons'
-import { getStorybook, Storybook } from '../../services/firestore'
+import { Typography, Card, Button, Spin, Image, Rate, message, Space } from 'antd'
+import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined } from '@ant-design/icons'
+import { getStorybook, rateStorybook, Storybook } from '../../services/firestore'
 import { StoryFrame } from '../../services/gemini'
 
-const { Title, Paragraph } = Typography
+const { Title, Paragraph, Text } = Typography
 
 function StorybookView() {
   const { id } = useParams<{ id: string }>()
@@ -14,6 +14,18 @@ function StorybookView() {
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
   const [error, setError] = useState('')
+  const [userRating, setUserRating] = useState(0)
+  const [submittingRating, setSubmittingRating] = useState(false)
+
+  // Generate a unique viewer ID for anonymous rating
+  const getViewerId = () => {
+    let viewerId = localStorage.getItem('viewer-id')
+    if (!viewerId) {
+      viewerId = 'viewer-' + Math.random().toString(36).substring(2, 15)
+      localStorage.setItem('viewer-id', viewerId)
+    }
+    return viewerId
+  }
 
   useEffect(() => {
     if (id) {
@@ -27,6 +39,12 @@ function StorybookView() {
       const data = await getStorybook(storybookId)
       if (data) {
         setStorybook(data)
+        // Check if user already rated
+        const viewerId = getViewerId()
+        const existingRating = data.ratings?.find(r => r.oderId === viewerId)
+        if (existingRating) {
+          setUserRating(existingRating.rating)
+        }
       } else {
         setError('Storybook not found')
       }
@@ -35,6 +53,28 @@ function StorybookView() {
       setError('Failed to load storybook')
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleRating = async (value: number) => {
+    if (!id || submittingRating) return
+
+    setSubmittingRating(true)
+    try {
+      const viewerId = getViewerId()
+      const result = await rateStorybook(id, viewerId, value)
+      setUserRating(value)
+      setStorybook(prev => prev ? {
+        ...prev,
+        averageRating: result.averageRating,
+        ratingCount: result.ratingCount,
+      } : null)
+      message.success('Thank you for rating!')
+    } catch (err) {
+      console.error('Failed to submit rating:', err)
+      message.error('Failed to submit rating')
+    } finally {
+      setSubmittingRating(false)
     }
   }
 
@@ -87,11 +127,39 @@ function StorybookView() {
   return (
     <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: 24 }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-          <Title level={2} style={{ margin: 0 }}>{storybook.title}</Title>
-          <Button icon={<HomeOutlined />} onClick={() => navigate('/')}>
-            Home
-          </Button>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+          <div>
+            <Title level={2} style={{ margin: 0 }}>{storybook.title}</Title>
+            <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
+              <Text type="secondary">
+                <UserOutlined style={{ marginRight: 4 }} />
+                {storybook.authorName || 'Unknown Author'}
+              </Text>
+              {storybook.ratingCount && storybook.ratingCount > 0 && (
+                <Text type="secondary">
+                  <Rate disabled value={storybook.averageRating} allowHalf style={{ fontSize: 14 }} />
+                  <span style={{ marginLeft: 8 }}>
+                    {storybook.averageRating?.toFixed(1)} ({storybook.ratingCount} {storybook.ratingCount === 1 ? 'rating' : 'ratings'})
+                  </span>
+                </Text>
+              )}
+            </div>
+          </div>
+          <Space>
+            <Button
+              icon={<ShareAltOutlined />}
+              onClick={() => {
+                const shareUrl = window.location.href
+                navigator.clipboard.writeText(shareUrl)
+                message.success('Share link copied to clipboard!')
+              }}
+            >
+              Share
+            </Button>
+            <Button icon={<HomeOutlined />} onClick={() => navigate('/')}>
+              Home
+            </Button>
+          </Space>
         </div>
 
         <Card>
@@ -263,6 +331,24 @@ function StorybookView() {
               </Paragraph>
             </div>
           )}
+        </Card>
+
+        {/* Rating Section */}
+        <Card style={{ marginTop: 24 }}>
+          <div style={{ textAlign: 'center' }}>
+            <Title level={4} style={{ marginBottom: 16 }}>Rate this Storybook</Title>
+            <Rate
+              value={userRating}
+              onChange={handleRating}
+              disabled={submittingRating}
+              style={{ fontSize: 32 }}
+            />
+            {userRating > 0 && (
+              <Paragraph style={{ marginTop: 8, color: '#666' }}>
+                You rated this storybook {userRating} star{userRating !== 1 ? 's' : ''}
+              </Paragraph>
+            )}
+          </div>
         </Card>
 
         <div style={{ textAlign: 'center', marginTop: 24, color: '#999', fontSize: 12 }}>

@@ -36,17 +36,74 @@ export const generateStorybook = async (
   frameCount: number = 10,
   onProgress?: (status: string, frame: number) => void
 ): Promise<StoryFrame[]> => {
-  onProgress?.('Generating storybook (this may take a few minutes)...', 0)
+  const frames: StoryFrame[] = []
 
-  const generateStorybookFn = httpsCallable<
-    { prompt: string; frameCount: number },
-    { frames: StoryFrame[] }
-  >(functions, 'generateStorybook', { timeout: 540000 })
+  // Step 1: Generate story outline
+  onProgress?.(`Creating story outline...`, 0)
 
-  const result = await generateStorybookFn({ prompt, frameCount })
+  const outlinePrompt = `Create a ${frameCount}-page sci-fi storybook based on this concept: "${prompt}"
 
-  onProgress?.('Storybook complete!', frameCount)
-  return result.data.frames
+For each page, provide:
+1. A short caption (1-2 sentences) that tells the story
+2. A detailed visual description for illustration
+
+Format EXACTLY as:
+PAGE 1:
+Caption: [story text for this page]
+Visual: [detailed illustration description]
+
+PAGE 2:
+Caption: [story text for this page]
+Visual: [detailed illustration description]
+
+...continue for all ${frameCount} pages.
+
+Make it a compelling narrative with a beginning, middle, and end.`
+
+  const outline = await generateWithGemini(outlinePrompt)
+
+  // Parse the outline
+  const pageRegex = /PAGE \d+:\s*Caption:\s*(.*?)\s*Visual:\s*(.*?)(?=PAGE \d+:|$)/gis
+  const pages: Array<{ caption: string; visual: string }> = []
+
+  let match
+  while ((match = pageRegex.exec(outline)) !== null) {
+    pages.push({
+      caption: match[1].trim(),
+      visual: match[2].trim(),
+    })
+  }
+
+  if (pages.length === 0) {
+    throw new Error('Failed to generate story outline')
+  }
+
+  // Step 2: Generate images for each page one by one
+  const totalPages = Math.min(pages.length, frameCount)
+
+  for (let i = 0; i < totalPages; i++) {
+    onProgress?.(`Generating image ${i + 1} of ${totalPages}...`, i + 1)
+
+    try {
+      const imagePrompt = `Create a beautiful sci-fi storybook illustration: ${pages[i].visual}. Style: cinematic, detailed, vibrant colors, suitable for a storybook.`
+      const imageUrl = await generateImage(imagePrompt)
+
+      frames.push({
+        caption: pages[i].caption,
+        imageUrl: imageUrl,
+      })
+    } catch (error) {
+      console.error(`Failed to generate image for page ${i + 1}:`, error)
+      // Continue with empty image
+      frames.push({
+        caption: pages[i].caption,
+        imageUrl: '',
+      })
+    }
+  }
+
+  onProgress?.('Storybook complete!', totalPages)
+  return frames
 }
 
 export const enhanceStoryPrompt = async (userPrompt: string): Promise<string> => {

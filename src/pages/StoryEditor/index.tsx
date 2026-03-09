@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select } from 'antd'
+import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select, Progress } from 'antd'
 import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useAuth } from '../../hooks/useAuth'
 import { generateStorybook, enhanceStoryPrompt, StoryFrame } from '../../services/gemini'
@@ -29,6 +29,22 @@ function StoryEditor() {
   const [showLoadModal, setShowLoadModal] = useState(false)
   const [loadingStorybooks, setLoadingStorybooks] = useState(false)
   const [frameCount, setFrameCount] = useState(5)
+  const [generationProgress, setGenerationProgress] = useState(0)
+  const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+
+  // Warn user before leaving page with unsaved changes
+  useEffect(() => {
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasUnsavedChanges) {
+        e.preventDefault()
+        e.returnValue = ''
+        return ''
+      }
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [hasUnsavedChanges])
 
   useEffect(() => {
     if (user) {
@@ -52,6 +68,7 @@ function StoryEditor() {
         setStoryTitle(storybook.title)
         setFrames(storybook.frames)
         setCurrentPage(0)
+        setHasUnsavedChanges(false)
       } else {
         message.error('Storybook not found')
         navigate('/story')
@@ -113,6 +130,7 @@ function StoryEditor() {
     setError('')
     setFrames([])
     setCurrentPage(0)
+    setGenerationProgress(0)
 
     try {
       const generatedFrames = await generateStorybook(
@@ -120,12 +138,20 @@ function StoryEditor() {
         frameCount,
         (statusMsg, frameNum) => {
           setStatus(statusMsg)
+          setGenerationProgress(frameNum)
           if (frameNum > 0) setCurrentPage(frameNum - 1)
         }
       )
       setFrames(generatedFrames)
       setCurrentPage(0)
+      setHasUnsavedChanges(true)
       message.success('Storybook generated successfully!')
+      // Remind user to save if this is a new storybook
+      if (!storybookId) {
+        setTimeout(() => {
+          message.warning('Remember to save your storybook to avoid losing your work!', 5)
+        }, 1500)
+      }
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Failed to generate storybook'
       setError(errorMessage)
@@ -133,6 +159,7 @@ function StoryEditor() {
     } finally {
       setLoading(false)
       setStatus('')
+      setGenerationProgress(0)
     }
   }
 
@@ -151,22 +178,26 @@ function StoryEditor() {
     setSaving(true)
     try {
       if (storybookId) {
-        // Update existing
+        // Update existing (also set authorName if missing)
         await updateStorybook(storybookId, {
+          authorName: user.displayName || (user.isAnonymous ? 'Anonymous' : 'Unknown'),
           title,
           prompt: enhancedPrompt || prompt,
           frames,
         }, user.uid)
+        setHasUnsavedChanges(false)
         message.success('Storybook updated!')
       } else {
         // Create new
         const newId = await createStorybook({
           userId: user.uid,
+          authorName: user.displayName || (user.isAnonymous ? 'Anonymous' : 'Unknown'),
           title,
           prompt: enhancedPrompt || prompt,
           frames,
         })
         setStorybookId(newId)
+        setHasUnsavedChanges(false)
         navigate(`/story/${newId}`, { replace: true })
         message.success('Storybook saved!')
       }
@@ -187,6 +218,7 @@ function StoryEditor() {
     setFrames([])
     setCurrentPage(0)
     setError('')
+    setHasUnsavedChanges(false)
     navigate('/story')
   }
 
@@ -197,6 +229,7 @@ function StoryEditor() {
     setStoryTitle(storybook.title)
     setFrames(storybook.frames)
     setCurrentPage(0)
+    setHasUnsavedChanges(false)
     setShowLoadModal(false)
     navigate(`/story/${storybook.id}`, { replace: true })
     message.success('Storybook loaded!')
@@ -281,16 +314,15 @@ function StoryEditor() {
             icon={<ShareAltOutlined />}
             onClick={() => {
               if (storybookId) {
-                const shareUrl = `${window.location.origin}/view/${storybookId}`
-                navigator.clipboard.writeText(shareUrl)
-                message.success('Share link copied to clipboard!')
+                const publishUrl = `${window.location.origin}/view/${storybookId}`
+                window.open(publishUrl, '_blank')
               } else {
-                message.warning('Save the storybook first to get a share link')
+                message.warning('Save the storybook first to publish')
               }
             }}
             disabled={!storybookId}
           >
-            Share
+            Publish
           </Button>
         </Space>
       </div>
@@ -390,8 +422,16 @@ function StoryEditor() {
           </Button>
 
           {status && (
-            <div style={{ textAlign: 'center' }}>
-              <Spin /> <span style={{ marginLeft: 8 }}>{status}</span>
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <Progress
+                percent={Math.round((generationProgress / frameCount) * 100)}
+                status="active"
+                format={() => `${generationProgress} / ${frameCount}`}
+                style={{ maxWidth: 300, margin: '0 auto 12px' }}
+              />
+              <div>
+                <Spin size="small" /> <span style={{ marginLeft: 8 }}>{status}</span>
+              </div>
             </div>
           )}
         </Space>
