@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "استودیو علمی-تخیلی",
+    "copyright": "Institute for Future Intelligence, Inc. تمامی حقوق محفوظ است."
+  },
+  "nav": {
+    "home": "خانه",
+    "storyEditor": "ویرایشگر داستان",
+    "videoEditor": "ویرایشگر ویدیو"
+  },
+  "auth": {
+    "signIn": "ورود",
+    "signOut": "خروج",
+    "signInWithGoogle": "ورود با Google",
+    "continueAsGuest": "ادامه به عنوان مهمان",
+    "welcome": "خوش آمدید",
+    "guest": "مهمان"
+  },
+  "home": {
+    "title": "به استودیو علمی-تخیلی خوش آمدید",
+    "subtitle": "کتاب‌های داستان و ویدیوهای علمی-تخیلی شگفت‌انگیز با GenAI بسازید.",
+    "signInPrompt": "برای شروع با Google وارد شوید.",
+    "myProjects": "پروژه‌های من",
+    "newStory": "داستان جدید",
+    "newVideo": "ویدیو جدید",
+    "noProjectsYet": "هنوز پروژه‌ای نیست",
+    "createFirstStory": "اولین داستان خود را بسازید",
+    "deleteStorybook": "این کتاب حذف شود؟",
+    "delete": "حذف",
+    "cancel": "لغو",
+    "pages": "صفحه"
+  },
+  "storyEditor": {
+    "title": "ویرایشگر داستان",
+    "editStorybook": "ویرایش کتاب",
+    "description": "یک کتاب داستان علمی-تخیلی مصور با هوش مصنوعی بسازید.",
+    "storyTitle": "عنوان داستان",
+    "storyTitlePlaceholder": "عنوانی برای کتاب خود وارد کنید...",
+    "storyIdea": "ایده داستان",
+    "storyIdeaPlaceholder": "ایده داستان علمی-تخیلی خود را شرح دهید... (مثال: 'یک فضانورد تنها یک مصنوع بیگانه باستانی در اروپا کشف می‌کند')",
+    "numberOfPages": "تعداد صفحات",
+    "pages": "صفحه",
+    "enhanceStoryConcept": "بهبود مفهوم",
+    "enhancedConcept": "مفهوم بهبود یافته",
+    "generateStorybook": "ساخت کتاب {{count}} صفحه‌ای",
+    "storybookPreview": "پیش‌نمایش کتاب",
+    "previewPlaceholder": "کتاب شما اینجا نمایش داده می‌شود...",
+    "page": "صفحه",
+    "of": "از",
+    "previous": "قبلی",
+    "next": "بعدی",
+    "noImage": "بدون تصویر",
+    "imageFailed": "ساخت تصویر ناموفق بود",
+    "new": "جدید",
+    "load": "بارگذاری",
+    "save": "ذخیره",
+    "update": "به‌روزرسانی",
+    "publish": "انتشار",
+    "loadStorybook": "بارگذاری کتاب",
+    "noSavedStorybooks": "کتاب ذخیره‌شده‌ای نیست",
+    "pleaseSignIn": "برای ساخت داستان وارد شوید.",
+    "loadingStorybook": "در حال بارگذاری کتاب...",
+    "saveFirst": "ابتدا برای انتشار ذخیره کنید",
+    "generateFirst": "ابتدا یک کتاب بسازید",
+    "enterTitleFirst": "ابتدا عنوان وارد کنید",
+    "enterIdeaFirst": "ابتدا ایده وارد کنید",
+    "storybookGenerated": "کتاب با موفقیت ساخته شد!",
+    "rememberToSave": "یادتان باشد ذخیره کنید!",
+    "storybookUpdated": "کتاب به‌روز شد!",
+    "storybookSaved": "کتاب ذخیره شد!",
+    "storybookLoaded": "کتاب بارگذاری شد!",
+    "storybookDeleted": "کتاب حذف شد",
+    "storyConceptEnhanced": "مفهوم بهبود یافت!",
+    "storybookNotFound": "کتاب یافت نشد",
+    "failedToLoad": "بارگذاری ناموفق",
+    "failedToSave": "ذخیره ناموفق",
+    "failedToDelete": "حذف ناموفق",
+    "failedToEnhance": "بهبود ناموفق",
+    "failedToGenerate": "ساخت ناموفق"
+  },
+  "videoEditor": {
+    "title": "ویرایشگر ویدیو",
+    "description": "ویدیوهای علمی-تخیلی با هوش مصنوعی بسازید.",
+    "comingSoon": "به زودی!",
+    "placeholder": "این ویژگی در حال توسعه است."
+  },
+  "storybookView": {
+    "notFound": "کتاب یافت نشد",
+    "noPages": "این کتاب صفحه‌ای ندارد.",
+    "noImageAvailable": "تصویری موجود نیست",
+    "rateStorybook": "به این کتاب امتیاز دهید",
+    "youRated": "شما {{count}} ستاره دادید",
+    "youRated_plural": "شما {{count}} ستاره دادید",
+    "rating": "امتیاز",
+    "ratings": "امتیاز",
+    "share": "اشتراک‌گذاری",
+    "shareLinkCopied": "لینک کپی شد!",
+    "thankYouForRating": "از امتیاز شما سپاسگزاریم!",
+    "failedToSubmitRating": "ارسال امتیاز ناموفق",
+    "unknownAuthor": "نویسنده ناشناس"
+  },
+  "cookie": {
+    "message": "ما از کوکی‌ها برای بهبود تجربه شما استفاده می‌کنیم. با ادامه، استفاده از کوکی‌ها را می‌پذیرید.",
+    "accept": "پذیرش",
+    "decline": "رد"
+  },
+  "common": {
+    "home": "خانه",
+    "error": "خطا",
+    "loading": "در حال بارگذاری..."
+  }
+}

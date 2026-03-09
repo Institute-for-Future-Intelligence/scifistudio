@@ -9,7 +9,8 @@
       "Bash(firebase deploy:*)",
       "Bash(npx firebase-tools deploy)",
       "Bash(npx firebase-tools deploy:*)",
-      "Bash(npx firebase deploy:*)"
+      "Bash(npx firebase deploy:*)",
+      "Bash(npm install:*)"
     ]
   }
 }

@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "SF スタジオ",
+    "copyright": "Institute for Future Intelligence, Inc. All rights reserved."
+  },
+  "nav": {
+    "home": "ホーム",
+    "storyEditor": "ストーリーエディター",
+    "videoEditor": "ビデオエディター"
+  },
+  "auth": {
+    "signIn": "ログイン",
+    "signOut": "ログアウト",
+    "signInWithGoogle": "Googleでログイン",
+    "continueAsGuest": "ゲストとして続ける",
+    "welcome": "ようこそ",
+    "guest": "ゲスト"
+  },
+  "home": {
+    "title": "SF スタジオへようこそ",
+    "subtitle": "GenAIで素晴らしいSFストーリーブックや動画を作成しましょう。",
+    "signInPrompt": "Googleでログインして始めましょう。",
+    "myProjects": "マイプロジェクト",
+    "newStory": "新しいストーリー",
+    "newVideo": "新しいビデオ",
+    "noProjectsYet": "プロジェクトはまだありません",
+    "createFirstStory": "最初のストーリーを作成",
+    "deleteStorybook": "このストーリーブックを削除しますか？",
+    "delete": "削除",
+    "cancel": "キャンセル",
+    "pages": "ページ"
+  },
+  "storyEditor": {
+    "title": "ストーリーエディター",
+    "editStorybook": "ストーリーブックを編集",
+    "description": "AIでイラスト付きSFストーリーブックを作成します。",
+    "storyTitle": "ストーリータイトル",
+    "storyTitlePlaceholder": "ストーリーブックのタイトルを入力...",
+    "storyIdea": "ストーリーのアイデア",
+    "storyIdeaPlaceholder": "SFストーリーのアイデアを説明してください...（例：「孤独な宇宙飛行士がエウロパで古代の宇宙人の遺物を発見する」）",
+    "numberOfPages": "ページ数",
+    "pages": "ページ",
+    "enhanceStoryConcept": "コンセプトを強化",
+    "enhancedConcept": "強化されたコンセプト",
+    "generateStorybook": "{{count}}ページのストーリーブックを生成",
+    "storybookPreview": "ストーリーブックプレビュー",
+    "previewPlaceholder": "AI生成のストーリーブックがここに表示されます...",
+    "page": "ページ",
+    "of": "/",
+    "previous": "前へ",
+    "next": "次へ",
+    "noImage": "画像なし",
+    "imageFailed": "画像の生成に失敗しました",
+    "new": "新規",
+    "load": "読み込み",
+    "save": "保存",
+    "update": "更新",
+    "publish": "公開",
+    "loadStorybook": "ストーリーブックを読み込む",
+    "noSavedStorybooks": "保存されたストーリーブックはありません",
+    "pleaseSignIn": "ストーリーを作成するにはログインしてください。",
+    "loadingStorybook": "ストーリーブックを読み込み中...",
+    "saveFirst": "公開するには先に保存してください",
+    "generateFirst": "先にストーリーブックを生成してください",
+    "enterTitleFirst": "先にタイトルを入力してください",
+    "enterIdeaFirst": "先にストーリーのアイデアを入力してください",
+    "storybookGenerated": "ストーリーブックが正常に生成されました！",
+    "rememberToSave": "作業を失わないようにストーリーブックを保存してください！",
+    "storybookUpdated": "ストーリーブックが更新されました！",
+    "storybookSaved": "ストーリーブックが保存されました！",
+    "storybookLoaded": "ストーリーブックが読み込まれました！",
+    "storybookDeleted": "ストーリーブックが削除されました",
+    "storyConceptEnhanced": "ストーリーコンセプトが強化されました！",
+    "storybookNotFound": "ストーリーブックが見つかりません",
+    "failedToLoad": "ストーリーブックの読み込みに失敗しました",
+    "failedToSave": "ストーリーブックの保存に失敗しました",
+    "failedToDelete": "ストーリーブックの削除に失敗しました",
+    "failedToEnhance": "コンセプトの強化に失敗しました",
+    "failedToGenerate": "ストーリーブックの生成に失敗しました"
+  },
+  "videoEditor": {
+    "title": "ビデオエディター",
+    "description": "AI生成のSFビデオを作成します。",
+    "comingSoon": "ビデオ生成は近日公開！",
+    "placeholder": "この機能は開発中です。AIビデオ生成機能は後日お試しください。"
+  },
+  "storybookView": {
+    "notFound": "ストーリーブックが見つかりません",
+    "noPages": "このストーリーブックにはページがありません。",
+    "noImageAvailable": "画像がありません",
+    "rateStorybook": "このストーリーブックを評価",
+    "youRated": "このストーリーブックに{{count}}つ星を付けました",
+    "youRated_plural": "このストーリーブックに{{count}}つ星を付けました",
+    "rating": "件の評価",
+    "ratings": "件の評価",
+    "share": "共有",
+    "shareLinkCopied": "共有リンクがクリップボードにコピーされました！",
+    "thankYouForRating": "評価ありがとうございます！",
+    "failedToSubmitRating": "評価の送信に失敗しました",
+    "unknownAuthor": "不明な作者"
+  },
+  "cookie": {
+    "message": "当サイトではCookieを使用してエクスペリエンスを向上させています。このサイトを引き続き使用することで、Cookieの使用に同意したことになります。",
+    "accept": "同意する",
+    "decline": "拒否する"
+  },
+  "common": {
+    "home": "ホーム",
+    "error": "エラー",
+    "loading": "読み込み中..."
+  }
+}

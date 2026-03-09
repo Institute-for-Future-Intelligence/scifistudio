@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Sci-Fi Studio",
+    "copyright": "Institute for Future Intelligence, Inc. All rights reserved."
+  },
+  "nav": {
+    "home": "Home",
+    "storyEditor": "Story Editor",
+    "videoEditor": "Video Editor"
+  },
+  "auth": {
+    "signIn": "Sign In",
+    "signOut": "Sign Out",
+    "signInWithGoogle": "Sign in with Google",
+    "continueAsGuest": "Continue as Guest",
+    "welcome": "Welcome",
+    "guest": "Guest"
+  },
+  "home": {
+    "title": "Welcome to Sci-Fi Studio",
+    "subtitle": "Create amazing sci-fi storybooks and short videos using GenAI.",
+    "signInPrompt": "Sign in with Google to get started.",
+    "myProjects": "My Projects",
+    "newStory": "New Story",
+    "newVideo": "New Video",
+    "noProjectsYet": "No projects yet",
+    "createFirstStory": "Create Your First Story",
+    "deleteStorybook": "Delete this storybook?",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "pages": "pages"
+  },
+  "storyEditor": {
+    "title": "Story Editor",
+    "editStorybook": "Edit Storybook",
+    "description": "Create an illustrated sci-fi storybook with AI.",
+    "storyTitle": "Story Title",
+    "storyTitlePlaceholder": "Enter a title for your storybook...",
+    "storyIdea": "Story Idea",
+    "storyIdeaPlaceholder": "Describe your sci-fi story idea... (e.g., 'A lone astronaut discovers an ancient alien artifact on Europa')",
+    "numberOfPages": "Number of Pages",
+    "pages": "pages",
+    "enhanceStoryConcept": "Enhance Story Concept",
+    "enhancedConcept": "Enhanced Concept",
+    "generateStorybook": "Generate {{count}}-Page Storybook",
+    "storybookPreview": "Storybook Preview",
+    "previewPlaceholder": "Your AI-generated storybook will appear here...",
+    "page": "Page",
+    "of": "of",
+    "previous": "Previous",
+    "next": "Next",
+    "noImage": "No image",
+    "imageFailed": "Image failed to generate",
+    "new": "New",
+    "load": "Load",
+    "save": "Save",
+    "update": "Update",
+    "publish": "Publish",
+    "loadStorybook": "Load Storybook",
+    "noSavedStorybooks": "No saved storybooks",
+    "pleaseSignIn": "Please sign in to create stories.",
+    "loadingStorybook": "Loading storybook...",
+    "saveFirst": "Save the storybook first to publish",
+    "generateFirst": "Generate a storybook first",
+    "enterTitleFirst": "Please enter a story title first",
+    "enterIdeaFirst": "Please enter a story idea first",
+    "storybookGenerated": "Storybook generated successfully!",
+    "rememberToSave": "Remember to save your storybook to avoid losing your work!",
+    "storybookUpdated": "Storybook updated!",
+    "storybookSaved": "Storybook saved!",
+    "storybookLoaded": "Storybook loaded!",
+    "storybookDeleted": "Storybook deleted",
+    "storyConceptEnhanced": "Story concept enhanced!",
+    "storybookNotFound": "Storybook not found",
+    "failedToLoad": "Failed to load storybook",
+    "failedToSave": "Failed to save storybook",
+    "failedToDelete": "Failed to delete storybook",
+    "failedToEnhance": "Failed to enhance prompt",
+    "failedToGenerate": "Failed to generate storybook"
+  },
+  "videoEditor": {
+    "title": "Video Editor",
+    "description": "Create AI-generated sci-fi videos.",
+    "comingSoon": "Video generation coming soon!",
+    "placeholder": "This feature is under development. Check back later for AI-powered video generation capabilities."
+  },
+  "storybookView": {
+    "notFound": "Storybook not found",
+    "noPages": "This storybook has no pages.",
+    "noImageAvailable": "No image available",
+    "rateStorybook": "Rate this Storybook",
+    "youRated": "You rated this storybook {{count}} star",
+    "youRated_plural": "You rated this storybook {{count}} stars",
+    "rating": "rating",
+    "ratings": "ratings",
+    "share": "Share",
+    "shareLinkCopied": "Share link copied to clipboard!",
+    "thankYouForRating": "Thank you for rating!",
+    "failedToSubmitRating": "Failed to submit rating",
+    "unknownAuthor": "Unknown Author"
+  },
+  "cookie": {
+    "message": "We use cookies to enhance your experience. By continuing to use this site, you agree to our use of cookies.",
+    "accept": "Accept",
+    "decline": "Decline"
+  },
+  "common": {
+    "home": "Home",
+    "error": "Error",
+    "loading": "Loading..."
+  }
+}

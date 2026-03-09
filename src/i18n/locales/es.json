@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Estudio Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Todos los derechos reservados."
+  },
+  "nav": {
+    "home": "Inicio",
+    "storyEditor": "Editor de Historias",
+    "videoEditor": "Editor de Videos"
+  },
+  "auth": {
+    "signIn": "Iniciar Sesión",
+    "signOut": "Cerrar Sesión",
+    "signInWithGoogle": "Iniciar sesión con Google",
+    "continueAsGuest": "Continuar como Invitado",
+    "welcome": "Bienvenido",
+    "guest": "Invitado"
+  },
+  "home": {
+    "title": "Bienvenido a Estudio Sci-Fi",
+    "subtitle": "Crea increíbles libros de cuentos y videos de ciencia ficción con GenAI.",
+    "signInPrompt": "Inicia sesión con Google para comenzar.",
+    "myProjects": "Mis Proyectos",
+    "newStory": "Nueva Historia",
+    "newVideo": "Nuevo Video",
+    "noProjectsYet": "Aún no hay proyectos",
+    "createFirstStory": "Crea Tu Primera Historia",
+    "deleteStorybook": "¿Eliminar este libro de cuentos?",
+    "delete": "Eliminar",
+    "cancel": "Cancelar",
+    "pages": "páginas"
+  },
+  "storyEditor": {
+    "title": "Editor de Historias",
+    "editStorybook": "Editar Libro de Cuentos",
+    "description": "Crea un libro de cuentos de ciencia ficción ilustrado con IA.",
+    "storyTitle": "Título de la Historia",
+    "storyTitlePlaceholder": "Ingresa un título para tu libro de cuentos...",
+    "storyIdea": "Idea de la Historia",
+    "storyIdeaPlaceholder": "Describe tu idea de historia de ciencia ficción... (ej., 'Un astronauta solitario descubre un antiguo artefacto alienígena en Europa')",
+    "numberOfPages": "Número de Páginas",
+    "pages": "páginas",
+    "enhanceStoryConcept": "Mejorar Concepto de Historia",
+    "enhancedConcept": "Concepto Mejorado",
+    "generateStorybook": "Generar Libro de {{count}} Páginas",
+    "storybookPreview": "Vista Previa del Libro",
+    "previewPlaceholder": "Tu libro de cuentos generado por IA aparecerá aquí...",
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Siguiente",
+    "noImage": "Sin imagen",
+    "imageFailed": "Error al generar imagen",
+    "new": "Nuevo",
+    "load": "Cargar",
+    "save": "Guardar",
+    "update": "Actualizar",
+    "publish": "Publicar",
+    "loadStorybook": "Cargar Libro de Cuentos",
+    "noSavedStorybooks": "No hay libros guardados",
+    "pleaseSignIn": "Por favor inicia sesión para crear historias.",
+    "loadingStorybook": "Cargando libro de cuentos...",
+    "saveFirst": "Guarda el libro primero para publicar",
+    "generateFirst": "Genera un libro de cuentos primero",
+    "enterTitleFirst": "Por favor ingresa un título primero",
+    "enterIdeaFirst": "Por favor ingresa una idea de historia primero",
+    "storybookGenerated": "¡Libro de cuentos generado exitosamente!",
+    "rememberToSave": "¡Recuerda guardar tu libro para no perder tu trabajo!",
+    "storybookUpdated": "¡Libro de cuentos actualizado!",
+    "storybookSaved": "¡Libro de cuentos guardado!",
+    "storybookLoaded": "¡Libro de cuentos cargado!",
+    "storybookDeleted": "Libro de cuentos eliminado",
+    "storyConceptEnhanced": "¡Concepto de historia mejorado!",
+    "storybookNotFound": "Libro de cuentos no encontrado",
+    "failedToLoad": "Error al cargar libro de cuentos",
+    "failedToSave": "Error al guardar libro de cuentos",
+    "failedToDelete": "Error al eliminar libro de cuentos",
+    "failedToEnhance": "Error al mejorar el concepto",
+    "failedToGenerate": "Error al generar libro de cuentos"
+  },
+  "videoEditor": {
+    "title": "Editor de Videos",
+    "description": "Crea videos de ciencia ficción generados por IA.",
+    "comingSoon": "¡Generación de videos próximamente!",
+    "placeholder": "Esta función está en desarrollo. Vuelve más tarde para las capacidades de generación de videos con IA."
+  },
+  "storybookView": {
+    "notFound": "Libro de cuentos no encontrado",
+    "noPages": "Este libro de cuentos no tiene páginas.",
+    "noImageAvailable": "Sin imagen disponible",
+    "rateStorybook": "Califica este Libro de Cuentos",
+    "youRated": "Calificaste este libro con {{count}} estrella(s)",
+    "youRated_plural": "Calificaste este libro con {{count}} estrellas",
+    "rating": "calificación",
+    "ratings": "calificaciones",
+    "share": "Compartir",
+    "shareLinkCopied": "¡Enlace copiado al portapapeles!",
+    "thankYouForRating": "¡Gracias por tu calificación!",
+    "failedToSubmitRating": "Error al enviar calificación",
+    "unknownAuthor": "Autor Desconocido"
+  },
+  "cookie": {
+    "message": "Usamos cookies para mejorar tu experiencia. Al continuar usando este sitio, aceptas nuestro uso de cookies.",
+    "accept": "Aceptar",
+    "decline": "Rechazar"
+  },
+  "common": {
+    "home": "Inicio",
+    "error": "Error",
+    "loading": "Cargando..."
+  }
+}

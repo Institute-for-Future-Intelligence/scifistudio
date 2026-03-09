@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Sci-Fi Studio",
+    "copyright": "Institute for Future Intelligence, Inc. Alle Rechte vorbehalten."
+  },
+  "nav": {
+    "home": "Startseite",
+    "storyEditor": "Geschichten-Editor",
+    "videoEditor": "Video-Editor"
+  },
+  "auth": {
+    "signIn": "Anmelden",
+    "signOut": "Abmelden",
+    "signInWithGoogle": "Mit Google anmelden",
+    "continueAsGuest": "Als Gast fortfahren",
+    "welcome": "Willkommen",
+    "guest": "Gast"
+  },
+  "home": {
+    "title": "Willkommen im Sci-Fi Studio",
+    "subtitle": "Erstellen Sie erstaunliche Science-Fiction-Geschichtenbücher und Videos mit GenAI.",
+    "signInPrompt": "Melden Sie sich mit Google an, um zu beginnen.",
+    "myProjects": "Meine Projekte",
+    "newStory": "Neue Geschichte",
+    "newVideo": "Neues Video",
+    "noProjectsYet": "Noch keine Projekte",
+    "createFirstStory": "Erstellen Sie Ihre Erste Geschichte",
+    "deleteStorybook": "Dieses Geschichtenbuch löschen?",
+    "delete": "Löschen",
+    "cancel": "Abbrechen",
+    "pages": "Seiten"
+  },
+  "storyEditor": {
+    "title": "Geschichten-Editor",
+    "editStorybook": "Geschichtenbuch Bearbeiten",
+    "description": "Erstellen Sie ein illustriertes Science-Fiction-Geschichtenbuch mit KI.",
+    "storyTitle": "Titel der Geschichte",
+    "storyTitlePlaceholder": "Geben Sie einen Titel für Ihr Geschichtenbuch ein...",
+    "storyIdea": "Geschichtsidee",
+    "storyIdeaPlaceholder": "Beschreiben Sie Ihre Science-Fiction-Geschichtsidee... (z.B. 'Ein einsamer Astronaut entdeckt ein uraltes außerirdisches Artefakt auf Europa')",
+    "numberOfPages": "Seitenanzahl",
+    "pages": "Seiten",
+    "enhanceStoryConcept": "Konzept Verbessern",
+    "enhancedConcept": "Verbessertes Konzept",
+    "generateStorybook": "{{count}}-seitiges Buch Generieren",
+    "storybookPreview": "Buchvorschau",
+    "previewPlaceholder": "Ihr KI-generiertes Geschichtenbuch erscheint hier...",
+    "page": "Seite",
+    "of": "von",
+    "previous": "Zurück",
+    "next": "Weiter",
+    "noImage": "Kein Bild",
+    "imageFailed": "Bildgenerierung fehlgeschlagen",
+    "new": "Neu",
+    "load": "Laden",
+    "save": "Speichern",
+    "update": "Aktualisieren",
+    "publish": "Veröffentlichen",
+    "loadStorybook": "Geschichtenbuch Laden",
+    "noSavedStorybooks": "Keine gespeicherten Bücher",
+    "pleaseSignIn": "Bitte melden Sie sich an, um Geschichten zu erstellen.",
+    "loadingStorybook": "Geschichtenbuch wird geladen...",
+    "saveFirst": "Speichern Sie das Buch zuerst zum Veröffentlichen",
+    "generateFirst": "Generieren Sie zuerst ein Geschichtenbuch",
+    "enterTitleFirst": "Bitte geben Sie zuerst einen Titel ein",
+    "enterIdeaFirst": "Bitte geben Sie zuerst eine Geschichtsidee ein",
+    "storybookGenerated": "Geschichtenbuch erfolgreich generiert!",
+    "rememberToSave": "Denken Sie daran, Ihr Buch zu speichern, um Ihre Arbeit nicht zu verlieren!",
+    "storybookUpdated": "Geschichtenbuch aktualisiert!",
+    "storybookSaved": "Geschichtenbuch gespeichert!",
+    "storybookLoaded": "Geschichtenbuch geladen!",
+    "storybookDeleted": "Geschichtenbuch gelöscht",
+    "storyConceptEnhanced": "Geschichtskonzept verbessert!",
+    "storybookNotFound": "Geschichtenbuch nicht gefunden",
+    "failedToLoad": "Laden des Buches fehlgeschlagen",
+    "failedToSave": "Speichern des Buches fehlgeschlagen",
+    "failedToDelete": "Löschen des Buches fehlgeschlagen",
+    "failedToEnhance": "Verbesserung des Konzepts fehlgeschlagen",
+    "failedToGenerate": "Generierung des Buches fehlgeschlagen"
+  },
+  "videoEditor": {
+    "title": "Video-Editor",
+    "description": "Erstellen Sie KI-generierte Science-Fiction-Videos.",
+    "comingSoon": "Videogenerierung bald verfügbar!",
+    "placeholder": "Diese Funktion befindet sich in der Entwicklung. Schauen Sie später wieder vorbei für KI-Videogenerierungsfunktionen."
+  },
+  "storybookView": {
+    "notFound": "Geschichtenbuch nicht gefunden",
+    "noPages": "Dieses Geschichtenbuch hat keine Seiten.",
+    "noImageAvailable": "Kein Bild verfügbar",
+    "rateStorybook": "Bewerten Sie dieses Geschichtenbuch",
+    "youRated": "Sie haben dieses Buch mit {{count}} Stern(en) bewertet",
+    "youRated_plural": "Sie haben dieses Buch mit {{count}} Sternen bewertet",
+    "rating": "Bewertung",
+    "ratings": "Bewertungen",
+    "share": "Teilen",
+    "shareLinkCopied": "Link in die Zwischenablage kopiert!",
+    "thankYouForRating": "Danke für Ihre Bewertung!",
+    "failedToSubmitRating": "Bewertung konnte nicht gesendet werden",
+    "unknownAuthor": "Unbekannter Autor"
+  },
+  "cookie": {
+    "message": "Wir verwenden Cookies, um Ihre Erfahrung zu verbessern. Durch die weitere Nutzung dieser Website stimmen Sie unserer Verwendung von Cookies zu.",
+    "accept": "Akzeptieren",
+    "decline": "Ablehnen"
+  },
+  "common": {
+    "home": "Startseite",
+    "error": "Fehler",
+    "loading": "Wird geladen..."
+  }
+}

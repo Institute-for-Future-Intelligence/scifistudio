@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "SF 스튜디오",
+    "copyright": "Institute for Future Intelligence, Inc. 모든 권리 보유."
+  },
+  "nav": {
+    "home": "홈",
+    "storyEditor": "스토리 편집기",
+    "videoEditor": "비디오 편집기"
+  },
+  "auth": {
+    "signIn": "로그인",
+    "signOut": "로그아웃",
+    "signInWithGoogle": "Google로 로그인",
+    "continueAsGuest": "게스트로 계속하기",
+    "welcome": "환영합니다",
+    "guest": "게스트"
+  },
+  "home": {
+    "title": "SF 스튜디오에 오신 것을 환영합니다",
+    "subtitle": "GenAI로 놀라운 SF 스토리북과 짧은 비디오를 만들어보세요.",
+    "signInPrompt": "Google로 로그인하여 시작하세요.",
+    "myProjects": "내 프로젝트",
+    "newStory": "새 스토리",
+    "newVideo": "새 비디오",
+    "noProjectsYet": "아직 프로젝트가 없습니다",
+    "createFirstStory": "첫 번째 스토리 만들기",
+    "deleteStorybook": "이 스토리북을 삭제하시겠습니까?",
+    "delete": "삭제",
+    "cancel": "취소",
+    "pages": "페이지"
+  },
+  "storyEditor": {
+    "title": "스토리 편집기",
+    "editStorybook": "스토리북 편집",
+    "description": "AI로 삽화가 있는 SF 스토리북을 만들어보세요.",
+    "storyTitle": "스토리 제목",
+    "storyTitlePlaceholder": "스토리북 제목을 입력하세요...",
+    "storyIdea": "스토리 아이디어",
+    "storyIdeaPlaceholder": "SF 스토리 아이디어를 설명하세요... (예: '외로운 우주비행사가 유로파에서 고대 외계 유물을 발견하다')",
+    "numberOfPages": "페이지 수",
+    "pages": "페이지",
+    "enhanceStoryConcept": "스토리 컨셉 향상",
+    "enhancedConcept": "향상된 컨셉",
+    "generateStorybook": "{{count}}페이지 스토리북 생성",
+    "storybookPreview": "스토리북 미리보기",
+    "previewPlaceholder": "AI가 생성한 스토리북이 여기에 표시됩니다...",
+    "page": "페이지",
+    "of": "/",
+    "previous": "이전",
+    "next": "다음",
+    "noImage": "이미지 없음",
+    "imageFailed": "이미지 생성 실패",
+    "new": "새로 만들기",
+    "load": "불러오기",
+    "save": "저장",
+    "update": "업데이트",
+    "publish": "게시",
+    "loadStorybook": "스토리북 불러오기",
+    "noSavedStorybooks": "저장된 스토리북이 없습니다",
+    "pleaseSignIn": "스토리를 만들려면 로그인하세요.",
+    "loadingStorybook": "스토리북 로딩 중...",
+    "saveFirst": "게시하려면 먼저 스토리북을 저장하세요",
+    "generateFirst": "먼저 스토리북을 생성하세요",
+    "enterTitleFirst": "먼저 스토리 제목을 입력하세요",
+    "enterIdeaFirst": "먼저 스토리 아이디어를 입력하세요",
+    "storybookGenerated": "스토리북이 성공적으로 생성되었습니다!",
+    "rememberToSave": "작업을 잃지 않도록 스토리북을 저장하세요!",
+    "storybookUpdated": "스토리북이 업데이트되었습니다!",
+    "storybookSaved": "스토리북이 저장되었습니다!",
+    "storybookLoaded": "스토리북이 로드되었습니다!",
+    "storybookDeleted": "스토리북이 삭제되었습니다",
+    "storyConceptEnhanced": "스토리 컨셉이 향상되었습니다!",
+    "storybookNotFound": "스토리북을 찾을 수 없습니다",
+    "failedToLoad": "스토리북 로드 실패",
+    "failedToSave": "스토리북 저장 실패",
+    "failedToDelete": "스토리북 삭제 실패",
+    "failedToEnhance": "프롬프트 향상 실패",
+    "failedToGenerate": "스토리북 생성 실패"
+  },
+  "videoEditor": {
+    "title": "비디오 편집기",
+    "description": "AI가 생성한 SF 비디오를 만들어보세요.",
+    "comingSoon": "비디오 생성 곧 출시 예정!",
+    "placeholder": "이 기능은 개발 중입니다. AI 비디오 생성 기능을 나중에 다시 확인해주세요."
+  },
+  "storybookView": {
+    "notFound": "스토리북을 찾을 수 없습니다",
+    "noPages": "이 스토리북에는 페이지가 없습니다.",
+    "noImageAvailable": "사용 가능한 이미지 없음",
+    "rateStorybook": "이 스토리북 평가하기",
+    "youRated": "이 스토리북에 {{count}}점을 주셨습니다",
+    "youRated_plural": "이 스토리북에 {{count}}점을 주셨습니다",
+    "rating": "개 평가",
+    "ratings": "개 평가",
+    "share": "공유",
+    "shareLinkCopied": "공유 링크가 클립보드에 복사되었습니다!",
+    "thankYouForRating": "평가해 주셔서 감사합니다!",
+    "failedToSubmitRating": "평가 제출 실패",
+    "unknownAuthor": "알 수 없는 작성자"
+  },
+  "cookie": {
+    "message": "저희는 사용자 경험을 향상시키기 위해 쿠키를 사용합니다. 이 사이트를 계속 사용하시면 쿠키 사용에 동의하시는 것입니다.",
+    "accept": "수락",
+    "decline": "거부"
+  },
+  "common": {
+    "home": "홈",
+    "error": "오류",
+    "loading": "로딩 중..."
+  }
+}

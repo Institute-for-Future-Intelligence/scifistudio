@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "科幻工作室",
+    "copyright": "未来智能研究所版权所有。"
+  },
+  "nav": {
+    "home": "首页",
+    "storyEditor": "故事编辑器",
+    "videoEditor": "视频编辑器"
+  },
+  "auth": {
+    "signIn": "登录",
+    "signOut": "退出",
+    "signInWithGoogle": "使用 Google 登录",
+    "continueAsGuest": "以访客身份继续",
+    "welcome": "欢迎",
+    "guest": "访客"
+  },
+  "home": {
+    "title": "欢迎来到科幻工作室",
+    "subtitle": "使用 GenAI 创作精彩的科幻故事书和短视频。",
+    "signInPrompt": "使用 Google 登录以开始。",
+    "myProjects": "我的项目",
+    "newStory": "新建故事",
+    "newVideo": "新建视频",
+    "noProjectsYet": "暂无项目",
+    "createFirstStory": "创建您的第一个故事",
+    "deleteStorybook": "删除这本故事书？",
+    "delete": "删除",
+    "cancel": "取消",
+    "pages": "页"
+  },
+  "storyEditor": {
+    "title": "故事编辑器",
+    "editStorybook": "编辑故事书",
+    "description": "使用 AI 创作插图科幻故事书。",
+    "storyTitle": "故事标题",
+    "storyTitlePlaceholder": "输入故事书标题...",
+    "storyIdea": "故事创意",
+    "storyIdeaPlaceholder": "描述您的科幻故事创意...（例如：'一位孤独的宇航员在木卫二上发现了一件古老的外星文物'）",
+    "numberOfPages": "页数",
+    "pages": "页",
+    "enhanceStoryConcept": "优化故事概念",
+    "enhancedConcept": "优化后的概念",
+    "generateStorybook": "生成 {{count}} 页故事书",
+    "storybookPreview": "故事书预览",
+    "previewPlaceholder": "AI 生成的故事书将显示在这里...",
+    "page": "第",
+    "of": "页，共",
+    "previous": "上一页",
+    "next": "下一页",
+    "noImage": "无图片",
+    "imageFailed": "图片生成失败",
+    "new": "新建",
+    "load": "加载",
+    "save": "保存",
+    "update": "更新",
+    "publish": "发布",
+    "loadStorybook": "加载故事书",
+    "noSavedStorybooks": "没有已保存的故事书",
+    "pleaseSignIn": "请登录以创作故事。",
+    "loadingStorybook": "正在加载故事书...",
+    "saveFirst": "请先保存故事书再发布",
+    "generateFirst": "请先生成故事书",
+    "enterTitleFirst": "请先输入故事标题",
+    "enterIdeaFirst": "请先输入故事创意",
+    "storybookGenerated": "故事书生成成功！",
+    "rememberToSave": "请记得保存您的故事书，以免丢失！",
+    "storybookUpdated": "故事书已更新！",
+    "storybookSaved": "故事书已保存！",
+    "storybookLoaded": "故事书已加载！",
+    "storybookDeleted": "故事书已删除",
+    "storyConceptEnhanced": "故事概念已优化！",
+    "storybookNotFound": "未找到故事书",
+    "failedToLoad": "加载故事书失败",
+    "failedToSave": "保存故事书失败",
+    "failedToDelete": "删除故事书失败",
+    "failedToEnhance": "优化提示失败",
+    "failedToGenerate": "生成故事书失败"
+  },
+  "videoEditor": {
+    "title": "视频编辑器",
+    "description": "创作 AI 生成的科幻视频。",
+    "comingSoon": "视频生成即将推出！",
+    "placeholder": "此功能正在开发中。请稍后回来体验 AI 视频生成功能。"
+  },
+  "storybookView": {
+    "notFound": "未找到故事书",
+    "noPages": "这本故事书没有内容。",
+    "noImageAvailable": "无可用图片",
+    "rateStorybook": "为这本故事书评分",
+    "youRated": "您给这本故事书评了 {{count}} 星",
+    "youRated_plural": "您给这本故事书评了 {{count}} 星",
+    "rating": "条评价",
+    "ratings": "条评价",
+    "share": "分享",
+    "shareLinkCopied": "分享链接已复制到剪贴板！",
+    "thankYouForRating": "感谢您的评分！",
+    "failedToSubmitRating": "提交评分失败",
+    "unknownAuthor": "未知作者"
+  },
+  "cookie": {
+    "message": "我们使用 Cookie 来提升您的体验。继续使用本网站即表示您同意我们使用 Cookie。",
+    "accept": "接受",
+    "decline": "拒绝"
+  },
+  "common": {
+    "home": "首页",
+    "error": "错误",
+    "loading": "加载中..."
+  }
+}

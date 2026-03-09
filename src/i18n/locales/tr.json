@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Sci-Fi Stüdyo",
+    "copyright": "Institute for Future Intelligence, Inc. Tüm hakları saklıdır."
+  },
+  "nav": {
+    "home": "Ana Sayfa",
+    "storyEditor": "Hikaye Editörü",
+    "videoEditor": "Video Editörü"
+  },
+  "auth": {
+    "signIn": "Giriş Yap",
+    "signOut": "Çıkış Yap",
+    "signInWithGoogle": "Google ile Giriş Yap",
+    "continueAsGuest": "Misafir Olarak Devam Et",
+    "welcome": "Hoş Geldiniz",
+    "guest": "Misafir"
+  },
+  "home": {
+    "title": "Sci-Fi Stüdyo'ya Hoş Geldiniz",
+    "subtitle": "GenAI ile harika bilim kurgu hikaye kitapları ve videolar oluşturun.",
+    "signInPrompt": "Başlamak için Google ile giriş yapın.",
+    "myProjects": "Projelerim",
+    "newStory": "Yeni Hikaye",
+    "newVideo": "Yeni Video",
+    "noProjectsYet": "Henüz proje yok",
+    "createFirstStory": "İlk Hikayenizi Oluşturun",
+    "deleteStorybook": "Bu kitap silinsin mi?",
+    "delete": "Sil",
+    "cancel": "İptal",
+    "pages": "sayfa"
+  },
+  "storyEditor": {
+    "title": "Hikaye Editörü",
+    "editStorybook": "Kitabı Düzenle",
+    "description": "Yapay zeka ile resimli bilim kurgu hikaye kitabı oluşturun.",
+    "storyTitle": "Hikaye Başlığı",
+    "storyTitlePlaceholder": "Kitabınız için bir başlık girin...",
+    "storyIdea": "Hikaye Fikri",
+    "storyIdeaPlaceholder": "Bilim kurgu fikrinizi anlatın... (örn., 'Yalnız bir astronot Europa'da antik bir uzaylı eseri keşfeder')",
+    "numberOfPages": "Sayfa Sayısı",
+    "pages": "sayfa",
+    "enhanceStoryConcept": "Konsepti Geliştir",
+    "enhancedConcept": "Geliştirilmiş Konsept",
+    "generateStorybook": "{{count}} Sayfalık Kitap Oluştur",
+    "storybookPreview": "Kitap Önizlemesi",
+    "previewPlaceholder": "Yapay zeka kitabınız burada görünecek...",
+    "page": "Sayfa",
+    "of": "/",
+    "previous": "Önceki",
+    "next": "Sonraki",
+    "noImage": "Resim yok",
+    "imageFailed": "Resim oluşturulamadı",
+    "new": "Yeni",
+    "load": "Yükle",
+    "save": "Kaydet",
+    "update": "Güncelle",
+    "publish": "Yayınla",
+    "loadStorybook": "Kitap Yükle",
+    "noSavedStorybooks": "Kayıtlı kitap yok",
+    "pleaseSignIn": "Hikaye oluşturmak için giriş yapın.",
+    "loadingStorybook": "Kitap yükleniyor...",
+    "saveFirst": "Yayınlamak için önce kaydedin",
+    "generateFirst": "Önce bir kitap oluşturun",
+    "enterTitleFirst": "Önce bir başlık girin",
+    "enterIdeaFirst": "Önce bir fikir girin",
+    "storybookGenerated": "Kitap başarıyla oluşturuldu!",
+    "rememberToSave": "Kaydetmeyi unutmayın!",
+    "storybookUpdated": "Kitap güncellendi!",
+    "storybookSaved": "Kitap kaydedildi!",
+    "storybookLoaded": "Kitap yüklendi!",
+    "storybookDeleted": "Kitap silindi",
+    "storyConceptEnhanced": "Konsept geliştirildi!",
+    "storybookNotFound": "Kitap bulunamadı",
+    "failedToLoad": "Yüklenemedi",
+    "failedToSave": "Kaydedilemedi",
+    "failedToDelete": "Silinemedi",
+    "failedToEnhance": "Geliştirilemedi",
+    "failedToGenerate": "Oluşturulamadı"
+  },
+  "videoEditor": {
+    "title": "Video Editörü",
+    "description": "Yapay zeka ile bilim kurgu videoları oluşturun.",
+    "comingSoon": "Yakında!",
+    "placeholder": "Bu özellik geliştirme aşamasında."
+  },
+  "storybookView": {
+    "notFound": "Kitap bulunamadı",
+    "noPages": "Bu kitapta sayfa yok.",
+    "noImageAvailable": "Resim mevcut değil",
+    "rateStorybook": "Bu Kitabı Değerlendirin",
+    "youRated": "{{count}} yıldız verdiniz",
+    "youRated_plural": "{{count}} yıldız verdiniz",
+    "rating": "değerlendirme",
+    "ratings": "değerlendirme",
+    "share": "Paylaş",
+    "shareLinkCopied": "Bağlantı kopyalandı!",
+    "thankYouForRating": "Değerlendirmeniz için teşekkürler!",
+    "failedToSubmitRating": "Değerlendirme gönderilemedi",
+    "unknownAuthor": "Bilinmeyen Yazar"
+  },
+  "cookie": {
+    "message": "Deneyiminizi geliştirmek için çerezler kullanıyoruz. Devam ederek çerez kullanımını kabul etmiş olursunuz.",
+    "accept": "Kabul Et",
+    "decline": "Reddet"
+  },
+  "common": {
+    "home": "Ana Sayfa",
+    "error": "Hata",
+    "loading": "Yükleniyor..."
+  }
+}

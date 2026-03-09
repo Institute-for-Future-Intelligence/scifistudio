@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Typography, Button, Empty, Card, List, Spin, Popconfirm } from 'antd'
 import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { getStorybooks, deleteStorybook, Storybook } from '../../services/firestore'
 
@@ -10,6 +11,7 @@ const { Title, Paragraph } = Typography
 function Home() {
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [storybooks, setStorybooks] = useState<Storybook[]>([])
   const [loading, setLoading] = useState(false)
 
@@ -48,12 +50,12 @@ function Home() {
   if (!user) {
     return (
       <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <Title level={2}>Welcome to Sci-Fi Studio</Title>
+        <Title level={2}>{t('home.title')}</Title>
         <Paragraph style={{ fontSize: 16, color: '#666' }}>
-          Create amazing sci-fi storybooks and short videos using GenAI.
+          {t('home.subtitle')}
         </Paragraph>
         <Paragraph style={{ color: '#999' }}>
-          Sign in with Google to get started.
+          {t('home.signInPrompt')}
         </Paragraph>
       </div>
     )
@@ -62,20 +64,20 @@ function Home() {
   return (
     <div>
       <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Title level={3} style={{ margin: 0 }}>My Projects</Title>
+        <Title level={3} style={{ margin: 0 }}>{t('home.myProjects')}</Title>
         <div style={{ display: 'flex', gap: 12 }}>
           <Button
             type="primary"
             icon={<BookOutlined />}
             onClick={() => navigate('/story')}
           >
-            New Story
+            {t('home.newStory')}
           </Button>
           <Button
             icon={<VideoCameraOutlined />}
             onClick={() => navigate('/video')}
           >
-            New Video
+            {t('home.newVideo')}
           </Button>
         </div>
       </div>
@@ -87,10 +89,10 @@ function Home() {
       ) : storybooks.length === 0 ? (
         <Empty
           image={Empty.PRESENTED_IMAGE_SIMPLE}
-          description="No projects yet"
+          description={t('home.noProjectsYet')}
         >
           <Button type="primary" icon={<PlusOutlined />} onClick={() => navigate('/story')}>
-            Create Your First Story
+            {t('home.createFirstStory')}
           </Button>
         </Empty>
       ) : (
@@ -127,14 +129,14 @@ function Home() {
                 }
                 actions={[
                   <Popconfirm
-                    title="Delete this storybook?"
+                    title={t('home.deleteStorybook')}
                     onConfirm={(e) => {
                       e?.stopPropagation()
                       handleDelete(storybook.id!)
                     }}
                     onCancel={(e) => e?.stopPropagation()}
-                    okText="Delete"
-                    cancelText="Cancel"
+                    okText={t('home.delete')}
+                    cancelText={t('home.cancel')}
                   >
                     <DeleteOutlined
                       key="delete"
@@ -145,7 +147,7 @@ function Home() {
               >
                 <Card.Meta
                   title={storybook.title}
-                  description={`${storybook.frames.length} pages • ${storybook.createdAt.toDate().toLocaleDateString()}`}
+                  description={`${storybook.frames.length} ${t('home.pages')} • ${storybook.createdAt.toDate().toLocaleDateString()}`}
                 />
               </Card>
             </List.Item>

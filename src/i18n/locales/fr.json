@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Studio Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Tous droits réservés."
+  },
+  "nav": {
+    "home": "Accueil",
+    "storyEditor": "Éditeur d'Histoires",
+    "videoEditor": "Éditeur de Vidéos"
+  },
+  "auth": {
+    "signIn": "Connexion",
+    "signOut": "Déconnexion",
+    "signInWithGoogle": "Se connecter avec Google",
+    "continueAsGuest": "Continuer en tant qu'Invité",
+    "welcome": "Bienvenue",
+    "guest": "Invité"
+  },
+  "home": {
+    "title": "Bienvenue sur Studio Sci-Fi",
+    "subtitle": "Créez d'incroyables livres d'histoires et vidéos de science-fiction avec GenAI.",
+    "signInPrompt": "Connectez-vous avec Google pour commencer.",
+    "myProjects": "Mes Projets",
+    "newStory": "Nouvelle Histoire",
+    "newVideo": "Nouvelle Vidéo",
+    "noProjectsYet": "Aucun projet pour l'instant",
+    "createFirstStory": "Créez Votre Première Histoire",
+    "deleteStorybook": "Supprimer ce livre d'histoires ?",
+    "delete": "Supprimer",
+    "cancel": "Annuler",
+    "pages": "pages"
+  },
+  "storyEditor": {
+    "title": "Éditeur d'Histoires",
+    "editStorybook": "Modifier le Livre d'Histoires",
+    "description": "Créez un livre d'histoires de science-fiction illustré avec l'IA.",
+    "storyTitle": "Titre de l'Histoire",
+    "storyTitlePlaceholder": "Entrez un titre pour votre livre d'histoires...",
+    "storyIdea": "Idée d'Histoire",
+    "storyIdeaPlaceholder": "Décrivez votre idée d'histoire de science-fiction... (ex., 'Un astronaute solitaire découvre un ancien artefact extraterrestre sur Europe')",
+    "numberOfPages": "Nombre de Pages",
+    "pages": "pages",
+    "enhanceStoryConcept": "Améliorer le Concept",
+    "enhancedConcept": "Concept Amélioré",
+    "generateStorybook": "Générer un Livre de {{count}} Pages",
+    "storybookPreview": "Aperçu du Livre",
+    "previewPlaceholder": "Votre livre d'histoires généré par IA apparaîtra ici...",
+    "page": "Page",
+    "of": "sur",
+    "previous": "Précédent",
+    "next": "Suivant",
+    "noImage": "Pas d'image",
+    "imageFailed": "Échec de génération de l'image",
+    "new": "Nouveau",
+    "load": "Charger",
+    "save": "Enregistrer",
+    "update": "Mettre à jour",
+    "publish": "Publier",
+    "loadStorybook": "Charger un Livre d'Histoires",
+    "noSavedStorybooks": "Aucun livre enregistré",
+    "pleaseSignIn": "Veuillez vous connecter pour créer des histoires.",
+    "loadingStorybook": "Chargement du livre d'histoires...",
+    "saveFirst": "Enregistrez le livre d'abord pour publier",
+    "generateFirst": "Générez d'abord un livre d'histoires",
+    "enterTitleFirst": "Veuillez d'abord entrer un titre",
+    "enterIdeaFirst": "Veuillez d'abord entrer une idée d'histoire",
+    "storybookGenerated": "Livre d'histoires généré avec succès !",
+    "rememberToSave": "N'oubliez pas d'enregistrer votre livre pour ne pas perdre votre travail !",
+    "storybookUpdated": "Livre d'histoires mis à jour !",
+    "storybookSaved": "Livre d'histoires enregistré !",
+    "storybookLoaded": "Livre d'histoires chargé !",
+    "storybookDeleted": "Livre d'histoires supprimé",
+    "storyConceptEnhanced": "Concept d'histoire amélioré !",
+    "storybookNotFound": "Livre d'histoires non trouvé",
+    "failedToLoad": "Échec du chargement du livre",
+    "failedToSave": "Échec de l'enregistrement du livre",
+    "failedToDelete": "Échec de la suppression du livre",
+    "failedToEnhance": "Échec de l'amélioration du concept",
+    "failedToGenerate": "Échec de la génération du livre"
+  },
+  "videoEditor": {
+    "title": "Éditeur de Vidéos",
+    "description": "Créez des vidéos de science-fiction générées par IA.",
+    "comingSoon": "Génération de vidéos bientôt disponible !",
+    "placeholder": "Cette fonctionnalité est en cours de développement. Revenez plus tard pour les capacités de génération de vidéos par IA."
+  },
+  "storybookView": {
+    "notFound": "Livre d'histoires non trouvé",
+    "noPages": "Ce livre d'histoires n'a pas de pages.",
+    "noImageAvailable": "Aucune image disponible",
+    "rateStorybook": "Notez ce Livre d'Histoires",
+    "youRated": "Vous avez noté ce livre {{count}} étoile(s)",
+    "youRated_plural": "Vous avez noté ce livre {{count}} étoiles",
+    "rating": "note",
+    "ratings": "notes",
+    "share": "Partager",
+    "shareLinkCopied": "Lien copié dans le presse-papiers !",
+    "thankYouForRating": "Merci pour votre note !",
+    "failedToSubmitRating": "Échec de l'envoi de la note",
+    "unknownAuthor": "Auteur Inconnu"
+  },
+  "cookie": {
+    "message": "Nous utilisons des cookies pour améliorer votre expérience. En continuant à utiliser ce site, vous acceptez notre utilisation des cookies.",
+    "accept": "Accepter",
+    "decline": "Refuser"
+  },
+  "common": {
+    "home": "Accueil",
+    "error": "Erreur",
+    "loading": "Chargement..."
+  }
+}

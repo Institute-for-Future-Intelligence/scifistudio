@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Studio Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Hak cipta dilindungi."
+  },
+  "nav": {
+    "home": "Beranda",
+    "storyEditor": "Editor Cerita",
+    "videoEditor": "Editor Video"
+  },
+  "auth": {
+    "signIn": "Masuk",
+    "signOut": "Keluar",
+    "signInWithGoogle": "Masuk dengan Google",
+    "continueAsGuest": "Lanjutkan sebagai Tamu",
+    "welcome": "Selamat Datang",
+    "guest": "Tamu"
+  },
+  "home": {
+    "title": "Selamat Datang di Studio Sci-Fi",
+    "subtitle": "Buat buku cerita dan video fiksi ilmiah yang menakjubkan dengan GenAI.",
+    "signInPrompt": "Masuk dengan Google untuk memulai.",
+    "myProjects": "Proyek Saya",
+    "newStory": "Cerita Baru",
+    "newVideo": "Video Baru",
+    "noProjectsYet": "Belum ada proyek",
+    "createFirstStory": "Buat Cerita Pertama Anda",
+    "deleteStorybook": "Hapus buku ini?",
+    "delete": "Hapus",
+    "cancel": "Batal",
+    "pages": "halaman"
+  },
+  "storyEditor": {
+    "title": "Editor Cerita",
+    "editStorybook": "Edit Buku Cerita",
+    "description": "Buat buku cerita fiksi ilmiah bergambar dengan AI.",
+    "storyTitle": "Judul Cerita",
+    "storyTitlePlaceholder": "Masukkan judul untuk buku cerita Anda...",
+    "storyIdea": "Ide Cerita",
+    "storyIdeaPlaceholder": "Jelaskan ide cerita fiksi ilmiah Anda... (contoh: 'Seorang astronot kesepian menemukan artefak alien kuno di Europa')",
+    "numberOfPages": "Jumlah Halaman",
+    "pages": "halaman",
+    "enhanceStoryConcept": "Tingkatkan Konsep",
+    "enhancedConcept": "Konsep yang Ditingkatkan",
+    "generateStorybook": "Buat Buku {{count}} Halaman",
+    "storybookPreview": "Pratinjau Buku",
+    "previewPlaceholder": "Buku cerita yang dibuat AI akan muncul di sini...",
+    "page": "Halaman",
+    "of": "dari",
+    "previous": "Sebelumnya",
+    "next": "Berikutnya",
+    "noImage": "Tidak ada gambar",
+    "imageFailed": "Gagal membuat gambar",
+    "new": "Baru",
+    "load": "Muat",
+    "save": "Simpan",
+    "update": "Perbarui",
+    "publish": "Terbitkan",
+    "loadStorybook": "Muat Buku Cerita",
+    "noSavedStorybooks": "Tidak ada buku tersimpan",
+    "pleaseSignIn": "Silakan masuk untuk membuat cerita.",
+    "loadingStorybook": "Memuat buku cerita...",
+    "saveFirst": "Simpan dulu untuk menerbitkan",
+    "generateFirst": "Buat buku cerita terlebih dahulu",
+    "enterTitleFirst": "Masukkan judul terlebih dahulu",
+    "enterIdeaFirst": "Masukkan ide cerita terlebih dahulu",
+    "storybookGenerated": "Buku cerita berhasil dibuat!",
+    "rememberToSave": "Jangan lupa simpan!",
+    "storybookUpdated": "Buku cerita diperbarui!",
+    "storybookSaved": "Buku cerita disimpan!",
+    "storybookLoaded": "Buku cerita dimuat!",
+    "storybookDeleted": "Buku cerita dihapus",
+    "storyConceptEnhanced": "Konsep cerita ditingkatkan!",
+    "storybookNotFound": "Buku cerita tidak ditemukan",
+    "failedToLoad": "Gagal memuat",
+    "failedToSave": "Gagal menyimpan",
+    "failedToDelete": "Gagal menghapus",
+    "failedToEnhance": "Gagal meningkatkan",
+    "failedToGenerate": "Gagal membuat"
+  },
+  "videoEditor": {
+    "title": "Editor Video",
+    "description": "Buat video fiksi ilmiah dengan AI.",
+    "comingSoon": "Segera hadir!",
+    "placeholder": "Fitur ini sedang dalam pengembangan."
+  },
+  "storybookView": {
+    "notFound": "Buku cerita tidak ditemukan",
+    "noPages": "Buku cerita ini tidak memiliki halaman.",
+    "noImageAvailable": "Tidak ada gambar tersedia",
+    "rateStorybook": "Beri Rating Buku Ini",
+    "youRated": "Anda memberi {{count}} bintang",
+    "youRated_plural": "Anda memberi {{count}} bintang",
+    "rating": "rating",
+    "ratings": "rating",
+    "share": "Bagikan",
+    "shareLinkCopied": "Tautan disalin!",
+    "thankYouForRating": "Terima kasih atas ratingnya!",
+    "failedToSubmitRating": "Gagal mengirim rating",
+    "unknownAuthor": "Penulis Tidak Dikenal"
+  },
+  "cookie": {
+    "message": "Kami menggunakan cookie untuk meningkatkan pengalaman Anda. Dengan melanjutkan, Anda menyetujui penggunaan cookie.",
+    "accept": "Terima",
+    "decline": "Tolak"
+  },
+  "common": {
+    "home": "Beranda",
+    "error": "Kesalahan",
+    "loading": "Memuat..."
+  }
+}

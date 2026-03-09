@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Studio Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Tutti i diritti riservati."
+  },
+  "nav": {
+    "home": "Home",
+    "storyEditor": "Editor di Storie",
+    "videoEditor": "Editor Video"
+  },
+  "auth": {
+    "signIn": "Accedi",
+    "signOut": "Esci",
+    "signInWithGoogle": "Accedi con Google",
+    "continueAsGuest": "Continua come Ospite",
+    "welcome": "Benvenuto",
+    "guest": "Ospite"
+  },
+  "home": {
+    "title": "Benvenuto in Studio Sci-Fi",
+    "subtitle": "Crea incredibili libri di storie e video di fantascienza con GenAI.",
+    "signInPrompt": "Accedi con Google per iniziare.",
+    "myProjects": "I Miei Progetti",
+    "newStory": "Nuova Storia",
+    "newVideo": "Nuovo Video",
+    "noProjectsYet": "Nessun progetto ancora",
+    "createFirstStory": "Crea la Tua Prima Storia",
+    "deleteStorybook": "Eliminare questo libro di storie?",
+    "delete": "Elimina",
+    "cancel": "Annulla",
+    "pages": "pagine"
+  },
+  "storyEditor": {
+    "title": "Editor di Storie",
+    "editStorybook": "Modifica Libro di Storie",
+    "description": "Crea un libro di storie di fantascienza illustrato con l'IA.",
+    "storyTitle": "Titolo della Storia",
+    "storyTitlePlaceholder": "Inserisci un titolo per il tuo libro di storie...",
+    "storyIdea": "Idea della Storia",
+    "storyIdeaPlaceholder": "Descrivi la tua idea di storia di fantascienza... (es., 'Un astronauta solitario scopre un antico artefatto alieno su Europa')",
+    "numberOfPages": "Numero di Pagine",
+    "pages": "pagine",
+    "enhanceStoryConcept": "Migliora il Concetto",
+    "enhancedConcept": "Concetto Migliorato",
+    "generateStorybook": "Genera Libro di {{count}} Pagine",
+    "storybookPreview": "Anteprima del Libro",
+    "previewPlaceholder": "Il tuo libro di storie generato dall'IA apparirà qui...",
+    "page": "Pagina",
+    "of": "di",
+    "previous": "Precedente",
+    "next": "Successivo",
+    "noImage": "Nessuna immagine",
+    "imageFailed": "Generazione immagine fallita",
+    "new": "Nuovo",
+    "load": "Carica",
+    "save": "Salva",
+    "update": "Aggiorna",
+    "publish": "Pubblica",
+    "loadStorybook": "Carica Libro di Storie",
+    "noSavedStorybooks": "Nessun libro salvato",
+    "pleaseSignIn": "Accedi per creare storie.",
+    "loadingStorybook": "Caricamento libro di storie...",
+    "saveFirst": "Salva prima il libro per pubblicare",
+    "generateFirst": "Prima genera un libro di storie",
+    "enterTitleFirst": "Prima inserisci un titolo",
+    "enterIdeaFirst": "Prima inserisci un'idea per la storia",
+    "storybookGenerated": "Libro di storie generato con successo!",
+    "rememberToSave": "Ricorda di salvare il libro per non perdere il tuo lavoro!",
+    "storybookUpdated": "Libro di storie aggiornato!",
+    "storybookSaved": "Libro di storie salvato!",
+    "storybookLoaded": "Libro di storie caricato!",
+    "storybookDeleted": "Libro di storie eliminato",
+    "storyConceptEnhanced": "Concetto della storia migliorato!",
+    "storybookNotFound": "Libro di storie non trovato",
+    "failedToLoad": "Caricamento del libro fallito",
+    "failedToSave": "Salvataggio del libro fallito",
+    "failedToDelete": "Eliminazione del libro fallita",
+    "failedToEnhance": "Miglioramento del concetto fallito",
+    "failedToGenerate": "Generazione del libro fallita"
+  },
+  "videoEditor": {
+    "title": "Editor Video",
+    "description": "Crea video di fantascienza generati dall'IA.",
+    "comingSoon": "Generazione video in arrivo!",
+    "placeholder": "Questa funzionalità è in sviluppo. Torna più tardi per le capacità di generazione video con IA."
+  },
+  "storybookView": {
+    "notFound": "Libro di storie non trovato",
+    "noPages": "Questo libro di storie non ha pagine.",
+    "noImageAvailable": "Nessuna immagine disponibile",
+    "rateStorybook": "Valuta questo Libro di Storie",
+    "youRated": "Hai valutato questo libro {{count}} stella",
+    "youRated_plural": "Hai valutato questo libro {{count}} stelle",
+    "rating": "valutazione",
+    "ratings": "valutazioni",
+    "share": "Condividi",
+    "shareLinkCopied": "Link copiato negli appunti!",
+    "thankYouForRating": "Grazie per la valutazione!",
+    "failedToSubmitRating": "Invio valutazione fallito",
+    "unknownAuthor": "Autore Sconosciuto"
+  },
+  "cookie": {
+    "message": "Utilizziamo i cookie per migliorare la tua esperienza. Continuando a utilizzare questo sito, accetti il nostro utilizzo dei cookie.",
+    "accept": "Accetta",
+    "decline": "Rifiuta"
+  },
+  "common": {
+    "home": "Home",
+    "error": "Errore",
+    "loading": "Caricamento..."
+  }
+}

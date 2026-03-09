@@ -1,5 +1,5 @@
 import { Outlet, useNavigate, useLocation } from 'react-router-dom'
-import { Layout, Menu, Button, Avatar, Dropdown, Spin } from 'antd'
+import { Layout, Menu, Button, Avatar, Dropdown, Spin, Space } from 'antd'
 import {
   HomeOutlined,
   BookOutlined,
@@ -10,10 +10,12 @@ import {
   MenuUnfoldOutlined,
   GoogleOutlined,
 } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { useAppStore } from '../../stores'
 import Logo from '../common/Logo'
 import CookieConsent from '../common/CookieConsent'
+import LanguageSelector from '../common/LanguageSelector'
 
 const { Header, Sider, Content, Footer } = Layout
 
@@ -22,29 +24,30 @@ function AppLayout() {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, loading, signIn, signInAnonymous, signOut } = useAuth()
+  const { t } = useTranslation()
 
   const menuItems = [
     {
       key: '/',
       icon: <HomeOutlined />,
-      label: 'Home',
+      label: t('nav.home'),
     },
     {
       key: '/story',
       icon: <BookOutlined />,
-      label: 'Story Editor',
+      label: t('nav.storyEditor'),
     },
     {
       key: '/video',
       icon: <VideoCameraOutlined />,
-      label: 'Video Editor',
+      label: t('nav.videoEditor'),
     },
   ]
 
   const userMenuItems = [
     {
       key: 'profile',
-      label: user?.displayName || user?.email || (user?.isAnonymous ? 'Anonymous User' : 'User'),
+      label: user?.displayName || user?.email || (user?.isAnonymous ? t('auth.guest') : 'User'),
       disabled: true,
     },
     {
@@ -53,7 +56,7 @@ function AppLayout() {
     {
       key: 'signout',
       icon: <LogoutOutlined />,
-      label: 'Sign Out',
+      label: t('auth.signOut'),
       onClick: signOut,
     },
   ]
@@ -62,13 +65,13 @@ function AppLayout() {
     {
       key: 'google',
       icon: <GoogleOutlined />,
-      label: 'Sign in with Google',
+      label: t('auth.signInWithGoogle'),
       onClick: signIn,
     },
     {
       key: 'anonymous',
       icon: <UserOutlined />,
-      label: 'Continue as Guest',
+      label: t('auth.continueAsGuest'),
       onClick: signInAnonymous,
     },
   ]
@@ -104,7 +107,7 @@ function AppLayout() {
           <Logo size={collapsed ? 28 : 32} />
           {!collapsed && (
             <h1 style={{ margin: 0, fontSize: 18, fontWeight: 600, color: '#4f46e5' }}>
-              Sci-Fi Studio
+              {t('app.title')}
             </h1>
           )}
         </div>
@@ -131,7 +134,8 @@ function AppLayout() {
             icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
             onClick={toggleSidebar}
           />
-          <div>
+          <Space>
+            <LanguageSelector />
             {user ? (
               <Dropdown menu={{ items: userMenuItems }} placement="bottomRight">
                 <Avatar
@@ -143,17 +147,17 @@ function AppLayout() {
             ) : (
               <Dropdown menu={{ items: signInMenuItems }} placement="bottomRight">
                 <Button type="primary">
-                  Sign In
+                  {t('auth.signIn')}
                 </Button>
               </Dropdown>
             )}
-          </div>
+          </Space>
         </Header>
         <Content style={{ margin: 24, padding: 24, background: '#fff', borderRadius: 8 }}>
           <Outlet />
         </Content>
         <Footer style={{ textAlign: 'center', color: '#999', background: 'transparent' }}>
-          &copy; {new Date().getFullYear()} Institute for Future Intelligence, Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} {t('app.copyright')}
         </Footer>
       </Layout>
       <CookieConsent />

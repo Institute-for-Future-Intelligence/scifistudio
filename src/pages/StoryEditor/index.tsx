@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select, Progress } from 'antd'
 import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, ShareAltOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { generateStorybook, enhanceStoryPrompt, StoryFrame } from '../../services/gemini'
 import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook } from '../../services/firestore'
@@ -13,6 +14,7 @@ function StoryEditor() {
   const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
   const { user } = useAuth()
+  const { t } = useTranslation()
   const [storybookId, setStorybookId] = useState<string | null>(null)
   const [prompt, setPrompt] = useState('')
   const [enhancedPrompt, setEnhancedPrompt] = useState('')
@@ -70,12 +72,12 @@ function StoryEditor() {
         setCurrentPage(0)
         setHasUnsavedChanges(false)
       } else {
-        message.error('Storybook not found')
+        message.error(t('storyEditor.storybookNotFound'))
         navigate('/story')
       }
     } catch (err) {
       console.error('Failed to load storybook:', err)
-      message.error('Failed to load storybook')
+      message.error(t('storyEditor.failedToLoad'))
     } finally {
       setLoadingStorybook(false)
     }
@@ -96,7 +98,7 @@ function StoryEditor() {
 
   const handleEnhancePrompt = async () => {
     if (!prompt.trim()) {
-      message.warning('Please enter a story idea first')
+      message.warning(t('storyEditor.enterIdeaFirst'))
       return
     }
 
@@ -105,9 +107,9 @@ function StoryEditor() {
     try {
       const enhanced = await enhanceStoryPrompt(prompt)
       setEnhancedPrompt(enhanced)
-      message.success('Story concept enhanced!')
+      message.success(t('storyEditor.storyConceptEnhanced'))
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to enhance prompt'
+      const errorMessage = err instanceof Error ? err.message : t('storyEditor.failedToEnhance')
       setError(errorMessage)
       message.error(errorMessage)
     } finally {
@@ -117,12 +119,12 @@ function StoryEditor() {
 
   const handleGenerateStorybook = async () => {
     if (!storyTitle.trim()) {
-      message.warning('Please enter a story title first')
+      message.warning(t('storyEditor.enterTitleFirst'))
       return
     }
     const finalPrompt = enhancedPrompt || prompt
     if (!finalPrompt.trim()) {
-      message.warning('Please enter a story idea first')
+      message.warning(t('storyEditor.enterIdeaFirst'))
       return
     }
 
@@ -145,15 +147,15 @@ function StoryEditor() {
       setFrames(generatedFrames)
       setCurrentPage(0)
       setHasUnsavedChanges(true)
-      message.success('Storybook generated successfully!')
+      message.success(t('storyEditor.storybookGenerated'))
       // Remind user to save if this is a new storybook
       if (!storybookId) {
         setTimeout(() => {
-          message.warning('Remember to save your storybook to avoid losing your work!', 5)
+          message.warning(t('storyEditor.rememberToSave'), 5)
         }, 1500)
       }
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to generate storybook'
+      const errorMessage = err instanceof Error ? err.message : t('storyEditor.failedToGenerate')
       setError(errorMessage)
       message.error(errorMessage)
     } finally {
@@ -165,11 +167,11 @@ function StoryEditor() {
 
   const handleSaveStorybook = async () => {
     if (!user) {
-      message.error('Please sign in to save')
+      message.error(t('storyEditor.pleaseSignIn'))
       return
     }
     if (frames.length === 0) {
-      message.warning('Generate a storybook first')
+      message.warning(t('storyEditor.generateFirst'))
       return
     }
 
@@ -186,7 +188,7 @@ function StoryEditor() {
           frames,
         }, user.uid)
         setHasUnsavedChanges(false)
-        message.success('Storybook updated!')
+        message.success(t('storyEditor.storybookUpdated'))
       } else {
         // Create new
         const newId = await createStorybook({
@@ -199,11 +201,11 @@ function StoryEditor() {
         setStorybookId(newId)
         setHasUnsavedChanges(false)
         navigate(`/story/${newId}`, { replace: true })
-        message.success('Storybook saved!')
+        message.success(t('storyEditor.storybookSaved'))
       }
       await loadSavedStorybooks()
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Failed to save storybook'
+      const errorMessage = err instanceof Error ? err.message : t('storyEditor.failedToSave')
       message.error(errorMessage)
     } finally {
       setSaving(false)
@@ -232,19 +234,19 @@ function StoryEditor() {
     setHasUnsavedChanges(false)
     setShowLoadModal(false)
     navigate(`/story/${storybook.id}`, { replace: true })
-    message.success('Storybook loaded!')
+    message.success(t('storyEditor.storybookLoaded'))
   }
 
   const handleDeleteStorybook = async (id: string) => {
     try {
       await deleteStorybook(id)
-      message.success('Storybook deleted')
+      message.success(t('storyEditor.storybookDeleted'))
       await loadSavedStorybooks()
       if (id === storybookId) {
         handleNewStorybook()
       }
     } catch (err) {
-      message.error('Failed to delete storybook')
+      message.error(t('storyEditor.failedToDelete'))
     }
   }
 
@@ -259,9 +261,9 @@ function StoryEditor() {
   if (!user) {
     return (
       <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <Title level={3}>Story Editor</Title>
+        <Title level={3}>{t('storyEditor.title')}</Title>
         <Paragraph style={{ color: '#999' }}>
-          Please sign in to create stories.
+          {t('storyEditor.pleaseSignIn')}
         </Paragraph>
       </div>
     )
@@ -271,7 +273,7 @@ function StoryEditor() {
     return (
       <div style={{ textAlign: 'center', padding: '48px 0' }}>
         <Spin size="large" />
-        <Paragraph style={{ marginTop: 16, color: '#999' }}>Loading storybook...</Paragraph>
+        <Paragraph style={{ marginTop: 16, color: '#999' }}>{t('storyEditor.loadingStorybook')}</Paragraph>
       </div>
     )
   }
@@ -279,19 +281,19 @@ function StoryEditor() {
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Title level={3}>{storybookId ? 'Edit Storybook' : 'Story Editor'}</Title>
+        <Title level={3}>{storybookId ? t('storyEditor.editStorybook') : t('storyEditor.title')}</Title>
         <Space>
           <Button
             icon={<HomeOutlined />}
             onClick={() => navigate('/')}
           >
-            Home
+            {t('common.home')}
           </Button>
           <Button
             icon={<PlusOutlined />}
             onClick={handleNewStorybook}
           >
-            New
+            {t('storyEditor.new')}
           </Button>
           <Button
             icon={<FolderOpenOutlined />}
@@ -300,7 +302,7 @@ function StoryEditor() {
               loadSavedStorybooks()
             }}
           >
-            Load
+            {t('storyEditor.load')}
           </Button>
           <Button
             icon={<SaveOutlined />}
@@ -308,7 +310,7 @@ function StoryEditor() {
             loading={saving}
             disabled={frames.length === 0}
           >
-            {storybookId ? 'Update' : 'Save'}
+            {storybookId ? t('storyEditor.update') : t('storyEditor.save')}
           </Button>
           <Button
             icon={<ShareAltOutlined />}
@@ -317,22 +319,22 @@ function StoryEditor() {
                 const publishUrl = `${window.location.origin}/view/${storybookId}`
                 window.open(publishUrl, '_blank')
               } else {
-                message.warning('Save the storybook first to publish')
+                message.warning(t('storyEditor.saveFirst'))
               }
             }}
             disabled={!storybookId}
           >
-            Publish
+            {t('storyEditor.publish')}
           </Button>
         </Space>
       </div>
       <Paragraph style={{ color: '#666' }}>
-        Create an illustrated sci-fi storybook with AI.
+        {t('storyEditor.description')}
       </Paragraph>
 
       {error && (
         <Alert
-          message="Error"
+          message={t('common.error')}
           description={error}
           type="error"
           showIcon
@@ -345,45 +347,45 @@ function StoryEditor() {
       <Card style={{ marginTop: 24 }}>
         <Space direction="vertical" style={{ width: '100%' }} size="large">
           <div>
-            <label style={{ fontWeight: 500 }}>Story Title <span style={{ color: '#ff4d4f' }}>*</span></label>
+            <label style={{ fontWeight: 500 }}>{t('storyEditor.storyTitle')} <span style={{ color: '#ff4d4f' }}>*</span></label>
             <Input
               value={storyTitle}
               onChange={(e) => setStoryTitle(e.target.value)}
-              placeholder="Enter a title for your storybook..."
+              placeholder={t('storyEditor.storyTitlePlaceholder')}
               style={{ marginTop: 8 }}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label style={{ fontWeight: 500 }}>Story Idea <span style={{ color: '#ff4d4f' }}>*</span></label>
+            <label style={{ fontWeight: 500 }}>{t('storyEditor.storyIdea')} <span style={{ color: '#ff4d4f' }}>*</span></label>
             <TextArea
               rows={3}
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="Describe your sci-fi story idea... (e.g., 'A lone astronaut discovers an ancient alien artifact on Europa')"
+              placeholder={t('storyEditor.storyIdeaPlaceholder')}
               style={{ marginTop: 8 }}
               disabled={loading}
             />
           </div>
 
           <div>
-            <label style={{ fontWeight: 500 }}>Number of Pages</label>
+            <label style={{ fontWeight: 500 }}>{t('storyEditor.numberOfPages')}</label>
             <Select
               value={frameCount}
               onChange={(value) => setFrameCount(value)}
               style={{ width: 120, marginLeft: 12 }}
               disabled={loading}
               options={[
-                { value: 2, label: '2 pages' },
-                { value: 3, label: '3 pages' },
-                { value: 4, label: '4 pages' },
-                { value: 5, label: '5 pages' },
-                { value: 6, label: '6 pages' },
-                { value: 7, label: '7 pages' },
-                { value: 8, label: '8 pages' },
-                { value: 9, label: '9 pages' },
-                { value: 10, label: '10 pages' },
+                { value: 2, label: `2 ${t('storyEditor.pages')}` },
+                { value: 3, label: `3 ${t('storyEditor.pages')}` },
+                { value: 4, label: `4 ${t('storyEditor.pages')}` },
+                { value: 5, label: `5 ${t('storyEditor.pages')}` },
+                { value: 6, label: `6 ${t('storyEditor.pages')}` },
+                { value: 7, label: `7 ${t('storyEditor.pages')}` },
+                { value: 8, label: `8 ${t('storyEditor.pages')}` },
+                { value: 9, label: `9 ${t('storyEditor.pages')}` },
+                { value: 10, label: `10 ${t('storyEditor.pages')}` },
               ]}
             />
           </div>
@@ -394,12 +396,12 @@ function StoryEditor() {
             loading={enhancing}
             disabled={loading || !prompt.trim()}
           >
-            Enhance Story Concept
+            {t('storyEditor.enhanceStoryConcept')}
           </Button>
 
           {enhancedPrompt && (
             <div>
-              <label style={{ fontWeight: 500, color: '#6366f1' }}>Enhanced Concept</label>
+              <label style={{ fontWeight: 500, color: '#6366f1' }}>{t('storyEditor.enhancedConcept')}</label>
               <TextArea
                 rows={4}
                 value={enhancedPrompt}
@@ -418,7 +420,7 @@ function StoryEditor() {
             disabled={!storyTitle.trim() || (!prompt.trim() && !enhancedPrompt.trim())}
             size="large"
           >
-            Generate {frameCount}-Page Storybook
+            {t('storyEditor.generateStorybook', { count: frameCount })}
           </Button>
 
           {status && (
@@ -437,7 +439,7 @@ function StoryEditor() {
         </Space>
       </Card>
 
-      <Card title="Storybook Preview" style={{ marginTop: 24 }}>
+      <Card title={t('storyEditor.storybookPreview')} style={{ marginTop: 24 }}>
         {frames.length > 0 ? (
           <div>
             <div
@@ -463,14 +465,14 @@ function StoryEditor() {
                 {frames[currentPage]?.imageUrl ? (
                   <Image
                     src={frames[currentPage].imageUrl}
-                    alt={`Page ${currentPage + 1}`}
+                    alt={`${t('storyEditor.page')} ${currentPage + 1}`}
                     style={{ maxWidth: '100%', maxHeight: 400 }}
                     preview={true}
                   />
                 ) : (
                   <div style={{ color: '#999', padding: 24, textAlign: 'center' }}>
                     <RobotOutlined style={{ fontSize: 48, marginBottom: 16 }} />
-                    <div>Image failed to generate</div>
+                    <div>{t('storyEditor.imageFailed')}</div>
                   </div>
                 )}
               </div>
@@ -494,7 +496,7 @@ function StoryEditor() {
                     marginBottom: 16,
                   }}
                 >
-                  Page {currentPage + 1} of {frames.length}
+                  {t('storyEditor.page')} {currentPage + 1} {t('storyEditor.of')} {frames.length}
                 </div>
                 <Paragraph
                   style={{
@@ -522,7 +524,7 @@ function StoryEditor() {
                 onClick={handlePrevPage}
                 disabled={currentPage === 0}
               >
-                Previous
+                {t('storyEditor.previous')}
               </Button>
               <span style={{ color: '#666' }}>
                 {currentPage + 1} / {frames.length}
@@ -532,7 +534,7 @@ function StoryEditor() {
                 onClick={handleNextPage}
                 disabled={currentPage === frames.length - 1}
               >
-                Next
+                {t('storyEditor.next')}
               </Button>
             </div>
 
@@ -577,7 +579,7 @@ function StoryEditor() {
                         fontSize: 12,
                       }}
                     >
-                      No image
+                      {t('storyEditor.noImage')}
                     </div>
                   )}
                   <div
@@ -602,14 +604,14 @@ function StoryEditor() {
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
             <BookOutlined style={{ fontSize: 64, color: '#ddd', marginBottom: 16 }} />
             <Paragraph style={{ color: '#999' }}>
-              Your AI-generated storybook will appear here...
+              {t('storyEditor.previewPlaceholder')}
             </Paragraph>
           </div>
         )}
       </Card>
 
       <Modal
-        title="Load Storybook"
+        title={t('storyEditor.loadStorybook')}
         open={showLoadModal}
         onCancel={() => setShowLoadModal(false)}
         footer={null}
@@ -625,7 +627,7 @@ function StoryEditor() {
                   type="link"
                   onClick={() => handleLoadStorybook(storybook)}
                 >
-                  Load
+                  {t('storyEditor.load')}
                 </Button>,
                 <Button
                   type="link"
@@ -637,11 +639,11 @@ function StoryEditor() {
             >
               <List.Item.Meta
                 title={storybook.title}
-                description={`${storybook.frames.length} pages • ${storybook.createdAt.toDate().toLocaleDateString()}`}
+                description={`${storybook.frames.length} ${t('storyEditor.pages')} • ${storybook.createdAt.toDate().toLocaleDateString()}`}
               />
             </List.Item>
           )}
-          locale={{ emptyText: 'No saved storybooks' }}
+          locale={{ emptyText: t('storyEditor.noSavedStorybooks') }}
         />
       </Modal>
     </div>

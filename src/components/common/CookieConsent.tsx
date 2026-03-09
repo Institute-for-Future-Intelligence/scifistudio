@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react'
 import { Button, Space } from 'antd'
+import { useTranslation } from 'react-i18next'
 
 function CookieConsent() {
   const [visible, setVisible] = useState(false)
+  const { t } = useTranslation()
 
   useEffect(() => {
     const consent = localStorage.getItem('cookie-consent')
@@ -44,15 +46,15 @@ function CookieConsent() {
     >
       <div style={{ flex: 1, minWidth: 300 }}>
         <p style={{ margin: 0, fontSize: 14 }}>
-          We use cookies to enhance your experience. By continuing to use this site, you agree to our use of cookies.
+          {t('cookie.message')}
         </p>
       </div>
       <Space>
         <Button onClick={handleDecline}>
-          Decline
+          {t('cookie.decline')}
         </Button>
         <Button type="primary" onClick={handleAccept}>
-          Accept
+          {t('cookie.accept')}
         </Button>
       </Space>
     </div>

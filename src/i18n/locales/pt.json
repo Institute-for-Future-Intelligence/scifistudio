@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Estúdio Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Todos os direitos reservados."
+  },
+  "nav": {
+    "home": "Início",
+    "storyEditor": "Editor de Histórias",
+    "videoEditor": "Editor de Vídeos"
+  },
+  "auth": {
+    "signIn": "Entrar",
+    "signOut": "Sair",
+    "signInWithGoogle": "Entrar com Google",
+    "continueAsGuest": "Continuar como Convidado",
+    "welcome": "Bem-vindo",
+    "guest": "Convidado"
+  },
+  "home": {
+    "title": "Bem-vindo ao Estúdio Sci-Fi",
+    "subtitle": "Crie incríveis livros de histórias e vídeos de ficção científica com GenAI.",
+    "signInPrompt": "Entre com Google para começar.",
+    "myProjects": "Meus Projetos",
+    "newStory": "Nova História",
+    "newVideo": "Novo Vídeo",
+    "noProjectsYet": "Nenhum projeto ainda",
+    "createFirstStory": "Crie Sua Primeira História",
+    "deleteStorybook": "Excluir este livro de histórias?",
+    "delete": "Excluir",
+    "cancel": "Cancelar",
+    "pages": "páginas"
+  },
+  "storyEditor": {
+    "title": "Editor de Histórias",
+    "editStorybook": "Editar Livro de Histórias",
+    "description": "Crie um livro de histórias de ficção científica ilustrado com IA.",
+    "storyTitle": "Título da História",
+    "storyTitlePlaceholder": "Digite um título para seu livro de histórias...",
+    "storyIdea": "Ideia da História",
+    "storyIdeaPlaceholder": "Descreva sua ideia de história de ficção científica... (ex., 'Um astronauta solitário descobre um antigo artefato alienígena em Europa')",
+    "numberOfPages": "Número de Páginas",
+    "pages": "páginas",
+    "enhanceStoryConcept": "Aprimorar Conceito",
+    "enhancedConcept": "Conceito Aprimorado",
+    "generateStorybook": "Gerar Livro de {{count}} Páginas",
+    "storybookPreview": "Prévia do Livro",
+    "previewPlaceholder": "Seu livro de histórias gerado por IA aparecerá aqui...",
+    "page": "Página",
+    "of": "de",
+    "previous": "Anterior",
+    "next": "Próximo",
+    "noImage": "Sem imagem",
+    "imageFailed": "Falha ao gerar imagem",
+    "new": "Novo",
+    "load": "Carregar",
+    "save": "Salvar",
+    "update": "Atualizar",
+    "publish": "Publicar",
+    "loadStorybook": "Carregar Livro de Histórias",
+    "noSavedStorybooks": "Nenhum livro salvo",
+    "pleaseSignIn": "Por favor entre para criar histórias.",
+    "loadingStorybook": "Carregando livro de histórias...",
+    "saveFirst": "Salve o livro primeiro para publicar",
+    "generateFirst": "Primeiro gere um livro de histórias",
+    "enterTitleFirst": "Por favor digite um título primeiro",
+    "enterIdeaFirst": "Por favor digite uma ideia de história primeiro",
+    "storybookGenerated": "Livro de histórias gerado com sucesso!",
+    "rememberToSave": "Lembre-se de salvar seu livro para não perder seu trabalho!",
+    "storybookUpdated": "Livro de histórias atualizado!",
+    "storybookSaved": "Livro de histórias salvo!",
+    "storybookLoaded": "Livro de histórias carregado!",
+    "storybookDeleted": "Livro de histórias excluído",
+    "storyConceptEnhanced": "Conceito da história aprimorado!",
+    "storybookNotFound": "Livro de histórias não encontrado",
+    "failedToLoad": "Falha ao carregar livro de histórias",
+    "failedToSave": "Falha ao salvar livro de histórias",
+    "failedToDelete": "Falha ao excluir livro de histórias",
+    "failedToEnhance": "Falha ao aprimorar conceito",
+    "failedToGenerate": "Falha ao gerar livro de histórias"
+  },
+  "videoEditor": {
+    "title": "Editor de Vídeos",
+    "description": "Crie vídeos de ficção científica gerados por IA.",
+    "comingSoon": "Geração de vídeos em breve!",
+    "placeholder": "Este recurso está em desenvolvimento. Volte mais tarde para capacidades de geração de vídeo com IA."
+  },
+  "storybookView": {
+    "notFound": "Livro de histórias não encontrado",
+    "noPages": "Este livro de histórias não tem páginas.",
+    "noImageAvailable": "Nenhuma imagem disponível",
+    "rateStorybook": "Avalie este Livro de Histórias",
+    "youRated": "Você avaliou este livro com {{count}} estrela",
+    "youRated_plural": "Você avaliou este livro com {{count}} estrelas",
+    "rating": "avaliação",
+    "ratings": "avaliações",
+    "share": "Compartilhar",
+    "shareLinkCopied": "Link copiado para a área de transferência!",
+    "thankYouForRating": "Obrigado pela avaliação!",
+    "failedToSubmitRating": "Falha ao enviar avaliação",
+    "unknownAuthor": "Autor Desconhecido"
+  },
+  "cookie": {
+    "message": "Usamos cookies para melhorar sua experiência. Ao continuar usando este site, você concorda com nosso uso de cookies.",
+    "accept": "Aceitar",
+    "decline": "Recusar"
+  },
+  "common": {
+    "home": "Início",
+    "error": "Erro",
+    "loading": "Carregando..."
+  }
+}

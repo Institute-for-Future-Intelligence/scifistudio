@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Студія Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Усі права захищено."
+  },
+  "nav": {
+    "home": "Головна",
+    "storyEditor": "Редактор Історій",
+    "videoEditor": "Редактор Відео"
+  },
+  "auth": {
+    "signIn": "Увійти",
+    "signOut": "Вийти",
+    "signInWithGoogle": "Увійти через Google",
+    "continueAsGuest": "Продовжити як Гість",
+    "welcome": "Ласкаво просимо",
+    "guest": "Гість"
+  },
+  "home": {
+    "title": "Ласкаво просимо до Студії Sci-Fi",
+    "subtitle": "Створюйте неймовірні науково-фантастичні книги та відео за допомогою GenAI.",
+    "signInPrompt": "Увійдіть через Google, щоб почати.",
+    "myProjects": "Мої Проєкти",
+    "newStory": "Нова Історія",
+    "newVideo": "Нове Відео",
+    "noProjectsYet": "Поки немає проєктів",
+    "createFirstStory": "Створіть Свою Першу Історію",
+    "deleteStorybook": "Видалити цю книгу?",
+    "delete": "Видалити",
+    "cancel": "Скасувати",
+    "pages": "сторінок"
+  },
+  "storyEditor": {
+    "title": "Редактор Історій",
+    "editStorybook": "Редагувати Книгу",
+    "description": "Створіть ілюстровану науково-фантастичну книгу за допомогою ШІ.",
+    "storyTitle": "Назва Історії",
+    "storyTitlePlaceholder": "Введіть назву для вашої книги...",
+    "storyIdea": "Ідея Історії",
+    "storyIdeaPlaceholder": "Опишіть вашу науково-фантастичну ідею... (напр., 'Самотній астронавт знаходить давній інопланетний артефакт на Європі')",
+    "numberOfPages": "Кількість Сторінок",
+    "pages": "сторінок",
+    "enhanceStoryConcept": "Покращити Концепцію",
+    "enhancedConcept": "Покращена Концепція",
+    "generateStorybook": "Згенерувати Книгу на {{count}} Сторінок",
+    "storybookPreview": "Попередній Перегляд",
+    "previewPlaceholder": "Ваша книга, згенерована ШІ, з'явиться тут...",
+    "page": "Сторінка",
+    "of": "з",
+    "previous": "Назад",
+    "next": "Далі",
+    "noImage": "Немає зображення",
+    "imageFailed": "Не вдалося згенерувати зображення",
+    "new": "Нова",
+    "load": "Завантажити",
+    "save": "Зберегти",
+    "update": "Оновити",
+    "publish": "Опублікувати",
+    "loadStorybook": "Завантажити Книгу",
+    "noSavedStorybooks": "Немає збережених книг",
+    "pleaseSignIn": "Будь ласка, увійдіть, щоб створювати історії.",
+    "loadingStorybook": "Завантаження книги...",
+    "saveFirst": "Спочатку збережіть книгу для публікації",
+    "generateFirst": "Спочатку згенеруйте книгу",
+    "enterTitleFirst": "Спочатку введіть назву",
+    "enterIdeaFirst": "Спочатку введіть ідею історії",
+    "storybookGenerated": "Книгу успішно згенеровано!",
+    "rememberToSave": "Не забудьте зберегти книгу, щоб не втратити роботу!",
+    "storybookUpdated": "Книгу оновлено!",
+    "storybookSaved": "Книгу збережено!",
+    "storybookLoaded": "Книгу завантажено!",
+    "storybookDeleted": "Книгу видалено",
+    "storyConceptEnhanced": "Концепцію історії покращено!",
+    "storybookNotFound": "Книгу не знайдено",
+    "failedToLoad": "Не вдалося завантажити книгу",
+    "failedToSave": "Не вдалося зберегти книгу",
+    "failedToDelete": "Не вдалося видалити книгу",
+    "failedToEnhance": "Не вдалося покращити концепцію",
+    "failedToGenerate": "Не вдалося згенерувати книгу"
+  },
+  "videoEditor": {
+    "title": "Редактор Відео",
+    "description": "Створюйте науково-фантастичні відео за допомогою ШІ.",
+    "comingSoon": "Генерація відео скоро!",
+    "placeholder": "Ця функція в розробці. Поверніться пізніше для можливостей генерації відео за допомогою ШІ."
+  },
+  "storybookView": {
+    "notFound": "Книгу не знайдено",
+    "noPages": "Ця книга не має сторінок.",
+    "noImageAvailable": "Зображення недоступне",
+    "rateStorybook": "Оцініть цю Книгу",
+    "youRated": "Ви оцінили цю книгу на {{count}} зірку",
+    "youRated_plural": "Ви оцінили цю книгу на {{count}} зірок",
+    "rating": "оцінка",
+    "ratings": "оцінок",
+    "share": "Поділитися",
+    "shareLinkCopied": "Посилання скопійовано!",
+    "thankYouForRating": "Дякуємо за оцінку!",
+    "failedToSubmitRating": "Не вдалося надіслати оцінку",
+    "unknownAuthor": "Невідомий Автор"
+  },
+  "cookie": {
+    "message": "Ми використовуємо файли cookie для покращення вашого досвіду. Продовжуючи користуватися цим сайтом, ви погоджуєтесь з використанням cookie.",
+    "accept": "Прийняти",
+    "decline": "Відхилити"
+  },
+  "common": {
+    "home": "Головна",
+    "error": "Помилка",
+    "loading": "Завантаження..."
+  }
+}

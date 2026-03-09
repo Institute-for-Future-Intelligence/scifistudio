@@ -2,14 +2,17 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Typography, Card, Button, Spin, Image, Rate, message, Space } from 'antd'
 import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined } from '@ant-design/icons'
+import { useTranslation } from 'react-i18next'
 import { getStorybook, rateStorybook, Storybook } from '../../services/firestore'
 import { StoryFrame } from '../../services/gemini'
+import LanguageSelector from '../../components/common/LanguageSelector'
 
 const { Title, Paragraph, Text } = Typography
 
 function StorybookView() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const [storybook, setStorybook] = useState<Storybook | null>(null)
   const [loading, setLoading] = useState(true)
   const [currentPage, setCurrentPage] = useState(0)
@@ -46,11 +49,11 @@ function StorybookView() {
           setUserRating(existingRating.rating)
         }
       } else {
-        setError('Storybook not found')
+        setError(t('storybookView.notFound'))
       }
     } catch (err) {
       console.error('Failed to load storybook:', err)
-      setError('Failed to load storybook')
+      setError(t('storyEditor.failedToLoad'))
     } finally {
       setLoading(false)
     }
@@ -69,10 +72,10 @@ function StorybookView() {
         averageRating: result.averageRating,
         ratingCount: result.ratingCount,
       } : null)
-      message.success('Thank you for rating!')
+      message.success(t('storybookView.thankYouForRating'))
     } catch (err) {
       console.error('Failed to submit rating:', err)
-      message.error('Failed to submit rating')
+      message.error(t('storybookView.failedToSubmitRating'))
     } finally {
       setSubmittingRating(false)
     }
@@ -114,9 +117,9 @@ function StorybookView() {
         padding: 24
       }}>
         <BookOutlined style={{ fontSize: 64, color: '#ddd', marginBottom: 24 }} />
-        <Title level={3}>{error || 'Storybook not found'}</Title>
+        <Title level={3}>{error || t('storybookView.notFound')}</Title>
         <Button type="primary" icon={<HomeOutlined />} onClick={() => navigate('/')}>
-          Go Home
+          {t('common.home')}
         </Button>
       </div>
     )
@@ -133,31 +136,32 @@ function StorybookView() {
             <div style={{ marginTop: 8, display: 'flex', alignItems: 'center', gap: 16 }}>
               <Text type="secondary">
                 <UserOutlined style={{ marginRight: 4 }} />
-                {storybook.authorName || 'Unknown Author'}
+                {storybook.authorName || t('storybookView.unknownAuthor')}
               </Text>
               {storybook.ratingCount && storybook.ratingCount > 0 && (
                 <Text type="secondary">
                   <Rate disabled value={storybook.averageRating} allowHalf style={{ fontSize: 14 }} />
                   <span style={{ marginLeft: 8 }}>
-                    {storybook.averageRating?.toFixed(1)} ({storybook.ratingCount} {storybook.ratingCount === 1 ? 'rating' : 'ratings'})
+                    {storybook.averageRating?.toFixed(1)} ({storybook.ratingCount} {storybook.ratingCount === 1 ? t('storybookView.rating') : t('storybookView.ratings')})
                   </span>
                 </Text>
               )}
             </div>
           </div>
           <Space>
+            <LanguageSelector />
             <Button
               icon={<ShareAltOutlined />}
               onClick={() => {
                 const shareUrl = window.location.href
                 navigator.clipboard.writeText(shareUrl)
-                message.success('Share link copied to clipboard!')
+                message.success(t('storybookView.shareLinkCopied'))
               }}
             >
-              Share
+              {t('storybookView.share')}
             </Button>
             <Button icon={<HomeOutlined />} onClick={() => navigate('/')}>
-              Home
+              {t('common.home')}
             </Button>
           </Space>
         </div>
@@ -195,7 +199,7 @@ function StorybookView() {
                   ) : (
                     <div style={{ color: '#999', padding: 24, textAlign: 'center' }}>
                       <BookOutlined style={{ fontSize: 48, marginBottom: 16 }} />
-                      <div>No image available</div>
+                      <div>{t('storybookView.noImageAvailable')}</div>
                     </div>
                   )}
                 </div>
@@ -219,7 +223,7 @@ function StorybookView() {
                       marginBottom: 16,
                     }}
                   >
-                    Page {currentPage + 1} of {frames.length}
+                    {t('storyEditor.page')} {currentPage + 1} {t('storyEditor.of')} {frames.length}
                   </div>
                   <Paragraph
                     style={{
@@ -247,7 +251,7 @@ function StorybookView() {
                   onClick={handlePrevPage}
                   disabled={currentPage === 0}
                 >
-                  Previous
+                  {t('storyEditor.previous')}
                 </Button>
                 <span style={{ color: '#666' }}>
                   {currentPage + 1} / {frames.length}
@@ -257,7 +261,7 @@ function StorybookView() {
                   onClick={handleNextPage}
                   disabled={currentPage === frames.length - 1}
                 >
-                  Next
+                  {t('storyEditor.next')}
                 </Button>
               </div>
 
@@ -302,7 +306,7 @@ function StorybookView() {
                           fontSize: 12,
                         }}
                       >
-                        No image
+                        {t('storyEditor.noImage')}
                       </div>
                     )}
                     <div
@@ -327,7 +331,7 @@ function StorybookView() {
             <div style={{ textAlign: 'center', padding: '48px 0' }}>
               <BookOutlined style={{ fontSize: 64, color: '#ddd', marginBottom: 16 }} />
               <Paragraph style={{ color: '#999' }}>
-                This storybook has no pages.
+                {t('storybookView.noPages')}
               </Paragraph>
             </div>
           )}
@@ -336,7 +340,7 @@ function StorybookView() {
         {/* Rating Section */}
         <Card style={{ marginTop: 24 }}>
           <div style={{ textAlign: 'center' }}>
-            <Title level={4} style={{ marginBottom: 16 }}>Rate this Storybook</Title>
+            <Title level={4} style={{ marginBottom: 16 }}>{t('storybookView.rateStorybook')}</Title>
             <Rate
               value={userRating}
               onChange={handleRating}
@@ -345,14 +349,14 @@ function StorybookView() {
             />
             {userRating > 0 && (
               <Paragraph style={{ marginTop: 8, color: '#666' }}>
-                You rated this storybook {userRating} star{userRating !== 1 ? 's' : ''}
+                {t('storybookView.youRated', { count: userRating })}
               </Paragraph>
             )}
           </div>
         </Card>
 
         <div style={{ textAlign: 'center', marginTop: 24, color: '#999', fontSize: 12 }}>
-          &copy; {new Date().getFullYear()} Institute for Future Intelligence, Inc. All rights reserved.
+          &copy; {new Date().getFullYear()} {t('app.copyright')}
         </div>
       </div>
     </div>

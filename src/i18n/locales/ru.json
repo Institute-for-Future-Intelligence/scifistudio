@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Студия Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Все права защищены."
+  },
+  "nav": {
+    "home": "Главная",
+    "storyEditor": "Редактор Историй",
+    "videoEditor": "Редактор Видео"
+  },
+  "auth": {
+    "signIn": "Войти",
+    "signOut": "Выйти",
+    "signInWithGoogle": "Войти через Google",
+    "continueAsGuest": "Продолжить как Гость",
+    "welcome": "Добро пожаловать",
+    "guest": "Гость"
+  },
+  "home": {
+    "title": "Добро пожаловать в Студию Sci-Fi",
+    "subtitle": "Создавайте удивительные научно-фантастические книги и видео с помощью GenAI.",
+    "signInPrompt": "Войдите через Google, чтобы начать.",
+    "myProjects": "Мои Проекты",
+    "newStory": "Новая История",
+    "newVideo": "Новое Видео",
+    "noProjectsYet": "Пока нет проектов",
+    "createFirstStory": "Создайте Свою Первую Историю",
+    "deleteStorybook": "Удалить эту книгу?",
+    "delete": "Удалить",
+    "cancel": "Отмена",
+    "pages": "страниц"
+  },
+  "storyEditor": {
+    "title": "Редактор Историй",
+    "editStorybook": "Редактировать Книгу",
+    "description": "Создайте иллюстрированную научно-фантастическую книгу с помощью ИИ.",
+    "storyTitle": "Название Истории",
+    "storyTitlePlaceholder": "Введите название для вашей книги...",
+    "storyIdea": "Идея Истории",
+    "storyIdeaPlaceholder": "Опишите вашу идею... (напр., 'Одинокий астронавт находит древний инопланетный артефакт на Европе')",
+    "numberOfPages": "Количество Страниц",
+    "pages": "страниц",
+    "enhanceStoryConcept": "Улучшить Концепцию",
+    "enhancedConcept": "Улучшенная Концепция",
+    "generateStorybook": "Создать Книгу на {{count}} Страниц",
+    "storybookPreview": "Предпросмотр Книги",
+    "previewPlaceholder": "Ваша книга появится здесь...",
+    "page": "Страница",
+    "of": "из",
+    "previous": "Назад",
+    "next": "Далее",
+    "noImage": "Нет изображения",
+    "imageFailed": "Не удалось создать изображение",
+    "new": "Новая",
+    "load": "Загрузить",
+    "save": "Сохранить",
+    "update": "Обновить",
+    "publish": "Опубликовать",
+    "loadStorybook": "Загрузить Книгу",
+    "noSavedStorybooks": "Нет сохранённых книг",
+    "pleaseSignIn": "Войдите, чтобы создавать истории.",
+    "loadingStorybook": "Загрузка книги...",
+    "saveFirst": "Сначала сохраните для публикации",
+    "generateFirst": "Сначала создайте книгу",
+    "enterTitleFirst": "Сначала введите название",
+    "enterIdeaFirst": "Сначала введите идею",
+    "storybookGenerated": "Книга успешно создана!",
+    "rememberToSave": "Не забудьте сохранить!",
+    "storybookUpdated": "Книга обновлена!",
+    "storybookSaved": "Книга сохранена!",
+    "storybookLoaded": "Книга загружена!",
+    "storybookDeleted": "Книга удалена",
+    "storyConceptEnhanced": "Концепция улучшена!",
+    "storybookNotFound": "Книга не найдена",
+    "failedToLoad": "Не удалось загрузить",
+    "failedToSave": "Не удалось сохранить",
+    "failedToDelete": "Не удалось удалить",
+    "failedToEnhance": "Не удалось улучшить",
+    "failedToGenerate": "Не удалось создать"
+  },
+  "videoEditor": {
+    "title": "Редактор Видео",
+    "description": "Создавайте научно-фантастические видео с помощью ИИ.",
+    "comingSoon": "Скоро!",
+    "placeholder": "Эта функция в разработке."
+  },
+  "storybookView": {
+    "notFound": "Книга не найдена",
+    "noPages": "В этой книге нет страниц.",
+    "noImageAvailable": "Изображение недоступно",
+    "rateStorybook": "Оцените эту Книгу",
+    "youRated": "Вы поставили {{count}} звезду",
+    "youRated_plural": "Вы поставили {{count}} звёзд",
+    "rating": "оценка",
+    "ratings": "оценок",
+    "share": "Поделиться",
+    "shareLinkCopied": "Ссылка скопирована!",
+    "thankYouForRating": "Спасибо за оценку!",
+    "failedToSubmitRating": "Не удалось отправить оценку",
+    "unknownAuthor": "Неизвестный Автор"
+  },
+  "cookie": {
+    "message": "Мы используем файлы cookie для улучшения вашего опыта. Продолжая, вы соглашаетесь с использованием cookie.",
+    "accept": "Принять",
+    "decline": "Отклонить"
+  },
+  "common": {
+    "home": "Главная",
+    "error": "Ошибка",
+    "loading": "Загрузка..."
+  }
+}

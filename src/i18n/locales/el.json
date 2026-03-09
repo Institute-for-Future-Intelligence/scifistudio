@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "Στούντιο Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. Με επιφύλαξη παντός δικαιώματος."
+  },
+  "nav": {
+    "home": "Αρχική",
+    "storyEditor": "Επεξεργαστής Ιστοριών",
+    "videoEditor": "Επεξεργαστής Βίντεο"
+  },
+  "auth": {
+    "signIn": "Σύνδεση",
+    "signOut": "Αποσύνδεση",
+    "signInWithGoogle": "Σύνδεση με Google",
+    "continueAsGuest": "Συνέχεια ως Επισκέπτης",
+    "welcome": "Καλώς ήρθατε",
+    "guest": "Επισκέπτης"
+  },
+  "home": {
+    "title": "Καλώς ήρθατε στο Στούντιο Sci-Fi",
+    "subtitle": "Δημιουργήστε εκπληκτικά βιβλία ιστοριών και βίντεο επιστημονικής φαντασίας με GenAI.",
+    "signInPrompt": "Συνδεθείτε με Google για να ξεκινήσετε.",
+    "myProjects": "Τα Έργα Μου",
+    "newStory": "Νέα Ιστορία",
+    "newVideo": "Νέο Βίντεο",
+    "noProjectsYet": "Δεν υπάρχουν έργα ακόμα",
+    "createFirstStory": "Δημιουργήστε την Πρώτη σας Ιστορία",
+    "deleteStorybook": "Διαγραφή αυτού του βιβλίου;",
+    "delete": "Διαγραφή",
+    "cancel": "Ακύρωση",
+    "pages": "σελίδες"
+  },
+  "storyEditor": {
+    "title": "Επεξεργαστής Ιστοριών",
+    "editStorybook": "Επεξεργασία Βιβλίου",
+    "description": "Δημιουργήστε ένα εικονογραφημένο βιβλίο επιστημονικής φαντασίας με AI.",
+    "storyTitle": "Τίτλος Ιστορίας",
+    "storyTitlePlaceholder": "Εισάγετε τίτλο για το βιβλίο σας...",
+    "storyIdea": "Ιδέα Ιστορίας",
+    "storyIdeaPlaceholder": "Περιγράψτε την ιδέα σας... (π.χ., 'Ένας μοναχικός αστροναύτης ανακαλύπτει ένα αρχαίο εξωγήινο αντικείμενο στην Ευρώπη')",
+    "numberOfPages": "Αριθμός Σελίδων",
+    "pages": "σελίδες",
+    "enhanceStoryConcept": "Βελτίωση Ιδέας",
+    "enhancedConcept": "Βελτιωμένη Ιδέα",
+    "generateStorybook": "Δημιουργία Βιβλίου {{count}} Σελίδων",
+    "storybookPreview": "Προεπισκόπηση Βιβλίου",
+    "previewPlaceholder": "Το βιβλίο σας θα εμφανιστεί εδώ...",
+    "page": "Σελίδα",
+    "of": "από",
+    "previous": "Προηγούμενο",
+    "next": "Επόμενο",
+    "noImage": "Χωρίς εικόνα",
+    "imageFailed": "Αποτυχία δημιουργίας εικόνας",
+    "new": "Νέο",
+    "load": "Φόρτωση",
+    "save": "Αποθήκευση",
+    "update": "Ενημέρωση",
+    "publish": "Δημοσίευση",
+    "loadStorybook": "Φόρτωση Βιβλίου",
+    "noSavedStorybooks": "Δεν υπάρχουν αποθηκευμένα βιβλία",
+    "pleaseSignIn": "Συνδεθείτε για να δημιουργήσετε ιστορίες.",
+    "loadingStorybook": "Φόρτωση βιβλίου...",
+    "saveFirst": "Αποθηκεύστε πρώτα για δημοσίευση",
+    "generateFirst": "Δημιουργήστε πρώτα ένα βιβλίο",
+    "enterTitleFirst": "Εισάγετε πρώτα έναν τίτλο",
+    "enterIdeaFirst": "Εισάγετε πρώτα μια ιδέα",
+    "storybookGenerated": "Το βιβλίο δημιουργήθηκε επιτυχώς!",
+    "rememberToSave": "Θυμηθείτε να αποθηκεύσετε!",
+    "storybookUpdated": "Το βιβλίο ενημερώθηκε!",
+    "storybookSaved": "Το βιβλίο αποθηκεύτηκε!",
+    "storybookLoaded": "Το βιβλίο φορτώθηκε!",
+    "storybookDeleted": "Το βιβλίο διαγράφηκε",
+    "storyConceptEnhanced": "Η ιδέα βελτιώθηκε!",
+    "storybookNotFound": "Το βιβλίο δεν βρέθηκε",
+    "failedToLoad": "Αποτυχία φόρτωσης",
+    "failedToSave": "Αποτυχία αποθήκευσης",
+    "failedToDelete": "Αποτυχία διαγραφής",
+    "failedToEnhance": "Αποτυχία βελτίωσης",
+    "failedToGenerate": "Αποτυχία δημιουργίας"
+  },
+  "videoEditor": {
+    "title": "Επεξεργαστής Βίντεο",
+    "description": "Δημιουργήστε βίντεο επιστημονικής φαντασίας με AI.",
+    "comingSoon": "Σύντομα διαθέσιμο!",
+    "placeholder": "Αυτή η λειτουργία είναι υπό ανάπτυξη."
+  },
+  "storybookView": {
+    "notFound": "Το βιβλίο δεν βρέθηκε",
+    "noPages": "Αυτό το βιβλίο δεν έχει σελίδες.",
+    "noImageAvailable": "Δεν υπάρχει εικόνα",
+    "rateStorybook": "Βαθμολογήστε αυτό το Βιβλίο",
+    "youRated": "Δώσατε {{count}} αστέρι(α)",
+    "youRated_plural": "Δώσατε {{count}} αστέρια",
+    "rating": "βαθμολογία",
+    "ratings": "βαθμολογίες",
+    "share": "Κοινοποίηση",
+    "shareLinkCopied": "Ο σύνδεσμος αντιγράφηκε!",
+    "thankYouForRating": "Ευχαριστούμε για τη βαθμολογία!",
+    "failedToSubmitRating": "Αποτυχία υποβολής βαθμολογίας",
+    "unknownAuthor": "Άγνωστος Συγγραφέας"
+  },
+  "cookie": {
+    "message": "Χρησιμοποιούμε cookies για να βελτιώσουμε την εμπειρία σας. Συνεχίζοντας, συμφωνείτε με τη χρήση cookies.",
+    "accept": "Αποδοχή",
+    "decline": "Απόρριψη"
+  },
+  "common": {
+    "home": "Αρχική",
+    "error": "Σφάλμα",
+    "loading": "Φόρτωση..."
+  }
+}

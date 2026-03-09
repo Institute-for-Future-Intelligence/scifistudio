@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "สตูดิโอ Sci-Fi",
+    "copyright": "Institute for Future Intelligence, Inc. สงวนลิขสิทธิ์"
+  },
+  "nav": {
+    "home": "หน้าแรก",
+    "storyEditor": "เครื่องมือแต่งเรื่อง",
+    "videoEditor": "เครื่องมือตัดต่อวิดีโอ"
+  },
+  "auth": {
+    "signIn": "เข้าสู่ระบบ",
+    "signOut": "ออกจากระบบ",
+    "signInWithGoogle": "เข้าสู่ระบบด้วย Google",
+    "continueAsGuest": "ดำเนินการต่อในฐานะผู้เยี่ยมชม",
+    "welcome": "ยินดีต้อนรับ",
+    "guest": "ผู้เยี่ยมชม"
+  },
+  "home": {
+    "title": "ยินดีต้อนรับสู่สตูดิโอ Sci-Fi",
+    "subtitle": "สร้างหนังสือนิทานและวิดีโอไซไฟที่น่าทึ่งด้วย GenAI",
+    "signInPrompt": "เข้าสู่ระบบด้วย Google เพื่อเริ่มต้น",
+    "myProjects": "โปรเจกต์ของฉัน",
+    "newStory": "เรื่องใหม่",
+    "newVideo": "วิดีโอใหม่",
+    "noProjectsYet": "ยังไม่มีโปรเจกต์",
+    "createFirstStory": "สร้างเรื่องแรกของคุณ",
+    "deleteStorybook": "ลบหนังสือเล่มนี้?",
+    "delete": "ลบ",
+    "cancel": "ยกเลิก",
+    "pages": "หน้า"
+  },
+  "storyEditor": {
+    "title": "เครื่องมือแต่งเรื่อง",
+    "editStorybook": "แก้ไขหนังสือ",
+    "description": "สร้างหนังสือนิทานไซไฟพร้อมภาพประกอบด้วย AI",
+    "storyTitle": "ชื่อเรื่อง",
+    "storyTitlePlaceholder": "ใส่ชื่อเรื่องสำหรับหนังสือของคุณ...",
+    "storyIdea": "ไอเดียเรื่อง",
+    "storyIdeaPlaceholder": "อธิบายไอเดียเรื่องไซไฟของคุณ... (เช่น 'นักบินอวกาศผู้โดดเดี่ยวค้นพบสิ่งประดิษฐ์เอเลี่ยนโบราณบนยูโรปา')",
+    "numberOfPages": "จำนวนหน้า",
+    "pages": "หน้า",
+    "enhanceStoryConcept": "ปรับปรุงแนวคิด",
+    "enhancedConcept": "แนวคิดที่ปรับปรุงแล้ว",
+    "generateStorybook": "สร้างหนังสือ {{count}} หน้า",
+    "storybookPreview": "ดูตัวอย่างหนังสือ",
+    "previewPlaceholder": "หนังสือที่สร้างด้วย AI จะปรากฏที่นี่...",
+    "page": "หน้า",
+    "of": "จาก",
+    "previous": "ก่อนหน้า",
+    "next": "ถัดไป",
+    "noImage": "ไม่มีรูปภาพ",
+    "imageFailed": "สร้างรูปภาพไม่สำเร็จ",
+    "new": "ใหม่",
+    "load": "โหลด",
+    "save": "บันทึก",
+    "update": "อัปเดต",
+    "publish": "เผยแพร่",
+    "loadStorybook": "โหลดหนังสือ",
+    "noSavedStorybooks": "ไม่มีหนังสือที่บันทึกไว้",
+    "pleaseSignIn": "กรุณาเข้าสู่ระบบเพื่อสร้างเรื่อง",
+    "loadingStorybook": "กำลังโหลดหนังสือ...",
+    "saveFirst": "บันทึกก่อนเพื่อเผยแพร่",
+    "generateFirst": "สร้างหนังสือก่อน",
+    "enterTitleFirst": "กรุณาใส่ชื่อเรื่องก่อน",
+    "enterIdeaFirst": "กรุณาใส่ไอเดียก่อน",
+    "storybookGenerated": "สร้างหนังสือสำเร็จ!",
+    "rememberToSave": "อย่าลืมบันทึก!",
+    "storybookUpdated": "อัปเดตหนังสือแล้ว!",
+    "storybookSaved": "บันทึกหนังสือแล้ว!",
+    "storybookLoaded": "โหลดหนังสือแล้ว!",
+    "storybookDeleted": "ลบหนังสือแล้ว",
+    "storyConceptEnhanced": "ปรับปรุงแนวคิดแล้ว!",
+    "storybookNotFound": "ไม่พบหนังสือ",
+    "failedToLoad": "โหลดไม่สำเร็จ",
+    "failedToSave": "บันทึกไม่สำเร็จ",
+    "failedToDelete": "ลบไม่สำเร็จ",
+    "failedToEnhance": "ปรับปรุงไม่สำเร็จ",
+    "failedToGenerate": "สร้างไม่สำเร็จ"
+  },
+  "videoEditor": {
+    "title": "เครื่องมือตัดต่อวิดีโอ",
+    "description": "สร้างวิดีโอไซไฟด้วย AI",
+    "comingSoon": "เร็วๆ นี้!",
+    "placeholder": "คุณสมบัตินี้อยู่ระหว่างการพัฒนา"
+  },
+  "storybookView": {
+    "notFound": "ไม่พบหนังสือ",
+    "noPages": "หนังสือเล่มนี้ไม่มีหน้า",
+    "noImageAvailable": "ไม่มีรูปภาพ",
+    "rateStorybook": "ให้คะแนนหนังสือเล่มนี้",
+    "youRated": "คุณให้ {{count}} ดาว",
+    "youRated_plural": "คุณให้ {{count}} ดาว",
+    "rating": "คะแนน",
+    "ratings": "คะแนน",
+    "share": "แชร์",
+    "shareLinkCopied": "คัดลอกลิงก์แล้ว!",
+    "thankYouForRating": "ขอบคุณสำหรับคะแนน!",
+    "failedToSubmitRating": "ส่งคะแนนไม่สำเร็จ",
+    "unknownAuthor": "ผู้เขียนไม่ทราบ"
+  },
+  "cookie": {
+    "message": "เราใช้คุกกี้เพื่อปรับปรุงประสบการณ์ของคุณ การใช้งานต่อถือว่าคุณยอมรับการใช้คุกกี้",
+    "accept": "ยอมรับ",
+    "decline": "ปฏิเสธ"
+  },
+  "common": {
+    "home": "หน้าแรก",
+    "error": "ข้อผิดพลาด",
+    "loading": "กำลังโหลด..."
+  }
+}

@@ -1,0 +1,112 @@
+{
+  "app": {
+    "title": "استوديو الخيال العلمي",
+    "copyright": "Institute for Future Intelligence, Inc. جميع الحقوق محفوظة."
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "storyEditor": "محرر القصص",
+    "videoEditor": "محرر الفيديو"
+  },
+  "auth": {
+    "signIn": "تسجيل الدخول",
+    "signOut": "تسجيل الخروج",
+    "signInWithGoogle": "تسجيل الدخول بواسطة Google",
+    "continueAsGuest": "المتابعة كضيف",
+    "welcome": "مرحباً",
+    "guest": "ضيف"
+  },
+  "home": {
+    "title": "مرحباً بك في استوديو الخيال العلمي",
+    "subtitle": "أنشئ كتب قصص وفيديوهات خيال علمي مذهلة باستخدام GenAI.",
+    "signInPrompt": "سجّل الدخول بواسطة Google للبدء.",
+    "myProjects": "مشاريعي",
+    "newStory": "قصة جديدة",
+    "newVideo": "فيديو جديد",
+    "noProjectsYet": "لا توجد مشاريع بعد",
+    "createFirstStory": "أنشئ قصتك الأولى",
+    "deleteStorybook": "هل تريد حذف هذا الكتاب؟",
+    "delete": "حذف",
+    "cancel": "إلغاء",
+    "pages": "صفحات"
+  },
+  "storyEditor": {
+    "title": "محرر القصص",
+    "editStorybook": "تحرير الكتاب",
+    "description": "أنشئ كتاب قصص خيال علمي مصور باستخدام الذكاء الاصطناعي.",
+    "storyTitle": "عنوان القصة",
+    "storyTitlePlaceholder": "أدخل عنواناً لكتابك...",
+    "storyIdea": "فكرة القصة",
+    "storyIdeaPlaceholder": "صف فكرة قصة الخيال العلمي... (مثال: 'رائد فضاء وحيد يكتشف قطعة أثرية فضائية قديمة على يوروبا')",
+    "numberOfPages": "عدد الصفحات",
+    "pages": "صفحات",
+    "enhanceStoryConcept": "تحسين الفكرة",
+    "enhancedConcept": "الفكرة المحسّنة",
+    "generateStorybook": "إنشاء كتاب من {{count}} صفحة",
+    "storybookPreview": "معاينة الكتاب",
+    "previewPlaceholder": "سيظهر كتابك هنا...",
+    "page": "صفحة",
+    "of": "من",
+    "previous": "السابق",
+    "next": "التالي",
+    "noImage": "لا توجد صورة",
+    "imageFailed": "فشل في إنشاء الصورة",
+    "new": "جديد",
+    "load": "تحميل",
+    "save": "حفظ",
+    "update": "تحديث",
+    "publish": "نشر",
+    "loadStorybook": "تحميل كتاب",
+    "noSavedStorybooks": "لا توجد كتب محفوظة",
+    "pleaseSignIn": "سجّل الدخول لإنشاء القصص.",
+    "loadingStorybook": "جاري تحميل الكتاب...",
+    "saveFirst": "احفظ أولاً للنشر",
+    "generateFirst": "أنشئ كتاباً أولاً",
+    "enterTitleFirst": "أدخل عنواناً أولاً",
+    "enterIdeaFirst": "أدخل فكرة أولاً",
+    "storybookGenerated": "تم إنشاء الكتاب بنجاح!",
+    "rememberToSave": "تذكر أن تحفظ عملك!",
+    "storybookUpdated": "تم تحديث الكتاب!",
+    "storybookSaved": "تم حفظ الكتاب!",
+    "storybookLoaded": "تم تحميل الكتاب!",
+    "storybookDeleted": "تم حذف الكتاب",
+    "storyConceptEnhanced": "تم تحسين الفكرة!",
+    "storybookNotFound": "الكتاب غير موجود",
+    "failedToLoad": "فشل التحميل",
+    "failedToSave": "فشل الحفظ",
+    "failedToDelete": "فشل الحذف",
+    "failedToEnhance": "فشل التحسين",
+    "failedToGenerate": "فشل الإنشاء"
+  },
+  "videoEditor": {
+    "title": "محرر الفيديو",
+    "description": "أنشئ فيديوهات خيال علمي باستخدام الذكاء الاصطناعي.",
+    "comingSoon": "قريباً!",
+    "placeholder": "هذه الميزة قيد التطوير."
+  },
+  "storybookView": {
+    "notFound": "الكتاب غير موجود",
+    "noPages": "هذا الكتاب لا يحتوي على صفحات.",
+    "noImageAvailable": "لا توجد صورة",
+    "rateStorybook": "قيّم هذا الكتاب",
+    "youRated": "أعطيت {{count}} نجمة",
+    "youRated_plural": "أعطيت {{count}} نجوم",
+    "rating": "تقييم",
+    "ratings": "تقييمات",
+    "share": "مشاركة",
+    "shareLinkCopied": "تم نسخ الرابط!",
+    "thankYouForRating": "شكراً لتقييمك!",
+    "failedToSubmitRating": "فشل إرسال التقييم",
+    "unknownAuthor": "مؤلف غير معروف"
+  },
+  "cookie": {
+    "message": "نستخدم ملفات تعريف الارتباط لتحسين تجربتك. بالاستمرار، فإنك توافق على استخدامها.",
+    "accept": "قبول",
+    "decline": "رفض"
+  },
+  "common": {
+    "home": "الرئيسية",
+    "error": "خطأ",
+    "loading": "جاري التحميل..."
+  }
+}
