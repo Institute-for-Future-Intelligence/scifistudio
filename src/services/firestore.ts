@@ -39,6 +39,7 @@ export interface Storybook {
   title: string
   prompt: string
   frames: StoryFrame[]
+  tags?: string[]
   ratings?: StorybookRating[]
   averageRating?: number
   ratingCount?: number
@@ -46,8 +47,33 @@ export interface Storybook {
   updatedAt: Timestamp
 }
 
+export interface VideoRating {
+  oderId: string
+  rating: number
+  createdAt: Timestamp
+}
+
+export interface Video {
+  id?: string
+  userId: string
+  authorName?: string
+  title: string
+  prompt: string
+  videoUrl: string
+  thumbnailUrl?: string
+  durationSeconds?: number
+  tags?: string[]
+  ratings?: VideoRating[]
+  averageRating?: number
+  ratingCount?: number
+  status: 'generating' | 'completed' | 'failed'
+  createdAt: Timestamp
+  updatedAt: Timestamp
+}
+
 const projectsCollection = collection(db, 'projects')
 const storybooksCollection = collection(db, 'storybooks')
+const videosCollection = collection(db, 'videos')
 
 // Projects
 export const getProjects = async (userId: string): Promise<Project[]> => {
@@ -118,6 +144,7 @@ export const createStorybook = async (
 ): Promise<string> => {
   console.log('Creating storybook:', storybook.title)
   console.log('Frames count:', storybook.frames.length)
+  console.log('Tags to save:', storybook.tags)
 
   // Generate a new document reference to get the ID
   const docRef = doc(storybooksCollection)
@@ -136,12 +163,15 @@ export const createStorybook = async (
 
     // Now save to Firestore with Storage URLs instead of base64
     const now = Timestamp.now()
-    await setDoc(docRef, {
+    const dataToSave = {
       ...storybook,
       frames: uploadedFrames,
       createdAt: now,
       updatedAt: now,
-    })
+    }
+    console.log('Final data to save in Firestore:', dataToSave)
+    console.log('Tags in final data:', dataToSave.tags)
+    await setDoc(docRef, dataToSave)
     console.log('Storybook saved with ID:', storybookId)
     return storybookId
   } catch (error) {
@@ -155,6 +185,9 @@ export const updateStorybook = async (
   updates: Partial<Omit<Storybook, 'id' | 'createdAt'>>,
   userId?: string
 ): Promise<void> => {
+  console.log('Updating storybook:', id)
+  console.log('Tags in updates:', updates.tags)
+
   const docRef = doc(db, 'storybooks', id)
 
   let finalUpdates = { ...updates }
@@ -172,14 +205,62 @@ export const updateStorybook = async (
     }
   }
 
-  await updateDoc(docRef, {
+  const dataToUpdate = {
     ...finalUpdates,
     updatedAt: Timestamp.now(),
-  })
+  }
+  console.log('Final data to update in Firestore:', dataToUpdate)
+  await updateDoc(docRef, dataToUpdate)
 }
 
 export const deleteStorybook = async (id: string): Promise<void> => {
   const docRef = doc(db, 'storybooks', id)
+  await deleteDoc(docRef)
+}
+
+// Videos
+export const getVideos = async (userId: string): Promise<Video[]> => {
+  const q = query(
+    videosCollection,
+    where('userId', '==', userId),
+    orderBy('updatedAt', 'desc')
+  )
+  const snapshot = await getDocs(q)
+  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Video))
+}
+
+export const getVideo = async (id: string): Promise<Video | null> => {
+  const docRef = doc(db, 'videos', id)
+  const snapshot = await getDoc(docRef)
+  if (!snapshot.exists()) return null
+  return { id: snapshot.id, ...snapshot.data() } as Video
+}
+
+export const createVideo = async (
+  video: Omit<Video, 'id' | 'createdAt' | 'updatedAt'>
+): Promise<string> => {
+  const now = Timestamp.now()
+  const docRef = await addDoc(videosCollection, {
+    ...video,
+    createdAt: now,
+    updatedAt: now,
+  })
+  return docRef.id
+}
+
+export const updateVideo = async (
+  id: string,
+  updates: Partial<Omit<Video, 'id' | 'createdAt'>>
+): Promise<void> => {
+  const docRef = doc(db, 'videos', id)
+  await updateDoc(docRef, {
+    ...updates,
+    updatedAt: Timestamp.now(),
+  })
+}
+
+export const deleteVideo = async (id: string): Promise<void> => {
+  const docRef = doc(db, 'videos', id)
   await deleteDoc(docRef)
 }
 

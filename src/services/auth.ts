@@ -12,11 +12,12 @@ import { auth } from './firebase'
 
 const googleProvider = new GoogleAuthProvider()
 
-// Set persistence to local - keeps user signed in until explicit logout
-setPersistence(auth, browserLocalPersistence)
+// Ensure persistence is set before any auth operations
+const persistenceReady = setPersistence(auth, browserLocalPersistence)
 
 export const signInWithGoogle = async (): Promise<User | null> => {
   try {
+    await persistenceReady
     const result = await signInWithPopup(auth, googleProvider)
     return result.user
   } catch (error: unknown) {
@@ -32,6 +33,7 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 
 export const signInAnonymously = async (): Promise<User | null> => {
   try {
+    await persistenceReady
     const result = await firebaseSignInAnonymously(auth)
     return result.user
   } catch (error: unknown) {

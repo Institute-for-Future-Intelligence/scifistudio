@@ -76,7 +76,11 @@
     "failedToSave": "儲存故事書失敗",
     "failedToDelete": "刪除故事書失敗",
     "failedToEnhance": "優化提示失敗",
-    "failedToGenerate": "生成故事書失敗"
+    "failedToGenerate": "生成故事書失敗",
+    "unsavedChanges": "未儲存的變更",
+    "unsavedChangesMessage": "您有未儲存的變更。確定要離開此頁面嗎？",
+    "leaveWithoutSaving": "不儲存離開",
+    "stayOnPage": "留在頁面"
   },
   "videoEditor": {
     "title": "影片編輯器",
@@ -108,5 +112,12 @@
     "home": "首頁",
     "error": "錯誤",
     "loading": "載入中..."
+  },
+  "tags": {
+    "title": "標籤",
+    "addTag": "新增標籤",
+    "newTag": "新標籤...",
+    "generating": "產生標籤中...",
+    "rememberToSave": "記得儲存以保留標籤更改！"
   }
 }

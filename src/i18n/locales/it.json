@@ -76,7 +76,11 @@
     "failedToSave": "Salvataggio del libro fallito",
     "failedToDelete": "Eliminazione del libro fallita",
     "failedToEnhance": "Miglioramento del concetto fallito",
-    "failedToGenerate": "Generazione del libro fallita"
+    "failedToGenerate": "Generazione del libro fallita",
+    "unsavedChanges": "Modifiche non salvate",
+    "unsavedChangesMessage": "Hai modifiche non salvate. Sei sicuro di voler uscire?",
+    "leaveWithoutSaving": "Esci senza salvare",
+    "stayOnPage": "Resta sulla pagina"
   },
   "videoEditor": {
     "title": "Editor Video",
@@ -108,5 +112,12 @@
     "home": "Home",
     "error": "Errore",
     "loading": "Caricamento..."
+  },
+  "tags": {
+    "title": "Tag",
+    "addTag": "Aggiungi tag",
+    "newTag": "Nuovo tag...",
+    "generating": "Generazione tag...",
+    "rememberToSave": "Ricorda di salvare le modifiche!"
   }
 }

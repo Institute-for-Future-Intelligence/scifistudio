@@ -181,6 +181,206 @@ Make it a compelling narrative with a beginning, middle, and end.`
   }
 )
 
+// Generate story tags
+export const generateStoryTags = onCall(
+  { secrets: [geminiApiKey], cors: true },
+  async (request) => {
+    const { prompt, title } = request.data as { prompt?: string; title?: string }
+
+    if (!prompt && !title) {
+      throw new HttpsError('invalid-argument', 'Prompt or title is required')
+    }
+
+    const tagPrompt = `Analyze this story and generate 5-8 relevant tags.
+
+Title: ${title || 'Untitled'}
+Story concept: ${prompt || 'No description'}
+
+Generate tags that describe:
+- Genre (e.g., space opera, cyberpunk, dystopian)
+- Themes (e.g., exploration, survival, first contact)
+- Setting (e.g., space station, alien planet, future earth)
+- Mood (e.g., adventure, mystery, action)
+
+Return ONLY a comma-separated list of lowercase tags, nothing else.
+Example: space exploration, alien contact, mystery, adventure, mars colony`
+
+    const data = await fetchGemini(
+      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      { contents: [{ parts: [{ text: tagPrompt }] }] }
+    )
+
+    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+
+    // Parse and clean the tags
+    const tags = responseText
+      .split(',')
+      .map(tag => tag.trim().toLowerCase())
+      .filter(tag => tag.length > 0 && tag.length <= 30)
+      .slice(0, 8)
+
+    return { tags }
+  }
+)
+
+// Generate video with Veo
+export const generateVideo = onCall(
+  { secrets: [geminiApiKey], cors: true, timeoutSeconds: 540 },
+  async (request) => {
+    const { prompt } = request.data as { prompt?: string }
+
+    if (!prompt) {
+      throw new HttpsError('invalid-argument', 'Prompt is required')
+    }
+
+    const apiKey = geminiApiKey.value()
+
+    // Step 1: Submit video generation request
+    const submitResponse = await fetch(
+      `${API_BASE}/models/veo-2.0-generate-001:predictLongRunning?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instances: [{ prompt }],
+          parameters: {
+            aspectRatio: '16:9',
+            durationSeconds: 8,
+            personGeneration: 'allow_adult',
+            numberOfVideos: 1,
+          },
+        }),
+      }
+    )
+
+    if (!submitResponse.ok) {
+      const errorData = await submitResponse.json().catch(() => ({})) as ErrorResponse
+      throw new HttpsError('internal', errorData.error?.message || 'Video generation failed to start')
+    }
+
+    const submitResult = await submitResponse.json() as { name?: string }
+    const operationName = submitResult.name
+
+    if (!operationName) {
+      throw new HttpsError('internal', 'No operation name returned')
+    }
+
+    // Step 2: Poll for completion (with timeout)
+    const maxWaitTime = 480000 // 8 minutes
+    const pollInterval = 5000 // 5 seconds
+    const startTime = Date.now()
+
+    while (Date.now() - startTime < maxWaitTime) {
+      await new Promise(resolve => setTimeout(resolve, pollInterval))
+
+      const pollResponse = await fetch(
+        `${API_BASE}/${operationName}?key=${apiKey}`,
+        { method: 'GET' }
+      )
+
+      if (!pollResponse.ok) {
+        continue // Retry on error
+      }
+
+      const pollResult = await pollResponse.json() as {
+        done?: boolean
+        response?: {
+          generatedVideos?: Array<{ video?: { uri?: string } }>
+        }
+        error?: { message?: string }
+      }
+
+      if (pollResult.error) {
+        throw new HttpsError('internal', pollResult.error.message || 'Video generation failed')
+      }
+
+      if (pollResult.done && pollResult.response?.generatedVideos?.[0]?.video?.uri) {
+        const videoUri = pollResult.response.generatedVideos[0].video.uri
+
+        // Fetch the video content and convert to data URL
+        const videoResponse = await fetch(`${videoUri}&key=${apiKey}`)
+        if (!videoResponse.ok) {
+          throw new HttpsError('internal', 'Failed to fetch generated video')
+        }
+
+        const videoBuffer = await videoResponse.arrayBuffer()
+        const base64Video = Buffer.from(videoBuffer).toString('base64')
+        const videoUrl = `data:video/mp4;base64,${base64Video}`
+
+        return { videoUrl, durationSeconds: 8 }
+      }
+    }
+
+    throw new HttpsError('deadline-exceeded', 'Video generation timed out')
+  }
+)
+
+// Enhance video prompt
+export const enhanceVideoPrompt = onCall(
+  { secrets: [geminiApiKey], cors: true },
+  async (request) => {
+    const { prompt } = request.data as { prompt?: string }
+
+    if (!prompt) {
+      throw new HttpsError('invalid-argument', 'Prompt is required')
+    }
+
+    const enhancePrompt = `You are a video prompt engineer. Enhance the following video concept into a detailed, cinematic prompt suitable for AI video generation. Include visual details, camera movements, lighting, and atmosphere. Keep it under 200 words.
+
+User's concept: ${prompt}
+
+Enhanced prompt:`
+
+    const data = await fetchGemini(
+      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      { contents: [{ parts: [{ text: enhancePrompt }] }] }
+    )
+
+    return { text: data.candidates?.[0]?.content?.parts?.[0]?.text ?? '' }
+  }
+)
+
+// Generate video tags
+export const generateVideoTags = onCall(
+  { secrets: [geminiApiKey], cors: true },
+  async (request) => {
+    const { prompt, title } = request.data as { prompt?: string; title?: string }
+
+    if (!prompt && !title) {
+      throw new HttpsError('invalid-argument', 'Prompt or title is required')
+    }
+
+    const tagPrompt = `Analyze this video concept and generate 5-8 relevant tags.
+
+Title: ${title || 'Untitled'}
+Video concept: ${prompt || 'No description'}
+
+Generate tags that describe:
+- Genre (e.g., space opera, cyberpunk, action)
+- Themes (e.g., exploration, battle, discovery)
+- Setting (e.g., space station, alien world, future city)
+- Style (e.g., cinematic, dramatic, epic)
+
+Return ONLY a comma-separated list of lowercase tags, nothing else.
+Example: space battle, epic, cinematic, sci-fi, alien invasion`
+
+    const data = await fetchGemini(
+      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      { contents: [{ parts: [{ text: tagPrompt }] }] }
+    )
+
+    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+
+    const tags = responseText
+      .split(',')
+      .map(tag => tag.trim().toLowerCase())
+      .filter(tag => tag.length > 0 && tag.length <= 30)
+      .slice(0, 8)
+
+    return { tags }
+  }
+)
+
 // Enhance story prompt
 export const enhanceStoryPrompt = onCall(
   { secrets: [geminiApiKey], cors: true },

@@ -76,7 +76,11 @@
     "failedToSave": "Falha ao salvar livro de histórias",
     "failedToDelete": "Falha ao excluir livro de histórias",
     "failedToEnhance": "Falha ao aprimorar conceito",
-    "failedToGenerate": "Falha ao gerar livro de histórias"
+    "failedToGenerate": "Falha ao gerar livro de histórias",
+    "unsavedChanges": "Alterações não salvas",
+    "unsavedChangesMessage": "Você tem alterações não salvas. Tem certeza que deseja sair?",
+    "leaveWithoutSaving": "Sair sem salvar",
+    "stayOnPage": "Ficar na página"
   },
   "videoEditor": {
     "title": "Editor de Vídeos",
@@ -108,5 +112,12 @@
     "home": "Início",
     "error": "Erro",
     "loading": "Carregando..."
+  },
+  "tags": {
+    "title": "Tags",
+    "addTag": "Adicionar tag",
+    "newTag": "Nova tag...",
+    "generating": "Gerando tags...",
+    "rememberToSave": "Lembre-se de salvar as alterações!"
   }
 }

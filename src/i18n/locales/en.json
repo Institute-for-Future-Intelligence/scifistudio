@@ -76,7 +76,11 @@
     "failedToSave": "Failed to save storybook",
     "failedToDelete": "Failed to delete storybook",
     "failedToEnhance": "Failed to enhance prompt",
-    "failedToGenerate": "Failed to generate storybook"
+    "failedToGenerate": "Failed to generate storybook",
+    "unsavedChanges": "Unsaved Changes",
+    "unsavedChangesMessage": "You have unsaved changes. Are you sure you want to leave this page?",
+    "leaveWithoutSaving": "Leave without saving",
+    "stayOnPage": "Stay on page"
   },
   "videoEditor": {
     "title": "Video Editor",
@@ -108,5 +112,12 @@
     "home": "Home",
     "error": "Error",
     "loading": "Loading..."
+  },
+  "tags": {
+    "title": "Tags",
+    "addTag": "Add Tag",
+    "newTag": "New tag...",
+    "generating": "Generating tags...",
+    "rememberToSave": "Remember to save to keep your tag changes!"
   }
 }

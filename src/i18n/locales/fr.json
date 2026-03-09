@@ -76,7 +76,11 @@
     "failedToSave": "Échec de l'enregistrement du livre",
     "failedToDelete": "Échec de la suppression du livre",
     "failedToEnhance": "Échec de l'amélioration du concept",
-    "failedToGenerate": "Échec de la génération du livre"
+    "failedToGenerate": "Échec de la génération du livre",
+    "unsavedChanges": "Modifications non enregistrées",
+    "unsavedChangesMessage": "Vous avez des modifications non enregistrées. Voulez-vous vraiment quitter?",
+    "leaveWithoutSaving": "Quitter sans enregistrer",
+    "stayOnPage": "Rester sur la page"
   },
   "videoEditor": {
     "title": "Éditeur de Vidéos",
@@ -108,5 +112,12 @@
     "home": "Accueil",
     "error": "Erreur",
     "loading": "Chargement..."
+  },
+  "tags": {
+    "title": "Tags",
+    "addTag": "Ajouter un tag",
+    "newTag": "Nouveau tag...",
+    "generating": "Génération des tags...",
+    "rememberToSave": "N'oubliez pas de sauvegarder!"
   }
 }

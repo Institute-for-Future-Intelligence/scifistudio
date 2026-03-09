@@ -76,7 +76,11 @@
     "failedToSave": "บันทึกไม่สำเร็จ",
     "failedToDelete": "ลบไม่สำเร็จ",
     "failedToEnhance": "ปรับปรุงไม่สำเร็จ",
-    "failedToGenerate": "สร้างไม่สำเร็จ"
+    "failedToGenerate": "สร้างไม่สำเร็จ",
+    "unsavedChanges": "การเปลี่ยนแปลงที่ยังไม่ได้บันทึก",
+    "unsavedChangesMessage": "คุณมีการเปลี่ยนแปลงที่ยังไม่ได้บันทึก ต้องการออกจากหน้านี้หรือไม่?",
+    "leaveWithoutSaving": "ออกโดยไม่บันทึก",
+    "stayOnPage": "อยู่ในหน้านี้"
   },
   "videoEditor": {
     "title": "เครื่องมือตัดต่อวิดีโอ",
@@ -108,5 +112,12 @@
     "home": "หน้าแรก",
     "error": "ข้อผิดพลาด",
     "loading": "กำลังโหลด..."
+  },
+  "tags": {
+    "title": "แท็ก",
+    "addTag": "เพิ่มแท็ก",
+    "newTag": "แท็กใหม่...",
+    "generating": "กำลังสร้างแท็ก...",
+    "rememberToSave": "อย่าลืมบันทึกการเปลี่ยนแปลง!"
   }
 }

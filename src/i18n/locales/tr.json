@@ -76,7 +76,11 @@
     "failedToSave": "Kaydedilemedi",
     "failedToDelete": "Silinemedi",
     "failedToEnhance": "Geliştirilemedi",
-    "failedToGenerate": "Oluşturulamadı"
+    "failedToGenerate": "Oluşturulamadı",
+    "unsavedChanges": "Kaydedilmemiş Değişiklikler",
+    "unsavedChangesMessage": "Kaydedilmemiş değişiklikleriniz var. Bu sayfadan ayrılmak istediğinizden emin misiniz?",
+    "leaveWithoutSaving": "Kaydetmeden ayrıl",
+    "stayOnPage": "Sayfada kal"
   },
   "videoEditor": {
     "title": "Video Editörü",
@@ -108,5 +112,12 @@
     "home": "Ana Sayfa",
     "error": "Hata",
     "loading": "Yükleniyor..."
+  },
+  "tags": {
+    "title": "Etiketler",
+    "addTag": "Etiket Ekle",
+    "newTag": "Yeni etiket...",
+    "generating": "Etiketler oluşturuluyor...",
+    "rememberToSave": "Değişiklikleri kaydetmeyi unutmayın!"
   }
 }

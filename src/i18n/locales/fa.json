@@ -76,7 +76,11 @@
     "failedToSave": "ذخیره ناموفق",
     "failedToDelete": "حذف ناموفق",
     "failedToEnhance": "بهبود ناموفق",
-    "failedToGenerate": "ساخت ناموفق"
+    "failedToGenerate": "ساخت ناموفق",
+    "unsavedChanges": "تغییرات ذخیره نشده",
+    "unsavedChangesMessage": "تغییرات ذخیره نشده دارید. آیا مطمئن هستید که می‌خواهید خارج شوید؟",
+    "leaveWithoutSaving": "خروج بدون ذخیره",
+    "stayOnPage": "ماندن در صفحه"
   },
   "videoEditor": {
     "title": "ویرایشگر ویدیو",
@@ -108,5 +112,12 @@
     "home": "خانه",
     "error": "خطا",
     "loading": "در حال بارگذاری..."
+  },
+  "tags": {
+    "title": "برچسب‌ها",
+    "addTag": "افزودن برچسب",
+    "newTag": "برچسب جدید...",
+    "generating": "در حال ایجاد برچسب‌ها...",
+    "rememberToSave": "فراموش نکنید ذخیره کنید!"
   }
 }

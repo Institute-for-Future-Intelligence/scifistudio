@@ -76,7 +76,11 @@
     "failedToSave": "ストーリーブックの保存に失敗しました",
     "failedToDelete": "ストーリーブックの削除に失敗しました",
     "failedToEnhance": "コンセプトの強化に失敗しました",
-    "failedToGenerate": "ストーリーブックの生成に失敗しました"
+    "failedToGenerate": "ストーリーブックの生成に失敗しました",
+    "unsavedChanges": "未保存の変更",
+    "unsavedChangesMessage": "未保存の変更があります。このページを離れますか？",
+    "leaveWithoutSaving": "保存せずに離れる",
+    "stayOnPage": "ページに留まる"
   },
   "videoEditor": {
     "title": "ビデオエディター",
@@ -108,5 +112,12 @@
     "home": "ホーム",
     "error": "エラー",
     "loading": "読み込み中..."
+  },
+  "tags": {
+    "title": "タグ",
+    "addTag": "タグを追加",
+    "newTag": "新しいタグ...",
+    "generating": "タグを生成中...",
+    "rememberToSave": "保存を忘れずに！"
   }
 }

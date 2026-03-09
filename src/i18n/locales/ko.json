@@ -76,7 +76,11 @@
     "failedToSave": "스토리북 저장 실패",
     "failedToDelete": "스토리북 삭제 실패",
     "failedToEnhance": "프롬프트 향상 실패",
-    "failedToGenerate": "스토리북 생성 실패"
+    "failedToGenerate": "스토리북 생성 실패",
+    "unsavedChanges": "저장되지 않은 변경사항",
+    "unsavedChangesMessage": "저장되지 않은 변경사항이 있습니다. 페이지를 떠나시겠습니까?",
+    "leaveWithoutSaving": "저장하지 않고 나가기",
+    "stayOnPage": "페이지에 머무르기"
   },
   "videoEditor": {
     "title": "비디오 편집기",
@@ -108,5 +112,12 @@
     "home": "홈",
     "error": "오류",
     "loading": "로딩 중..."
+  },
+  "tags": {
+    "title": "태그",
+    "addTag": "태그 추가",
+    "newTag": "새 태그...",
+    "generating": "태그 생성 중...",
+    "rememberToSave": "변경 사항을 저장하세요!"
   }
 }

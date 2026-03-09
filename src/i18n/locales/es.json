@@ -76,7 +76,11 @@
     "failedToSave": "Error al guardar libro de cuentos",
     "failedToDelete": "Error al eliminar libro de cuentos",
     "failedToEnhance": "Error al mejorar el concepto",
-    "failedToGenerate": "Error al generar libro de cuentos"
+    "failedToGenerate": "Error al generar libro de cuentos",
+    "unsavedChanges": "Cambios sin guardar",
+    "unsavedChangesMessage": "Tienes cambios sin guardar. ¿Estás seguro de que quieres salir?",
+    "leaveWithoutSaving": "Salir sin guardar",
+    "stayOnPage": "Permanecer en la página"
   },
   "videoEditor": {
     "title": "Editor de Videos",
@@ -108,5 +112,12 @@
     "home": "Inicio",
     "error": "Error",
     "loading": "Cargando..."
+  },
+  "tags": {
+    "title": "Etiquetas",
+    "addTag": "Agregar etiqueta",
+    "newTag": "Nueva etiqueta...",
+    "generating": "Generando etiquetas...",
+    "rememberToSave": "¡Recuerda guardar para conservar los cambios!"
   }
 }

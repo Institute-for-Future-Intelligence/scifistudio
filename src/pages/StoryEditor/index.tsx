@@ -1,11 +1,12 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select, Progress } from 'antd'
 import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
-import { generateStorybook, enhanceStoryPrompt, StoryFrame } from '../../services/gemini'
+import { generateStorybook, enhanceStoryPrompt, generateStoryTags, StoryFrame } from '../../services/gemini'
 import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook } from '../../services/firestore'
+import TagEditor from '../../components/common/TagEditor'
 
 const { Title, Paragraph } = Typography
 const { TextArea } = Input
@@ -33,8 +34,28 @@ function StoryEditor() {
   const [frameCount, setFrameCount] = useState(5)
   const [generationProgress, setGenerationProgress] = useState(0)
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [tags, setTags] = useState<string[]>([])
+  const [generatingTags, setGeneratingTags] = useState(false)
+  const storybookIdRef = useRef<string | null>(null)
+  const pendingTagsRef = useRef<string[] | null>(null)
 
-  // Warn user before leaving page with unsaved changes
+  // Keep ref in sync with state
+  useEffect(() => {
+    console.log('storybookId changed to:', storybookId)
+    console.log('pendingTagsRef.current:', pendingTagsRef.current)
+    storybookIdRef.current = storybookId
+    // If we have pending tags and now have a storybookId, save them
+    if (storybookId && pendingTagsRef.current && pendingTagsRef.current.length > 0) {
+      const tagsToSave = pendingTagsRef.current
+      pendingTagsRef.current = null
+      console.log('Saving pending tags:', tagsToSave)
+      updateStorybook(storybookId, { tags: tagsToSave })
+        .then(() => console.log('Pending tags saved to Firestore'))
+        .catch((err) => console.error('Failed to save pending tags:', err))
+    }
+  }, [storybookId])
+
+  // Warn user before leaving page with unsaved changes (browser navigation)
   useEffect(() => {
     const handleBeforeUnload = (e: BeforeUnloadEvent) => {
       if (hasUnsavedChanges) {
@@ -47,6 +68,17 @@ function StoryEditor() {
     window.addEventListener('beforeunload', handleBeforeUnload)
     return () => window.removeEventListener('beforeunload', handleBeforeUnload)
   }, [hasUnsavedChanges])
+
+  // Helper to confirm navigation when there are unsaved changes
+  const confirmNavigation = (callback: () => void) => {
+    if (hasUnsavedChanges) {
+      if (window.confirm(t('storyEditor.unsavedChangesMessage'))) {
+        callback()
+      }
+    } else {
+      callback()
+    }
+  }
 
   useEffect(() => {
     if (user) {
@@ -69,6 +101,7 @@ function StoryEditor() {
         setPrompt(storybook.prompt)
         setStoryTitle(storybook.title)
         setFrames(storybook.frames)
+        setTags(storybook.tags || [])
         setCurrentPage(0)
         setHasUnsavedChanges(false)
       } else {
@@ -131,6 +164,7 @@ function StoryEditor() {
     setLoading(true)
     setError('')
     setFrames([])
+    setTags([])
     setCurrentPage(0)
     setGenerationProgress(0)
 
@@ -154,6 +188,34 @@ function StoryEditor() {
           message.warning(t('storyEditor.rememberToSave'), 5)
         }, 1500)
       }
+      // Generate tags (non-blocking)
+      setGeneratingTags(true)
+      generateStoryTags(finalPrompt, storyTitle)
+        .then(async (generatedTags) => {
+          console.log('Generated tags:', generatedTags)
+          setTags(generatedTags)
+          // Auto-save tags if storybook is already saved, otherwise mark as pending
+          const currentId = storybookIdRef.current
+          console.log('Current storybookId for auto-save:', currentId)
+          if (currentId && generatedTags.length > 0) {
+            try {
+              await updateStorybook(currentId, { tags: generatedTags })
+              console.log('Tags auto-saved to Firestore')
+            } catch (err) {
+              console.error('Failed to auto-save tags:', err)
+            }
+          } else if (generatedTags.length > 0) {
+            // Store pending tags to be saved when storybookId becomes available
+            console.log('Storing pending tags:', generatedTags)
+            pendingTagsRef.current = generatedTags
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to generate tags:', err)
+        })
+        .finally(() => {
+          setGeneratingTags(false)
+        })
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('storyEditor.failedToGenerate')
       setError(errorMessage)
@@ -178,6 +240,7 @@ function StoryEditor() {
     const title = storyTitle.trim() || 'Untitled Storybook'
 
     setSaving(true)
+    console.log('Saving storybook with tags:', tags)
     try {
       if (storybookId) {
         // Update existing (also set authorName if missing)
@@ -186,6 +249,7 @@ function StoryEditor() {
           title,
           prompt: enhancedPrompt || prompt,
           frames,
+          tags: tags || [],
         }, user.uid)
         setHasUnsavedChanges(false)
         message.success(t('storyEditor.storybookUpdated'))
@@ -197,6 +261,7 @@ function StoryEditor() {
           title,
           prompt: enhancedPrompt || prompt,
           frames,
+          tags: tags || [],
         })
         setStorybookId(newId)
         setHasUnsavedChanges(false)
@@ -218,6 +283,7 @@ function StoryEditor() {
     setEnhancedPrompt('')
     setStoryTitle('')
     setFrames([])
+    setTags([])
     setCurrentPage(0)
     setError('')
     setHasUnsavedChanges(false)
@@ -225,16 +291,20 @@ function StoryEditor() {
   }
 
   const handleLoadStorybook = (storybook: Storybook) => {
-    setStorybookId(storybook.id!)
-    setPrompt(storybook.prompt)
-    setEnhancedPrompt('')
-    setStoryTitle(storybook.title)
-    setFrames(storybook.frames)
-    setCurrentPage(0)
-    setHasUnsavedChanges(false)
-    setShowLoadModal(false)
-    navigate(`/story/${storybook.id}`, { replace: true })
-    message.success(t('storyEditor.storybookLoaded'))
+    const doLoad = () => {
+      setStorybookId(storybook.id!)
+      setPrompt(storybook.prompt)
+      setEnhancedPrompt('')
+      setStoryTitle(storybook.title)
+      setFrames(storybook.frames)
+      setTags(storybook.tags || [])
+      setCurrentPage(0)
+      setHasUnsavedChanges(false)
+      setShowLoadModal(false)
+      navigate(`/story/${storybook.id}`, { replace: true })
+      message.success(t('storyEditor.storybookLoaded'))
+    }
+    confirmNavigation(doLoad)
   }
 
   const handleDeleteStorybook = async (id: string) => {
@@ -285,13 +355,13 @@ function StoryEditor() {
         <Space>
           <Button
             icon={<HomeOutlined />}
-            onClick={() => navigate('/')}
+            onClick={() => confirmNavigation(() => navigate('/'))}
           >
             {t('common.home')}
           </Button>
           <Button
             icon={<PlusOutlined />}
-            onClick={handleNewStorybook}
+            onClick={() => confirmNavigation(handleNewStorybook)}
           >
             {t('storyEditor.new')}
           </Button>
@@ -599,6 +669,21 @@ function StoryEditor() {
                 </div>
               ))}
             </div>
+
+            {/* Tags Section */}
+            <div style={{ marginTop: 24 }}>
+              <label style={{ fontWeight: 500, marginBottom: 8, display: 'block' }}>{t('tags.title')}</label>
+              <TagEditor
+                tags={tags}
+                onChange={(newTags) => {
+                  setTags(newTags)
+                  setHasUnsavedChanges(true)
+                  message.info(t('tags.rememberToSave'), 3)
+                }}
+                loading={generatingTags}
+                editable={true}
+              />
+            </div>
           </div>
         ) : (
           <div style={{ textAlign: 'center', padding: '48px 0' }}>
@@ -646,7 +731,8 @@ function StoryEditor() {
           locale={{ emptyText: t('storyEditor.noSavedStorybooks') }}
         />
       </Modal>
-    </div>
+
+          </div>
   )
 }
 

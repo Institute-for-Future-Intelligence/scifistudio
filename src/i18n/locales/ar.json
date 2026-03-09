@@ -76,7 +76,11 @@
     "failedToSave": "فشل الحفظ",
     "failedToDelete": "فشل الحذف",
     "failedToEnhance": "فشل التحسين",
-    "failedToGenerate": "فشل الإنشاء"
+    "failedToGenerate": "فشل الإنشاء",
+    "unsavedChanges": "تغييرات غير محفوظة",
+    "unsavedChangesMessage": "لديك تغييرات غير محفوظة. هل أنت متأكد أنك تريد المغادرة؟",
+    "leaveWithoutSaving": "المغادرة بدون حفظ",
+    "stayOnPage": "البقاء في الصفحة"
   },
   "videoEditor": {
     "title": "محرر الفيديو",
@@ -108,5 +112,12 @@
     "home": "الرئيسية",
     "error": "خطأ",
     "loading": "جاري التحميل..."
+  },
+  "tags": {
+    "title": "الوسوم",
+    "addTag": "إضافة وسم",
+    "newTag": "وسم جديد...",
+    "generating": "جاري إنشاء الوسوم...",
+    "rememberToSave": "تذكر الحفظ للاحتفاظ بالتغييرات!"
   }
 }

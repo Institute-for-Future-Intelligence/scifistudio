@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Typography, Button, Empty, Card, List, Spin, Popconfirm } from 'antd'
+import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag } from 'antd'
 import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -147,7 +147,21 @@ function Home() {
               >
                 <Card.Meta
                   title={storybook.title}
-                  description={`${storybook.frames.length} ${t('home.pages')} • ${storybook.createdAt.toDate().toLocaleDateString()}`}
+                  description={
+                    <div>
+                      <div>{storybook.frames.length} {t('home.pages')} • {storybook.createdAt.toDate().toLocaleDateString()}</div>
+                      {storybook.tags && storybook.tags.length > 0 && (
+                        <div style={{ marginTop: 8, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                          {storybook.tags.slice(0, 3).map(tag => (
+                            <Tag key={tag} color="blue" style={{ margin: 0, fontSize: 11 }}>{tag}</Tag>
+                          ))}
+                          {storybook.tags.length > 3 && (
+                            <Tag style={{ margin: 0, fontSize: 11 }}>+{storybook.tags.length - 3}</Tag>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  }
                 />
               </Card>
             </List.Item>

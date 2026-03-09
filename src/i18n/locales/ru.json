@@ -76,7 +76,11 @@
     "failedToSave": "Не удалось сохранить",
     "failedToDelete": "Не удалось удалить",
     "failedToEnhance": "Не удалось улучшить",
-    "failedToGenerate": "Не удалось создать"
+    "failedToGenerate": "Не удалось создать",
+    "unsavedChanges": "Несохранённые изменения",
+    "unsavedChangesMessage": "У вас есть несохранённые изменения. Вы уверены, что хотите покинуть страницу?",
+    "leaveWithoutSaving": "Покинуть без сохранения",
+    "stayOnPage": "Остаться на странице"
   },
   "videoEditor": {
     "title": "Редактор Видео",
@@ -108,5 +112,12 @@
     "home": "Главная",
     "error": "Ошибка",
     "loading": "Загрузка..."
+  },
+  "tags": {
+    "title": "Теги",
+    "addTag": "Добавить тег",
+    "newTag": "Новый тег...",
+    "generating": "Генерация тегов...",
+    "rememberToSave": "Не забудьте сохранить изменения!"
   }
 }

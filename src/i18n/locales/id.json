@@ -76,7 +76,11 @@
     "failedToSave": "Gagal menyimpan",
     "failedToDelete": "Gagal menghapus",
     "failedToEnhance": "Gagal meningkatkan",
-    "failedToGenerate": "Gagal membuat"
+    "failedToGenerate": "Gagal membuat",
+    "unsavedChanges": "Perubahan belum disimpan",
+    "unsavedChangesMessage": "Anda memiliki perubahan yang belum disimpan. Yakin ingin meninggalkan halaman?",
+    "leaveWithoutSaving": "Keluar tanpa menyimpan",
+    "stayOnPage": "Tetap di halaman"
   },
   "videoEditor": {
     "title": "Editor Video",
@@ -108,5 +112,12 @@
     "home": "Beranda",
     "error": "Kesalahan",
     "loading": "Memuat..."
+  },
+  "tags": {
+    "title": "Tag",
+    "addTag": "Tambah Tag",
+    "newTag": "Tag baru...",
+    "generating": "Membuat tag...",
+    "rememberToSave": "Ingat untuk menyimpan perubahan!"
   }
 }

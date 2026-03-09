@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Card, Button, Spin, Image, Rate, message, Space } from 'antd'
+import { Typography, Card, Button, Spin, Image, Rate, message, Space, Tag } from 'antd'
 import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { getStorybook, rateStorybook, Storybook } from '../../services/firestore'
@@ -147,6 +147,13 @@ function StorybookView() {
                 </Text>
               )}
             </div>
+            {storybook.tags && storybook.tags.length > 0 && (
+              <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+                {storybook.tags.map(tag => (
+                  <Tag key={tag} color="blue">{tag}</Tag>
+                ))}
+              </div>
+            )}
           </div>
           <Space>
             <LanguageSelector />

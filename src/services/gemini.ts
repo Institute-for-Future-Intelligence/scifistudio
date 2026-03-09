@@ -115,16 +115,50 @@ export const enhanceStoryPrompt = async (userPrompt: string): Promise<string> =>
   return result.data.text
 }
 
+export interface VideoResult {
+  videoUrl: string
+  durationSeconds: number
+}
+
 export const generateVideo = async (
-    _prompt: string,
+  prompt: string,
   onProgress?: (status: string) => void
-): Promise<string> => {
-  onProgress?.('Video generation not yet available via Cloud Functions')
-  throw new Error('Video generation requires additional setup')
+): Promise<VideoResult> => {
+  onProgress?.('Generating video with AI...')
+
+  const generateVideoFn = httpsCallable<
+    { prompt: string },
+    { videoUrl: string; durationSeconds: number }
+  >(functions, 'generateVideo', { timeout: 600000 }) // 10 min timeout
+
+  const result = await generateVideoFn({ prompt })
+  onProgress?.('Video generation complete!')
+  return result.data
 }
 
 export const enhanceVideoPrompt = async (userPrompt: string): Promise<string> => {
-  return generateWithGemini(
-    `You are a video prompt engineer. Enhance the following video concept into a detailed, cinematic prompt suitable for AI video generation. Include visual details, camera movements, lighting, and atmosphere. Keep it under 200 words.\n\nUser's concept: ${userPrompt}\n\nEnhanced prompt:`
+  const enhancePromptFn = httpsCallable<{ prompt: string }, { text: string }>(
+    functions,
+    'enhanceVideoPrompt'
   )
+  const result = await enhancePromptFn({ prompt: userPrompt })
+  return result.data.text
+}
+
+export const generateVideoTags = async (prompt: string, title: string): Promise<string[]> => {
+  const generateTagsFn = httpsCallable<{ prompt: string; title: string }, { tags: string[] }>(
+    functions,
+    'generateVideoTags'
+  )
+  const result = await generateTagsFn({ prompt, title })
+  return result.data.tags
+}
+
+export const generateStoryTags = async (prompt: string, title: string): Promise<string[]> => {
+  const generateTagsFn = httpsCallable<{ prompt: string; title: string }, { tags: string[] }>(
+    functions,
+    'generateStoryTags'
+  )
+  const result = await generateTagsFn({ prompt, title })
+  return result.data.tags
 }

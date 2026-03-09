@@ -76,7 +76,11 @@
     "failedToSave": "保存故事书失败",
     "failedToDelete": "删除故事书失败",
     "failedToEnhance": "优化提示失败",
-    "failedToGenerate": "生成故事书失败"
+    "failedToGenerate": "生成故事书失败",
+    "unsavedChanges": "未保存的更改",
+    "unsavedChangesMessage": "您有未保存的更改。确定要离开此页面吗？",
+    "leaveWithoutSaving": "不保存离开",
+    "stayOnPage": "留在页面"
   },
   "videoEditor": {
     "title": "视频编辑器",
@@ -108,5 +112,12 @@
     "home": "首页",
     "error": "错误",
     "loading": "加载中..."
+  },
+  "tags": {
+    "title": "标签",
+    "addTag": "添加标签",
+    "newTag": "新标签...",
+    "generating": "生成标签中...",
+    "rememberToSave": "记得保存以保留标签更改！"
   }
 }

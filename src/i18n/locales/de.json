@@ -76,7 +76,11 @@
     "failedToSave": "Speichern des Buches fehlgeschlagen",
     "failedToDelete": "Löschen des Buches fehlgeschlagen",
     "failedToEnhance": "Verbesserung des Konzepts fehlgeschlagen",
-    "failedToGenerate": "Generierung des Buches fehlgeschlagen"
+    "failedToGenerate": "Generierung des Buches fehlgeschlagen",
+    "unsavedChanges": "Ungespeicherte Änderungen",
+    "unsavedChangesMessage": "Sie haben ungespeicherte Änderungen. Möchten Sie diese Seite wirklich verlassen?",
+    "leaveWithoutSaving": "Ohne Speichern verlassen",
+    "stayOnPage": "Auf Seite bleiben"
   },
   "videoEditor": {
     "title": "Video-Editor",
@@ -108,5 +112,12 @@
     "home": "Startseite",
     "error": "Fehler",
     "loading": "Wird geladen..."
+  },
+  "tags": {
+    "title": "Tags",
+    "addTag": "Tag hinzufügen",
+    "newTag": "Neuer Tag...",
+    "generating": "Tags werden generiert...",
+    "rememberToSave": "Vergessen Sie nicht zu speichern!"
   }
 }
