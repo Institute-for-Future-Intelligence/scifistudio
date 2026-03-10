@@ -21,7 +21,7 @@
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Select } from 'antd'
+import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Select, Rate } from 'antd'
 import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined, PlayCircleOutlined, EyeOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -37,7 +37,7 @@ function Home() {
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('all')
-  const [sortBy, setSortBy] = useState<'updatedAt' | 'createdAt'>('updatedAt')
+  const [sortBy, setSortBy] = useState<'updatedAt' | 'createdAt' | 'averageRating'>('updatedAt')
 
   useEffect(() => {
     if (user) {
@@ -153,6 +153,12 @@ function Home() {
                     : `${t('home.updated')} ${storybook.updatedAt.toDate().toLocaleDateString()}`
                 }
               </div>
+              <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Rate disabled value={storybook.averageRating || 0} allowHalf style={{ fontSize: 12 }} />
+                {storybook.averageRating != null && storybook.averageRating > 0 && (
+                  <span style={{ fontSize: 11, color: '#999' }}>{storybook.averageRating.toFixed(1)} ({storybook.ratingCount})</span>
+                )}
+              </div>
               {storybook.tags && storybook.tags.length > 0 && (
                 <div style={{ marginTop: 8, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                   {storybook.tags.slice(0, 3).map(tag => (
@@ -236,6 +242,12 @@ function Home() {
                     : `${t('home.updated')} ${video.updatedAt.toDate().toLocaleDateString()}`
                 }
               </div>
+              <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                <Rate disabled value={video.averageRating || 0} allowHalf style={{ fontSize: 12 }} />
+                {video.averageRating != null && video.averageRating > 0 && (
+                  <span style={{ fontSize: 11, color: '#999' }}>{video.averageRating.toFixed(1)} ({video.ratingCount})</span>
+                )}
+              </div>
               {video.tags && video.tags.length > 0 && (
                 <div style={{ marginTop: 8, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                   {video.tags.slice(0, 3).map(tag => (
@@ -297,19 +309,21 @@ function Home() {
     )
   }
 
-  const sortedStorybooks = [...storybooks].sort((a, b) =>
-    b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime()
-  )
+  const sortItems = <T extends { updatedAt: { toDate: () => Date }; createdAt: { toDate: () => Date }; averageRating?: number }>(items: T[]) => {
+    if (sortBy === 'averageRating') {
+      return [...items].sort((a, b) => (b.averageRating || 0) - (a.averageRating || 0))
+    }
+    return [...items].sort((a, b) => b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime())
+  }
 
-  const sortedVideos = [...videos].sort((a, b) =>
-    b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime()
-  )
+  const sortedStorybooks = sortItems(storybooks)
+  const sortedVideos = sortItems(videos)
 
   const renderAllProjects = () => {
     const allProjects = [
-      ...sortedStorybooks.map(s => ({ type: 'storybook' as const, item: s, date: s[sortBy].toDate() })),
-      ...sortedVideos.map(v => ({ type: 'video' as const, item: v, date: v[sortBy].toDate() }))
-    ].sort((a, b) => b.date.getTime() - a.date.getTime())
+      ...sortedStorybooks.map(s => ({ type: 'storybook' as const, item: s, sortVal: sortBy === 'averageRating' ? (s.averageRating || 0) : s[sortBy].toDate().getTime() })),
+      ...sortedVideos.map(v => ({ type: 'video' as const, item: v, sortVal: sortBy === 'averageRating' ? (v.averageRating || 0) : v[sortBy].toDate().getTime() }))
+    ].sort((a, b) => b.sortVal - a.sortVal)
 
     return (
       <List
@@ -350,6 +364,7 @@ function Home() {
             options={[
               { value: 'updatedAt', label: t('home.sortByUpdated') },
               { value: 'createdAt', label: t('home.sortByCreated') },
+              { value: 'averageRating', label: t('home.sortByRating') },
             ]}
           />
         </div>

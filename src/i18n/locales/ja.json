@@ -36,7 +36,8 @@
     "tabStories": "ストーリー",
     "tabVideos": "ビデオ",
     "sortByUpdated": "更新日順",
-    "sortByCreated": "作成日順"
+    "sortByCreated": "作成日順",
+    "sortByRating": "評価順"
   },
   "storyEditor": {
     "title": "ストーリーエディター",

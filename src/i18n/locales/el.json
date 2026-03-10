@@ -36,7 +36,8 @@
     "tabStories": "Ιστορίες",
     "tabVideos": "Βίντεο",
     "sortByUpdated": "Ταξινόμηση κατά ενημέρωση",
-    "sortByCreated": "Ταξινόμηση κατά δημιουργία"
+    "sortByCreated": "Ταξινόμηση κατά δημιουργία",
+    "sortByRating": "Ταξινόμηση κατά βαθμολογία"
   },
   "storyEditor": {
     "title": "Επεξεργαστής Ιστοριών",

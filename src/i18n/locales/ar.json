@@ -36,7 +36,8 @@
     "tabStories": "القصص",
     "tabVideos": "الفيديوهات",
     "sortByUpdated": "ترتيب حسب التحديث",
-    "sortByCreated": "ترتيب حسب الإنشاء"
+    "sortByCreated": "ترتيب حسب الإنشاء",
+    "sortByRating": "ترتيب حسب التقييم"
   },
   "storyEditor": {
     "title": "محرر القصص",

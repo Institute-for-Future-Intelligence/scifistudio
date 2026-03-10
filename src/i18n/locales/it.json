@@ -36,7 +36,8 @@
     "tabStories": "Storie",
     "tabVideos": "Video",
     "sortByUpdated": "Ordina per aggiornamento",
-    "sortByCreated": "Ordina per creazione"
+    "sortByCreated": "Ordina per creazione",
+    "sortByRating": "Ordina per valutazione"
   },
   "storyEditor": {
     "title": "Editor di Storie",

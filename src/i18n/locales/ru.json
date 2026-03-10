@@ -36,7 +36,8 @@
     "tabStories": "Истории",
     "tabVideos": "Видео",
     "sortByUpdated": "По дате обновления",
-    "sortByCreated": "По дате создания"
+    "sortByCreated": "По дате создания",
+    "sortByRating": "По рейтингу"
   },
   "storyEditor": {
     "title": "Редактор Историй",

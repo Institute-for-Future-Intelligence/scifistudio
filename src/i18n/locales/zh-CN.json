@@ -36,7 +36,8 @@
     "tabStories": "故事",
     "tabVideos": "视频",
     "sortByUpdated": "按更新排序",
-    "sortByCreated": "按创建排序"
+    "sortByCreated": "按创建排序",
+    "sortByRating": "按评分排序"
   },
   "storyEditor": {
     "title": "故事编辑器",

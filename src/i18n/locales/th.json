@@ -36,7 +36,8 @@
     "tabStories": "เรื่อง",
     "tabVideos": "วิดีโอ",
     "sortByUpdated": "เรียงตามวันที่อัปเดต",
-    "sortByCreated": "เรียงตามวันที่สร้าง"
+    "sortByCreated": "เรียงตามวันที่สร้าง",
+    "sortByRating": "เรียงตามคะแนน"
   },
   "storyEditor": {
     "title": "เครื่องมือแต่งเรื่อง",

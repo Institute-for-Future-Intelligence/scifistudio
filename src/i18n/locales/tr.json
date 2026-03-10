@@ -36,7 +36,8 @@
     "tabStories": "Hikayeler",
     "tabVideos": "Videolar",
     "sortByUpdated": "Güncellemeye göre sırala",
-    "sortByCreated": "Oluşturmaya göre sırala"
+    "sortByCreated": "Oluşturmaya göre sırala",
+    "sortByRating": "Puana göre sırala"
   },
   "storyEditor": {
     "title": "Hikaye Editörü",

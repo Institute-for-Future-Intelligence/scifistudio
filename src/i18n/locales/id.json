@@ -36,7 +36,8 @@
     "tabStories": "Cerita",
     "tabVideos": "Video",
     "sortByUpdated": "Urutkan berdasarkan diperbarui",
-    "sortByCreated": "Urutkan berdasarkan dibuat"
+    "sortByCreated": "Urutkan berdasarkan dibuat",
+    "sortByRating": "Urutkan berdasarkan penilaian"
   },
   "storyEditor": {
     "title": "Editor Cerita",
