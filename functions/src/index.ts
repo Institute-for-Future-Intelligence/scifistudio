@@ -473,6 +473,15 @@ async function pollVeoOperation(operationName: string, apiKey: string): Promise<
       error?: { message?: string; code?: number }
       metadata?: unknown
       response?: {
+        // Actual API response structure
+        generateVideoResponse?: {
+          generatedSamples?: Array<{
+            video?: {
+              uri?: string
+            }
+          }>
+        }
+        // Legacy structure (kept for compatibility)
         videos?: Array<{
           uri?: string
           encoding?: string
@@ -491,26 +500,29 @@ async function pollVeoOperation(operationName: string, apiKey: string): Promise<
 
     // If done is true, we must exit the loop
     if (result.done) {
-      if (result.response?.videos?.[0]) {
-        const video = result.response.videos[0]
-        console.log('Video ready! URI:', video.uri?.substring(0, 100))
+      // Extract video URI from actual API response structure
+      const videoUri =
+        result.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri ||
+        result.response?.videos?.[0]?.uri
 
-        if (video.uri) {
-          // Fetch the video from the URI
-          const videoFetchUrl = `${video.uri}?key=${apiKey}`
-          const videoResponse = await fetch(videoFetchUrl)
+      if (videoUri) {
+        console.log('Video ready! URI:', videoUri.substring(0, 100))
 
-          if (videoResponse.ok) {
-            const buffer = await videoResponse.arrayBuffer()
-            const base64 = Buffer.from(buffer).toString('base64')
-            return {
-              videoUrl: `data:video/mp4;base64,${base64}`,
-              durationSeconds: 8,
-            }
-          } else {
-            console.log('Failed to fetch video:', videoResponse.status)
-            return null // Fallback to image
+        // Fetch the video from the URI (use & if URL already has query params)
+        const separator = videoUri.includes('?') ? '&' : '?'
+        const videoFetchUrl = `${videoUri}${separator}key=${apiKey}`
+        const videoResponse = await fetch(videoFetchUrl)
+
+        if (videoResponse.ok) {
+          const buffer = await videoResponse.arrayBuffer()
+          const base64 = Buffer.from(buffer).toString('base64')
+          return {
+            videoUrl: `data:video/mp4;base64,${base64}`,
+            durationSeconds: 8,
           }
+        } else {
+          console.log('Failed to fetch video:', videoResponse.status)
+          return null // Fallback to image
         }
       }
 

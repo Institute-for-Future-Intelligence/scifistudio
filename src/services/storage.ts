@@ -1,5 +1,35 @@
-import { ref, uploadString, getDownloadURL } from 'firebase/storage'
+import { ref, uploadString, uploadBytes, getDownloadURL } from 'firebase/storage'
 import { storage } from './firebase'
+
+export const uploadBase64Video = async (
+  base64Data: string,
+  path: string
+): Promise<string> => {
+  // Remove data URL prefix if present (e.g., "data:video/mp4;base64,...")
+  const base64Content = base64Data.includes(',')
+    ? base64Data.split(',')[1]
+    : base64Data
+
+  // Detect content type from data URL
+  let contentType = 'video/mp4'
+  if (base64Data.startsWith('data:')) {
+    const match = base64Data.match(/^data:([^;]+);/)
+    if (match) contentType = match[1]
+  }
+
+  // Convert base64 to Uint8Array for uploadBytes (more efficient for large files)
+  const binaryString = atob(base64Content)
+  const bytes = new Uint8Array(binaryString.length)
+  for (let i = 0; i < binaryString.length; i++) {
+    bytes[i] = binaryString.charCodeAt(i)
+  }
+
+  const storageRef = ref(storage, path)
+  await uploadBytes(storageRef, bytes, { contentType })
+
+  const downloadUrl = await getDownloadURL(storageRef)
+  return downloadUrl
+}
 
 export const uploadBase64Image = async (
   base64Data: string,

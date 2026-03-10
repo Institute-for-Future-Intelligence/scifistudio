@@ -20,7 +20,7 @@ import {
   HomeOutlined,
   DeleteOutlined,
   BulbOutlined,
-  ShareAltOutlined,
+  EyeOutlined,
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -38,6 +38,7 @@ import {
   deleteVideo,
   Video,
 } from '../../services/firestore'
+import { uploadBase64Video } from '../../services/storage'
 import TagEditor from '../../components/common/TagEditor'
 
 const { Title, Paragraph, Text } = Typography
@@ -211,11 +212,20 @@ function VideoEditor() {
     try {
       const tagsToSave = pendingTagsRef.current || tags
 
+      // Upload video/image to Storage if it's a base64 data URI
+      let savedUrl = videoUrl
+      if (videoUrl.startsWith('data:')) {
+        const ext = videoUrl.startsWith('data:video') ? 'mp4' : 'png'
+        const saveId = videoId || crypto.randomUUID()
+        const path = `videos/${user.uid}/${saveId}/video.${ext}`
+        savedUrl = await uploadBase64Video(videoUrl, path)
+      }
+
       if (videoId) {
         await updateVideo(videoId, {
           title,
           prompt: enhancedPrompt || prompt,
-          videoUrl,
+          videoUrl: savedUrl,
           tags: tagsToSave,
         })
         message.success(t('videoEditor.videoUpdated'))
@@ -225,7 +235,7 @@ function VideoEditor() {
           authorName: user.displayName || t('auth.guest'),
           title,
           prompt: enhancedPrompt || prompt,
-          videoUrl,
+          videoUrl: savedUrl,
           tags: tagsToSave,
           status: 'completed',
         })
@@ -350,7 +360,7 @@ function VideoEditor() {
             {videoId ? t('storyEditor.update') : t('storyEditor.save')}
           </Button>
           <Button
-            icon={<ShareAltOutlined />}
+            icon={<EyeOutlined />}
             onClick={() => {
               if (!videoId) {
                 message.warning(t('videoEditor.saveFirstToPublish'))
@@ -361,7 +371,7 @@ function VideoEditor() {
             }}
             disabled={!videoId}
           >
-            {t('storyEditor.publish')}
+            {t('storyEditor.view')}
           </Button>
         </Space>
       </div>
