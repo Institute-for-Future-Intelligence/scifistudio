@@ -17,5 +17,17 @@
   </head>
   <body>
     <div id="root"></div>
+    <script>
+      // GitHub Pages SPA redirect restore
+      (function() {
+        var redirect = sessionStorage.getItem('spa-redirect');
+        if (redirect) {
+          sessionStorage.removeItem('spa-redirect');
+          var base = document.querySelector('base');
+          var basePath = base ? base.getAttribute('href') : '/';
+          history.replaceState(null, '', basePath + redirect);
+        }
+      })();
+    </script>
   </body>
 </html>
