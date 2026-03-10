@@ -481,7 +481,7 @@ function VideoEditor() {
                 message.warning(t('videoEditor.saveFirstToPublish'))
                 return
               }
-              const shareUrl = `${window.location.origin}/watch/${videoId}`
+              const shareUrl = `${window.location.origin}${import.meta.env.BASE_URL}watch/${videoId}`
               window.open(shareUrl, '_blank')
             }}
             disabled={!videoId}

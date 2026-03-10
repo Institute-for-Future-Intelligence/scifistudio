@@ -420,7 +420,7 @@ function StoryEditor() {
             icon={<EyeOutlined />}
             onClick={() => {
               if (storybookId) {
-                const publishUrl = `${window.location.origin}/view/${storybookId}`
+                const publishUrl = `${window.location.origin}${import.meta.env.BASE_URL}view/${storybookId}`
                 window.open(publishUrl, '_blank')
               } else {
                 message.warning(t('storyEditor.saveFirst'))

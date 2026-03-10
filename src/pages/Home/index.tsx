@@ -122,7 +122,7 @@ function Home() {
             key="view"
             onClick={(e) => {
               e.stopPropagation()
-              window.open(`/view/${storybook.id}`, '_blank')
+              window.open(`${import.meta.env.BASE_URL}view/${storybook.id}`, '_blank')
             }}
           />,
           <Popconfirm
@@ -205,7 +205,7 @@ function Home() {
             key="view"
             onClick={(e) => {
               e.stopPropagation()
-              window.open(`/watch/${video.id}`, '_blank')
+              window.open(`${import.meta.env.BASE_URL}watch/${video.id}`, '_blank')
             }}
           />,
           <Popconfirm

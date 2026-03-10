@@ -25,7 +25,10 @@
       "Bash(cd \"C:/Users/charl/WebstormProjects/scifistudio\" && npx firebase storage:rules:list 2>&1; npx firebase target:list 2>&1)",
       "Bash(npm ls:*)",
       "Bash(GITHUB_PAGES=true npm run build 2>&1 && cp dist/index.html dist/404.html && npx gh-pages -d dist 2>&1)",
-      "WebFetch(domain:ai.google.dev)"
+      "WebFetch(domain:ai.google.dev)",
+      "Bash(GITHUB_PAGES=true npm run build 2>&1 && npx gh-pages -d dist 2>&1)",
+      "Bash(git ls-tree:*)",
+      "Bash(GITHUB_PAGES=true npm run build 2>&1 && cp dist/index.html dist/404.html && npx gh-pages -d dist --dotfiles 2>&1)"
     ]
   }
 }
