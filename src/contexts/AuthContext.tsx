@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, ReactNode } from 'react'
+import { createContext, useEffect, useState, useRef, ReactNode } from 'react'
 import { User, subscribeToAuthChanges, signInWithGoogle, signInAnonymously, signOut } from '../services/auth'
 
 interface AuthContextType {
@@ -18,11 +18,20 @@ interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const initialAuthCheckDone = useRef(false)
 
   useEffect(() => {
-    const unsubscribe = subscribeToAuthChanges((user) => {
-      console.log('Auth state changed:', user?.email || user?.uid || 'signed out')
-      setUser(user)
+    console.log('Setting up auth state listener...')
+    const unsubscribe = subscribeToAuthChanges((authUser) => {
+      console.log('Auth state changed:', authUser?.email || authUser?.uid || 'signed out')
+
+      // Only update state after the first callback (persistence is ready)
+      if (!initialAuthCheckDone.current) {
+        initialAuthCheckDone.current = true
+        console.log('Initial auth check complete, user:', authUser?.email || 'none')
+      }
+
+      setUser(authUser)
       setLoading(false)
     })
     return unsubscribe

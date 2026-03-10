@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import StoryEditor from './pages/StoryEditor'
 import VideoEditor from './pages/VideoEditor'
 import StorybookView from './pages/StorybookView'
+import VideoView from './pages/VideoView'
 
 function App() {
   return (
@@ -11,9 +12,10 @@ function App() {
       <Route path="/" element={<AppLayout />}>
         <Route index element={<Home />} />
         <Route path="story/:id?" element={<StoryEditor />} />
-        <Route path="video/:id?" element={<VideoEditor />} />
+        <Route path="video" element={<VideoEditor />} />
       </Route>
       <Route path="view/:id" element={<StorybookView />} />
+      <Route path="watch/:id" element={<VideoView />} />
     </Routes>
   )
 }

@@ -12,12 +12,13 @@ import { auth } from './firebase'
 
 const googleProvider = new GoogleAuthProvider()
 
-// Ensure persistence is set before any auth operations
-const persistenceReady = setPersistence(auth, browserLocalPersistence)
+// Set persistence immediately on module load
+setPersistence(auth, browserLocalPersistence)
+  .then(() => console.log('Firebase auth persistence configured'))
+  .catch((err) => console.error('Failed to set persistence:', err))
 
 export const signInWithGoogle = async (): Promise<User | null> => {
   try {
-    await persistenceReady
     const result = await signInWithPopup(auth, googleProvider)
     return result.user
   } catch (error: unknown) {
@@ -33,7 +34,6 @@ export const signInWithGoogle = async (): Promise<User | null> => {
 
 export const signInAnonymously = async (): Promise<User | null> => {
   try {
-    await persistenceReady
     const result = await firebaseSignInAnonymously(auth)
     return result.user
   } catch (error: unknown) {
@@ -50,6 +50,8 @@ export const signOut = async (): Promise<void> => {
 export const subscribeToAuthChanges = (
   callback: (user: User | null) => void
 ): (() => void) => {
+  // onAuthStateChanged will fire immediately with current user (or null if not signed in)
+  // Firebase automatically restores the persisted user from local storage
   return onAuthStateChanged(auth, callback)
 }
 

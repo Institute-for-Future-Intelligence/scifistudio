@@ -10,7 +10,14 @@
       "Bash(npx firebase-tools deploy)",
       "Bash(npx firebase-tools deploy:*)",
       "Bash(npx firebase deploy:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npx firebase functions:log:*)",
+      "Bash(dir /b \"C:\\\\Users\\\\charl\\\\WebstormProjects\\\\scifistudio\")",
+      "Bash(findstr:*)",
+      "Bash(ls:*)",
+      "Bash(dir C:UserscharlWebstormProjectsscifistudiofunctions /s /b)",
+      "Bash(firebase functions:secrets:access:*)",
+      "Bash(curl:*)"
     ]
   }
 }

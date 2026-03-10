@@ -29,5 +29,25 @@ service cloud.firestore {
       allow create: if request.auth != null
         && request.resource.data.userId == request.auth.uid;
     }
+
+    // Videos - public read, authenticated write for own documents
+    match /videos/{videoId} {
+      // Anyone can read videos (for public sharing)
+      allow read: if true;
+
+      // Only authenticated users can create their own videos
+      allow create: if request.auth != null
+        && request.resource.data.userId == request.auth.uid;
+
+      // Users can update their own videos, or anyone can update ratings
+      allow update: if request.auth != null
+        && resource.data.userId == request.auth.uid
+        || (request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['ratings', 'averageRating', 'ratingCount', 'updatedAt']));
+
+      // Only owners can delete
+      allow delete: if request.auth != null
+        && resource.data.userId == request.auth.uid;
+    }
   }
 }

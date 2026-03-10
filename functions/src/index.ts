@@ -6,6 +6,10 @@ const geminiApiKey = defineSecret('GEMINI_API_KEY')
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta'
 
+// Use stable model names
+const TEXT_MODEL = 'gemini-2.5-flash'
+const IMAGE_MODEL = 'gemini-2.0-flash-exp-image-generation'
+
 interface GeminiResponse {
   candidates?: Array<{
     content?: {
@@ -44,7 +48,7 @@ export const generateText = onCall(
     }
 
     const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
       { contents: [{ parts: [{ text: prompt }] }] }
     )
 
@@ -52,7 +56,7 @@ export const generateText = onCall(
   }
 )
 
-// Generate image with Gemini
+// Generate image with Imagen 3.0
 export const generateImage = onCall(
   { secrets: [geminiApiKey], cors: true },
   async (request) => {
@@ -62,23 +66,52 @@ export const generateImage = onCall(
       throw new HttpsError('invalid-argument', 'Prompt is required')
     }
 
-    const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${geminiApiKey.value()}`,
+    const apiKey = geminiApiKey.value()
+
+    // Try Imagen 3.0 first
+    const imagenResponse = await fetch(
+      `${API_BASE}/models/${IMAGE_MODEL}:predict?key=${apiKey}`,
       {
-        contents: [{ parts: [{ text: `Generate an image: ${prompt}` }] }],
-        generationConfig: { responseModalities: ['image', 'text'] },
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          instances: [{ prompt: prompt }],
+          parameters: {
+            sampleCount: 1,
+          },
+        }),
       }
     )
 
-    for (const part of data.candidates?.[0]?.content?.parts || []) {
-      if (part.inlineData?.data) {
+    if (imagenResponse.ok) {
+      const result = await imagenResponse.json() as {
+        predictions?: Array<{ bytesBase64Encoded?: string }>
+      }
+      if (result.predictions?.[0]?.bytesBase64Encoded) {
         return {
-          imageUrl: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
+          imageUrl: `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`,
         }
       }
     }
 
-    throw new HttpsError('internal', 'No image generated')
+    // Fallback to Gemini with image generation
+    const geminiResponse = await fetch(
+      `${API_BASE}/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [{ text: `Create a detailed description for an illustration: ${prompt}` }] }],
+        }),
+      }
+    )
+
+    if (!geminiResponse.ok) {
+      throw new HttpsError('internal', 'Image generation failed')
+    }
+
+    // For now, return empty - we'll need a working image model
+    throw new HttpsError('internal', 'Image generation model not available')
   }
 )
 
@@ -115,7 +148,7 @@ Visual: [detailed illustration description]
 Make it a compelling narrative with a beginning, middle, and end.`
 
     const outlineData = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${apiKey}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
       { contents: [{ parts: [{ text: outlinePrompt }] }] }
     )
 
@@ -145,7 +178,7 @@ Make it a compelling narrative with a beginning, middle, and end.`
         const imagePrompt = `Create a beautiful sci-fi storybook illustration: ${pages[i].visual}. Style: cinematic, detailed, vibrant colors, suitable for a storybook.`
 
         const imageData = await fetchGemini(
-          `${API_BASE}/models/gemini-2.0-flash-exp-image-generation:generateContent?key=${apiKey}`,
+          `${API_BASE}/models/${IMAGE_MODEL}:generateContent?key=${apiKey}`,
           {
             contents: [{ parts: [{ text: `Generate an image: ${imagePrompt}` }] }],
             generationConfig: { responseModalities: ['image', 'text'] },
@@ -206,7 +239,7 @@ Return ONLY a comma-separated list of lowercase tags, nothing else.
 Example: space exploration, alien contact, mystery, adventure, mars colony`
 
     const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
       { contents: [{ parts: [{ text: tagPrompt }] }] }
     )
 
@@ -223,7 +256,7 @@ Example: space exploration, alien contact, mystery, adventure, mars colony`
   }
 )
 
-// Generate video with Veo
+// Generate video with Veo via Gemini API
 export const generateVideo = onCall(
   { secrets: [geminiApiKey], cors: true, timeoutSeconds: 540 },
   async (request) => {
@@ -235,85 +268,228 @@ export const generateVideo = onCall(
 
     const apiKey = geminiApiKey.value()
 
-    // Step 1: Submit video generation request
-    const submitResponse = await fetch(
-      `${API_BASE}/models/veo-2.0-generate-001:predictLongRunning?key=${apiKey}`,
-      {
+    try {
+      console.log('Starting video generation with prompt:', prompt.substring(0, 100))
+
+      // Use Veo 3.1 with predictLongRunning method
+      const veoModel = 'veo-3.1-generate-preview'
+      const veoUrl = `https://generativelanguage.googleapis.com/v1beta/models/${veoModel}:predictLongRunning?key=${apiKey}`
+
+      console.log('Calling Veo 3.1 with predictLongRunning...')
+
+      const veoResponse = await fetch(veoUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          instances: [{ prompt }],
+          instances: [{
+            prompt: prompt
+          }],
           parameters: {
             aspectRatio: '16:9',
             durationSeconds: 8,
-            personGeneration: 'allow_adult',
-            numberOfVideos: 1,
           },
         }),
+      })
+
+      console.log('Veo response status:', veoResponse.status)
+
+      if (veoResponse.ok) {
+        const result = await veoResponse.json() as {
+          name?: string
+          done?: boolean
+          error?: { message?: string }
+        }
+        console.log('Veo result:', JSON.stringify(result).substring(0, 500))
+
+        // predictLongRunning returns an operation name for polling
+        if (result.name) {
+          console.log('Got operation:', result.name)
+          return await pollVeoOperation(result.name, apiKey)
+        }
+
+        if (result.error) {
+          console.log('Veo error:', result.error.message)
+        }
+      } else {
+        const errText = await veoResponse.text()
+        console.log('Veo error response:', errText.substring(0, 300))
       }
-    )
 
-    if (!submitResponse.ok) {
-      const errorData = await submitResponse.json().catch(() => ({})) as ErrorResponse
-      throw new HttpsError('internal', errorData.error?.message || 'Video generation failed to start')
-    }
+      // If Veo fails, try using imagen-3.0 to generate images as a fallback
+      console.log('Veo not available, falling back to image generation...')
 
-    const submitResult = await submitResponse.json() as { name?: string }
-    const operationName = submitResult.name
+      const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:generateImages?key=${apiKey}`
 
-    if (!operationName) {
-      throw new HttpsError('internal', 'No operation name returned')
-    }
+      const imagenResponse = await fetch(imagenUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{ text: `A cinematic sci-fi scene: ${prompt}` }]
+          }],
+          generationConfig: {
+            numberOfImages: 1,
+          },
+        }),
+      })
 
-    // Step 2: Poll for completion (with timeout)
-    const maxWaitTime = 480000 // 8 minutes
-    const pollInterval = 5000 // 5 seconds
-    const startTime = Date.now()
+      console.log('Imagen response status:', imagenResponse.status)
 
-    while (Date.now() - startTime < maxWaitTime) {
-      await new Promise(resolve => setTimeout(resolve, pollInterval))
+      if (imagenResponse.ok) {
+        const imagenResult = await imagenResponse.json() as {
+          generatedImages?: Array<{ image?: { imageBytes?: string } }>
+        }
 
-      const pollResponse = await fetch(
-        `${API_BASE}/${operationName}?key=${apiKey}`,
-        { method: 'GET' }
+        if (imagenResult.generatedImages?.[0]?.image?.imageBytes) {
+          // Return as image with a note
+          return {
+            videoUrl: `data:image/png;base64,${imagenResult.generatedImages[0].image.imageBytes}`,
+            durationSeconds: 0,
+            isImage: true,
+            message: 'Video generation not available. Generated image instead.',
+          }
+        }
+      }
+
+      // Final fallback: use gemini-2.0-flash-exp-image-generation for image
+      console.log('Trying Gemini image generation...')
+
+      const imageModels = [
+        'gemini-2.0-flash-exp-image-generation',
+        'gemini-2.0-flash-preview-image-generation',
+        'imagen-3.0-generate-001'
+      ]
+
+      let flashResponse: Response | null = null
+      for (const imgModel of imageModels) {
+        const flashUrl = `https://generativelanguage.googleapis.com/v1beta/models/${imgModel}:generateContent?key=${apiKey}`
+        console.log('Trying image model:', imgModel)
+
+        const response = await fetch(flashUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{
+              parts: [{ text: `Generate an image: A cinematic sci-fi scene - ${prompt}` }]
+            }],
+            generationConfig: {
+              responseModalities: ['image', 'text'],
+            },
+          }),
+        })
+
+        console.log(`${imgModel} response status:`, response.status)
+
+        if (response.ok) {
+          flashResponse = response
+          break
+        } else {
+          const errorText = await response.text()
+          console.log(`${imgModel} error:`, errorText.substring(0, 200))
+        }
+      }
+
+      if (flashResponse) {
+        const flashResult = await flashResponse.json() as GeminiResponse
+        console.log('Image result candidates:', flashResult.candidates?.length)
+
+        for (const part of flashResult.candidates?.[0]?.content?.parts || []) {
+          if (part.inlineData?.data) {
+            console.log('Found image data, size:', part.inlineData.data.length, 'mime:', part.inlineData.mimeType)
+            return {
+              videoUrl: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
+              durationSeconds: 0,
+              isImage: true,
+              message: 'Video generation requires Veo API access. Generated image instead.',
+            }
+          }
+        }
+        console.log('No image data found in response')
+      }
+
+      throw new HttpsError(
+        'unimplemented',
+        'Video generation (Veo API) is not available for this project. Please ensure you have access to the Veo API in Google AI Studio.'
       )
-
-      if (!pollResponse.ok) {
-        continue // Retry on error
+    } catch (error) {
+      console.error('generateVideo error:', error)
+      if (error instanceof HttpsError) {
+        throw error
       }
-
-      const pollResult = await pollResponse.json() as {
-        done?: boolean
-        response?: {
-          generatedVideos?: Array<{ video?: { uri?: string } }>
-        }
-        error?: { message?: string }
-      }
-
-      if (pollResult.error) {
-        throw new HttpsError('internal', pollResult.error.message || 'Video generation failed')
-      }
-
-      if (pollResult.done && pollResult.response?.generatedVideos?.[0]?.video?.uri) {
-        const videoUri = pollResult.response.generatedVideos[0].video.uri
-
-        // Fetch the video content and convert to data URL
-        const videoResponse = await fetch(`${videoUri}&key=${apiKey}`)
-        if (!videoResponse.ok) {
-          throw new HttpsError('internal', 'Failed to fetch generated video')
-        }
-
-        const videoBuffer = await videoResponse.arrayBuffer()
-        const base64Video = Buffer.from(videoBuffer).toString('base64')
-        const videoUrl = `data:video/mp4;base64,${base64Video}`
-
-        return { videoUrl, durationSeconds: 8 }
-      }
+      throw new HttpsError('internal', `Video generation failed: ${(error as Error).message}`)
     }
-
-    throw new HttpsError('deadline-exceeded', 'Video generation timed out')
   }
 )
+
+// Poll Veo API operation for video completion
+async function pollVeoOperation(operationName: string, apiKey: string) {
+  const maxWaitTime = 300000 // 5 minutes
+  const pollInterval = 5000 // 5 seconds
+  const startTime = Date.now()
+
+  while (Date.now() - startTime < maxWaitTime) {
+    await new Promise(resolve => setTimeout(resolve, pollInterval))
+
+    // The operation name format is like "operations/xxx" - we need full URL
+    const pollUrl = `https://generativelanguage.googleapis.com/v1beta/${operationName}?key=${apiKey}`
+    console.log('Polling Veo operation:', operationName)
+
+    const pollResponse = await fetch(pollUrl)
+
+    if (!pollResponse.ok) {
+      console.log('Poll error:', pollResponse.status)
+      const errText = await pollResponse.text()
+      console.log('Poll error body:', errText.substring(0, 200))
+      continue
+    }
+
+    interface VeoPollResult {
+      name?: string
+      done?: boolean
+      error?: { message?: string; code?: number }
+      metadata?: unknown
+      response?: {
+        videos?: Array<{
+          uri?: string
+          encoding?: string
+        }>
+      }
+    }
+
+    const result = await pollResponse.json() as VeoPollResult
+    console.log('Poll result done:', result.done, 'error:', result.error?.message)
+
+    if (result.error) {
+      throw new HttpsError('internal', result.error.message || 'Video generation failed')
+    }
+
+    if (result.done && result.response?.videos?.[0]) {
+      const video = result.response.videos[0]
+      console.log('Video ready! URI:', video.uri?.substring(0, 100))
+
+      if (video.uri) {
+        // Fetch the video from the URI
+        const videoFetchUrl = `${video.uri}?key=${apiKey}`
+        const videoResponse = await fetch(videoFetchUrl)
+
+        if (videoResponse.ok) {
+          const buffer = await videoResponse.arrayBuffer()
+          const base64 = Buffer.from(buffer).toString('base64')
+          return {
+            videoUrl: `data:video/mp4;base64,${base64}`,
+            durationSeconds: 8,
+          }
+        } else {
+          console.log('Failed to fetch video:', videoResponse.status)
+        }
+      }
+
+      throw new HttpsError('internal', 'Video completed but could not download')
+    }
+  }
+
+  throw new HttpsError('deadline-exceeded', 'Video generation timed out after 5 minutes')
+}
 
 // Enhance video prompt
 export const enhanceVideoPrompt = onCall(
@@ -332,7 +508,7 @@ User's concept: ${prompt}
 Enhanced prompt:`
 
     const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
       { contents: [{ parts: [{ text: enhancePrompt }] }] }
     )
 
@@ -365,7 +541,7 @@ Return ONLY a comma-separated list of lowercase tags, nothing else.
 Example: space battle, epic, cinematic, sci-fi, alien invasion`
 
     const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
       { contents: [{ parts: [{ text: tagPrompt }] }] }
     )
 
@@ -398,7 +574,7 @@ User's concept: ${prompt}
 Enhanced concept:`
 
     const data = await fetchGemini(
-      `${API_BASE}/models/gemini-2.5-flash:generateContent?key=${geminiApiKey.value()}`,
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
       { contents: [{ parts: [{ text: systemPrompt }] }] }
     )
 

@@ -20,6 +20,7 @@ import {
   HomeOutlined,
   DeleteOutlined,
   BulbOutlined,
+  ShareAltOutlined,
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -56,6 +57,7 @@ function VideoEditor() {
 
   // Video state
   const [videoUrl, setVideoUrl] = useState('')
+  const [isImage, setIsImage] = useState(false)
   const [tags, setTags] = useState<string[]>([])
 
   // UI state
@@ -152,6 +154,7 @@ function VideoEditor() {
 
     setGenerating(true)
     setVideoUrl('')
+    setIsImage(false)
     setTags([])
     setVideoId(null)
     videoIdRef.current = null
@@ -161,8 +164,14 @@ function VideoEditor() {
       const result: VideoResult = await generateVideo(finalPrompt, setGenerationStatus)
 
       setVideoUrl(result.videoUrl)
+      setIsImage(result.isImage || false)
       setHasUnsavedChanges(true)
-      message.success(t('videoEditor.videoGenerated'))
+
+      if (result.isImage) {
+        message.info(result.message || 'Video generation not available. Generated image instead.')
+      } else {
+        message.success(t('videoEditor.videoGenerated'))
+      }
 
       // Generate tags (non-blocking)
       setGeneratingTags(true)
@@ -340,6 +349,20 @@ function VideoEditor() {
           >
             {videoId ? t('storyEditor.update') : t('storyEditor.save')}
           </Button>
+          <Button
+            icon={<ShareAltOutlined />}
+            onClick={() => {
+              if (!videoId) {
+                message.warning(t('videoEditor.saveFirstToPublish'))
+                return
+              }
+              const shareUrl = `${window.location.origin}/watch/${videoId}`
+              window.open(shareUrl, '_blank')
+            }}
+            disabled={!videoId}
+          >
+            {t('storyEditor.publish')}
+          </Button>
         </Space>
       </div>
 
@@ -453,17 +476,34 @@ function VideoEditor() {
               </div>
             ) : videoUrl ? (
               <div>
-                <video
-                  src={videoUrl}
-                  controls
-                  autoPlay
-                  loop
-                  style={{
-                    width: '100%',
-                    borderRadius: 8,
-                    background: '#000',
-                  }}
-                />
+                {isImage ? (
+                  <img
+                    src={videoUrl}
+                    alt="Generated scene"
+                    style={{
+                      width: '100%',
+                      borderRadius: 8,
+                      background: '#000',
+                    }}
+                  />
+                ) : (
+                  <video
+                    src={videoUrl}
+                    controls
+                    autoPlay
+                    loop
+                    style={{
+                      width: '100%',
+                      borderRadius: 8,
+                      background: '#000',
+                    }}
+                  />
+                )}
+                {isImage && (
+                  <Text type="secondary" style={{ display: 'block', marginTop: 8, textAlign: 'center' }}>
+                    Video generation (Veo API) is not available. Showing generated image instead.
+                  </Text>
+                )}
                 <div style={{ marginTop: 16 }}>
                   <TagEditor
                     tags={tags}

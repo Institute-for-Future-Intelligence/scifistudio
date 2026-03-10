@@ -264,6 +264,55 @@ export const deleteVideo = async (id: string): Promise<void> => {
   await deleteDoc(docRef)
 }
 
+export const rateVideo = async (
+  videoId: string,
+  oderId: string,
+  rating: number
+): Promise<{ averageRating: number; ratingCount: number }> => {
+  const docRef = doc(db, 'videos', videoId)
+  const snapshot = await getDoc(docRef)
+
+  if (!snapshot.exists()) {
+    throw new Error('Video not found')
+  }
+
+  const data = snapshot.data() as Video
+  const existingRatings = data.ratings || []
+
+  // Check if user already rated
+  const existingIndex = existingRatings.findIndex(r => r.oderId === oderId)
+
+  const newRating: VideoRating = {
+    oderId,
+    rating,
+    createdAt: Timestamp.now(),
+  }
+
+  let updatedRatings: VideoRating[]
+  if (existingIndex >= 0) {
+    // Update existing rating
+    updatedRatings = [...existingRatings]
+    updatedRatings[existingIndex] = newRating
+  } else {
+    // Add new rating
+    updatedRatings = [...existingRatings, newRating]
+  }
+
+  // Calculate average
+  const totalRating = updatedRatings.reduce((sum, r) => sum + r.rating, 0)
+  const averageRating = totalRating / updatedRatings.length
+  const ratingCount = updatedRatings.length
+
+  await updateDoc(docRef, {
+    ratings: updatedRatings,
+    averageRating,
+    ratingCount,
+    updatedAt: Timestamp.now(),
+  })
+
+  return { averageRating, ratingCount }
+}
+
 export const rateStorybook = async (
   storybookId: string,
   oderId: string,

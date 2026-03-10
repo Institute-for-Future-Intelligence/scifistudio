@@ -118,6 +118,8 @@ export const enhanceStoryPrompt = async (userPrompt: string): Promise<string> =>
 export interface VideoResult {
   videoUrl: string
   durationSeconds: number
+  isImage?: boolean
+  message?: string
 }
 
 export const generateVideo = async (
@@ -128,11 +130,11 @@ export const generateVideo = async (
 
   const generateVideoFn = httpsCallable<
     { prompt: string },
-    { videoUrl: string; durationSeconds: number }
+    { videoUrl: string; durationSeconds: number; isImage?: boolean; message?: string }
   >(functions, 'generateVideo', { timeout: 600000 }) // 10 min timeout
 
   const result = await generateVideoFn({ prompt })
-  onProgress?.('Video generation complete!')
+  onProgress?.('Generation complete!')
   return result.data
 }
 
