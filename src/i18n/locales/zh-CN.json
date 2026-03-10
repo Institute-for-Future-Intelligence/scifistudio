@@ -30,9 +30,13 @@
     "delete": "删除",
     "cancel": "取消",
     "pages": "页",
+    "created": "创建于",
+    "updated": "更新于",
     "tabAll": "全部",
     "tabStories": "故事",
-    "tabVideos": "视频"
+    "tabVideos": "视频",
+    "sortByUpdated": "按更新排序",
+    "sortByCreated": "按创建排序"
   },
   "storyEditor": {
     "title": "故事编辑器",
@@ -59,7 +63,7 @@
     "load": "加载",
     "save": "保存",
     "update": "更新",
-    "publish": "发布",
+    "view": "查看",
     "loadStorybook": "加载故事书",
     "noSavedStorybooks": "没有已保存的故事书",
     "pleaseSignIn": "请登录以创作故事。",
@@ -167,5 +171,16 @@
     "newTag": "新标签...",
     "generating": "生成标签中...",
     "rememberToSave": "记得保存以保留标签更改！"
+  },
+  "audio": {
+    "readAloud": "朗读",
+    "stop": "停止",
+    "voice": "语音",
+    "momsVoice": "妈妈的声音",
+    "dadsVoice": "爸爸的声音",
+    "generating": "正在生成音频...",
+    "playing": "正在播放...",
+    "failedToGenerate": "音频生成失败",
+    "readStory": "朗读故事"
   }
 }

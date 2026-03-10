@@ -39,6 +39,7 @@ export interface Storybook {
   title: string
   prompt: string
   frames: StoryFrame[]
+  language?: string
   tags?: string[]
   ratings?: StorybookRating[]
   averageRating?: number
@@ -307,7 +308,6 @@ export const rateVideo = async (
     ratings: updatedRatings,
     averageRating,
     ratingCount,
-    updatedAt: Timestamp.now(),
   })
 
   return { averageRating, ratingCount }
@@ -356,7 +356,6 @@ export const rateStorybook = async (
     ratings: updatedRatings,
     averageRating,
     ratingCount,
-    updatedAt: Timestamp.now(),
   })
 
   return { averageRating, ratingCount }

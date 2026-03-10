@@ -30,9 +30,13 @@
     "delete": "Удалить",
     "cancel": "Отмена",
     "pages": "страниц",
+    "created": "Создано",
+    "updated": "Обновлено",
     "tabAll": "Все",
     "tabStories": "Истории",
-    "tabVideos": "Видео"
+    "tabVideos": "Видео",
+    "sortByUpdated": "По дате обновления",
+    "sortByCreated": "По дате создания"
   },
   "storyEditor": {
     "title": "Редактор Историй",
@@ -59,7 +63,7 @@
     "load": "Загрузить",
     "save": "Сохранить",
     "update": "Обновить",
-    "publish": "Опубликовать",
+    "view": "Просмотр",
     "loadStorybook": "Загрузить Книгу",
     "noSavedStorybooks": "Нет сохранённых книг",
     "pleaseSignIn": "Войдите, чтобы создавать истории.",
@@ -167,5 +171,16 @@
     "newTag": "Новый тег...",
     "generating": "Генерация тегов...",
     "rememberToSave": "Не забудьте сохранить изменения!"
+  },
+  "audio": {
+    "readAloud": "Читать вслух",
+    "stop": "Стоп",
+    "voice": "Голос",
+    "momsVoice": "Голос мамы",
+    "dadsVoice": "Голос папы",
+    "generating": "Генерация аудио...",
+    "playing": "Воспроизведение...",
+    "failedToGenerate": "Не удалось сгенерировать аудио",
+    "readStory": "Прочитать историю"
   }
 }

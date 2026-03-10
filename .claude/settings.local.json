@@ -17,7 +17,11 @@
       "Bash(ls:*)",
       "Bash(dir C:UserscharlWebstormProjectsscifistudiofunctions /s /b)",
       "Bash(firebase functions:secrets:access:*)",
-      "Bash(curl:*)"
+      "Bash(curl:*)",
+      "Bash(firebase functions:log:*)",
+      "Bash(dir /b C:UserscharlWebstormProjectsscifistudiosrci18nlocales)",
+      "Bash(dir:*)",
+      "mcp__ide__getDiagnostics"
     ]
   }
 }

@@ -30,9 +30,13 @@
     "delete": "ลบ",
     "cancel": "ยกเลิก",
     "pages": "หน้า",
+    "created": "สร้างเมื่อ",
+    "updated": "อัปเดตเมื่อ",
     "tabAll": "ทั้งหมด",
     "tabStories": "เรื่อง",
-    "tabVideos": "วิดีโอ"
+    "tabVideos": "วิดีโอ",
+    "sortByUpdated": "เรียงตามวันที่อัปเดต",
+    "sortByCreated": "เรียงตามวันที่สร้าง"
   },
   "storyEditor": {
     "title": "เครื่องมือแต่งเรื่อง",
@@ -59,7 +63,7 @@
     "load": "โหลด",
     "save": "บันทึก",
     "update": "อัปเดต",
-    "publish": "เผยแพร่",
+    "view": "ดู",
     "loadStorybook": "โหลดหนังสือ",
     "noSavedStorybooks": "ไม่มีหนังสือที่บันทึกไว้",
     "pleaseSignIn": "กรุณาเข้าสู่ระบบเพื่อสร้างเรื่อง",
@@ -167,5 +171,16 @@
     "newTag": "แท็กใหม่...",
     "generating": "กำลังสร้างแท็ก...",
     "rememberToSave": "อย่าลืมบันทึกการเปลี่ยนแปลง!"
+  },
+  "audio": {
+    "readAloud": "อ่านออกเสียง",
+    "stop": "หยุด",
+    "voice": "เสียง",
+    "momsVoice": "เสียงแม่",
+    "dadsVoice": "เสียงพ่อ",
+    "generating": "กำลังสร้างเสียง...",
+    "playing": "กำลังเล่น...",
+    "failedToGenerate": "สร้างเสียงไม่สำเร็จ",
+    "readStory": "อ่านเรื่อง"
   }
 }

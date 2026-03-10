@@ -1,11 +1,12 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Modal, List, Select, Progress } from 'antd'
-import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, ShareAltOutlined } from '@ant-design/icons'
+import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { generateStorybook, enhanceStoryPrompt, generateStoryTags, StoryFrame } from '../../services/gemini'
 import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook } from '../../services/firestore'
+import { Timestamp } from 'firebase/firestore'
 import TagEditor from '../../components/common/TagEditor'
 
 const { Title, Paragraph } = Typography
@@ -15,7 +16,7 @@ function StoryEditor() {
   const { id } = useParams<{ id?: string }>()
   const navigate = useNavigate()
   const { user } = useAuth()
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [storybookId, setStorybookId] = useState<string | null>(null)
   const [prompt, setPrompt] = useState('')
   const [enhancedPrompt, setEnhancedPrompt] = useState('')
@@ -36,6 +37,8 @@ function StoryEditor() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [generatingTags, setGeneratingTags] = useState(false)
+  const [createdAt, setCreatedAt] = useState<Timestamp | null>(null)
+  const [updatedAt, setUpdatedAt] = useState<Timestamp | null>(null)
   const storybookIdRef = useRef<string | null>(null)
   const pendingTagsRef = useRef<string[] | null>(null)
 
@@ -101,7 +104,10 @@ function StoryEditor() {
         setPrompt(storybook.prompt)
         setStoryTitle(storybook.title)
         setFrames(storybook.frames)
+        setFrameCount(storybook.frames.length)
         setTags(storybook.tags || [])
+        setCreatedAt(storybook.createdAt)
+        setUpdatedAt(storybook.updatedAt)
         setCurrentPage(0)
         setHasUnsavedChanges(false)
       } else {
@@ -138,7 +144,7 @@ function StoryEditor() {
     setEnhancing(true)
     setError('')
     try {
-      const enhanced = await enhanceStoryPrompt(prompt)
+      const enhanced = await enhanceStoryPrompt(prompt, i18n.language)
       setEnhancedPrompt(enhanced)
       message.success(t('storyEditor.storyConceptEnhanced'))
     } catch (err) {
@@ -172,6 +178,7 @@ function StoryEditor() {
       const generatedFrames = await generateStorybook(
         finalPrompt,
         frameCount,
+        i18n.language,
         (statusMsg, frameNum) => {
           setStatus(statusMsg)
           setGenerationProgress(frameNum)
@@ -190,7 +197,7 @@ function StoryEditor() {
       }
       // Generate tags (non-blocking)
       setGeneratingTags(true)
-      generateStoryTags(finalPrompt, storyTitle)
+      generateStoryTags(finalPrompt, storyTitle, i18n.language)
         .then(async (generatedTags) => {
           console.log('Generated tags:', generatedTags)
           setTags(generatedTags)
@@ -261,6 +268,7 @@ function StoryEditor() {
           title,
           prompt: enhancedPrompt || prompt,
           frames,
+          language: i18n.language,
           tags: tags || [],
         })
         setStorybookId(newId)
@@ -284,6 +292,8 @@ function StoryEditor() {
     setStoryTitle('')
     setFrames([])
     setTags([])
+    setCreatedAt(null)
+    setUpdatedAt(null)
     setCurrentPage(0)
     setError('')
     setHasUnsavedChanges(false)
@@ -297,7 +307,10 @@ function StoryEditor() {
       setEnhancedPrompt('')
       setStoryTitle(storybook.title)
       setFrames(storybook.frames)
+      setFrameCount(storybook.frames.length)
       setTags(storybook.tags || [])
+      setCreatedAt(storybook.createdAt)
+      setUpdatedAt(storybook.updatedAt)
       setCurrentPage(0)
       setHasUnsavedChanges(false)
       setShowLoadModal(false)
@@ -383,7 +396,7 @@ function StoryEditor() {
             {storybookId ? t('storyEditor.update') : t('storyEditor.save')}
           </Button>
           <Button
-            icon={<ShareAltOutlined />}
+            icon={<EyeOutlined />}
             onClick={() => {
               if (storybookId) {
                 const publishUrl = `${window.location.origin}/view/${storybookId}`
@@ -394,13 +407,24 @@ function StoryEditor() {
             }}
             disabled={!storybookId}
           >
-            {t('storyEditor.publish')}
+            {t('storyEditor.view')}
           </Button>
         </Space>
       </div>
       <Paragraph style={{ color: '#666' }}>
         {t('storyEditor.description')}
       </Paragraph>
+
+      {storybookId && createdAt && updatedAt && (
+        <div style={{ color: '#888', fontSize: 13, marginBottom: 16 }}>
+          {t('home.created')}: {createdAt.toDate().toLocaleString()}
+          {updatedAt.toMillis() !== createdAt.toMillis() && (
+            <span style={{ marginLeft: 16 }}>
+              {t('home.updated')}: {updatedAt.toDate().toLocaleString()}
+            </span>
+          )}
+        </div>
+      )}
 
       {error && (
         <Alert
@@ -724,7 +748,11 @@ function StoryEditor() {
             >
               <List.Item.Meta
                 title={storybook.title}
-                description={`${storybook.frames.length} ${t('storyEditor.pages')} • ${storybook.createdAt.toDate().toLocaleDateString()}`}
+                description={`${storybook.frames.length} ${t('storyEditor.pages')} • ${
+                        storybook.updatedAt.toMillis() === storybook.createdAt.toMillis()
+                          ? `${t('home.created')} ${storybook.createdAt.toDate().toLocaleDateString()}`
+                          : `${t('home.updated')} ${storybook.updatedAt.toDate().toLocaleDateString()}`
+                      }`}
               />
             </List.Item>
           )}

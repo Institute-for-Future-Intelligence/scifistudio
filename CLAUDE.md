@@ -12,12 +12,19 @@ Sci-Fi Studio is a web app for creating sci-fi storybooks and short videos using
 npm run dev      # Start development server
 npm run build    # Production build
 npm run preview  # Preview production build
-npm run deploy   # Deploy to GitHub Pages
 ```
 
 ## Deployment
 
-Production is deployed to GitHub Pages at: https://charl.github.io/scifistudio
+Production is deployed to Firebase Hosting at: https://sci-fi-studio.web.app/
+
+```bash
+# Deploy frontend
+npm run build && npx firebase deploy --only hosting
+
+# Deploy Cloud Functions
+cd functions && npm run build && npx firebase deploy --only functions
+```
 
 ## Architecture
 

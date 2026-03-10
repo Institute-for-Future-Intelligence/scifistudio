@@ -1,5 +1,5 @@
 import { createContext, useEffect, useState, useRef, ReactNode } from 'react'
-import { User, subscribeToAuthChanges, signInWithGoogle, signInAnonymously, signOut, persistenceReady } from '../services/auth'
+import { User, subscribeToAuthChanges, signInWithGoogle, signInAnonymously, signOut } from '../services/auth'
 
 interface AuthContextType {
   user: User | null
@@ -21,30 +21,20 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const initialAuthCheckDone = useRef(false)
 
   useEffect(() => {
-    let unsubscribe: (() => void) | undefined
+    // Persistence is configured at auth initialization, so we can subscribe immediately
+    const unsubscribe = subscribeToAuthChanges((authUser) => {
+      console.log('Auth state changed:', authUser?.email || authUser?.uid || 'signed out')
 
-    // Wait for persistence to be configured before subscribing to auth changes
-    persistenceReady.then(() => {
-      console.log('Setting up auth state listener...')
-      unsubscribe = subscribeToAuthChanges((authUser) => {
-        console.log('Auth state changed:', authUser?.email || authUser?.uid || 'signed out')
+      if (!initialAuthCheckDone.current) {
+        initialAuthCheckDone.current = true
+        console.log('Initial auth check complete, user:', authUser?.email || 'none')
+      }
 
-        // Only update state after the first callback (persistence is ready)
-        if (!initialAuthCheckDone.current) {
-          initialAuthCheckDone.current = true
-          console.log('Initial auth check complete, user:', authUser?.email || 'none')
-        }
-
-        setUser(authUser)
-        setLoading(false)
-      })
+      setUser(authUser)
+      setLoading(false)
     })
 
-    return () => {
-      if (unsubscribe) {
-        unsubscribe()
-      }
-    }
+    return unsubscribe
   }, [])
 
   const handleSignIn = async () => {

@@ -1,13 +1,87 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { Typography, Card, Button, Spin, Image, Rate, message, Space, Tag } from 'antd'
-import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined } from '@ant-design/icons'
+import { Typography, Card, Button, Spin, Image, Rate, message, Space, Tag, Select } from 'antd'
+import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined, SoundOutlined, PauseCircleOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { getStorybook, rateStorybook, Storybook } from '../../services/firestore'
 import { StoryFrame } from '../../services/gemini'
 import LanguageSelector from '../../components/common/LanguageSelector'
 
 const { Title, Paragraph, Text } = Typography
+
+// Language code mapping for TTS
+const languageCodeMap: Record<string, string> = {
+  'en': 'en-US',
+  'zh-CN': 'zh-CN',
+  'zh-TW': 'zh-TW',
+  'ja': 'ja-JP',
+  'ko': 'ko-KR',
+  'de': 'de-DE',
+  'es': 'es-ES',
+  'fr': 'fr-FR',
+  'it': 'it-IT',
+  'pt': 'pt-BR',
+  'ru': 'ru-RU',
+  'ar': 'ar-XA',
+  'el': 'el-GR',
+  'fa': 'fa-IR',
+  'id': 'id-ID',
+  'th': 'th-TH',
+  'tr': 'tr-TR',
+  'uk': 'uk-UA',
+}
+
+// Detect language from text content by script analysis
+const detectLanguageFromText = (text: string): string => {
+  // Count characters by script
+  const cjkRegex = /[\u4e00-\u9fff\u3400-\u4dbf]/g
+  const japaneseRegex = /[\u3040-\u309f\u30a0-\u30ff]/g
+  const koreanRegex = /[\uac00-\ud7af\u1100-\u11ff]/g
+  const arabicRegex = /[\u0600-\u06ff\u0750-\u077f]/g
+  const cyrillicRegex = /[\u0400-\u04ff]/g
+  const greekRegex = /[\u0370-\u03ff]/g
+  const thaiRegex = /[\u0e00-\u0e7f]/g
+  const persianSpecific = /[\u06cc\u06a9\u067e\u0686\u06af\u0698]/g
+
+  const japaneseCount = (text.match(japaneseRegex) || []).length
+  const koreanCount = (text.match(koreanRegex) || []).length
+  const cjkCount = (text.match(cjkRegex) || []).length
+  const arabicCount = (text.match(arabicRegex) || []).length
+  const cyrillicCount = (text.match(cyrillicRegex) || []).length
+  const greekCount = (text.match(greekRegex) || []).length
+  const thaiCount = (text.match(thaiRegex) || []).length
+  const persianCount = (text.match(persianSpecific) || []).length
+
+  // Japanese has kana mixed with kanji
+  if (japaneseCount > 0) return 'ja'
+  // Korean has hangul
+  if (koreanCount > 0) return 'ko'
+  // CJK without Japanese/Korean kana = Chinese
+  if (cjkCount > 5) return 'zh-CN'
+  // Persian is a subset of Arabic script with specific characters
+  if (persianCount > 0) return 'fa'
+  if (arabicCount > 5) return 'ar'
+  if (cyrillicCount > 5) {
+    // Could be Russian or Ukrainian - check for Ukrainian-specific chars
+    const ukrainianSpecific = /[\u0456\u0457\u0491\u0454]/g
+    if ((text.match(ukrainianSpecific) || []).length > 0) return 'uk'
+    return 'ru'
+  }
+  if (greekCount > 5) return 'el'
+  if (thaiCount > 5) return 'th'
+
+  // For Latin-script languages, use common word detection
+  const lower = text.toLowerCase()
+  if (/\b(der|die|das|und|ist|ein|ich)\b/.test(lower)) return 'de'
+  if (/\b(le|la|les|est|des|une|dans|avec)\b/.test(lower)) return 'fr'
+  if (/\b(el|los|las|una|del|por|con|está)\b/.test(lower)) return 'es'
+  if (/\b(il|gli|della|una|che|con|nel)\b/.test(lower)) return 'it'
+  if (/\b(o|os|uma|dos|das|com|são|está)\b/.test(lower)) return 'pt'
+  if (/\b(bir|ve|bu|ile|için|olan|den)\b/.test(lower)) return 'tr'
+  if (/\b(dan|yang|di|dengan|dari|ini|itu)\b/.test(lower)) return 'id'
+
+  return 'en'
+}
 
 function StorybookView() {
   const { id } = useParams<{ id: string }>()
@@ -19,6 +93,11 @@ function StorybookView() {
   const [error, setError] = useState('')
   const [userRating, setUserRating] = useState(0)
   const [submittingRating, setSubmittingRating] = useState(false)
+
+  // Audio state (using Web Speech API)
+  const [voice, setVoice] = useState<'mom' | 'dad'>('mom')
+  const [isPlaying, setIsPlaying] = useState(false)
+  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null)
 
   // Generate a unique viewer ID for anonymous rating
   const getViewerId = () => {
@@ -91,6 +170,206 @@ function StorybookView() {
     }
   }
 
+  // Find the best voice for the given gender and language
+  const findBestVoice = (voices: SpeechSynthesisVoice[], langCode: string, gender: 'female' | 'male'): SpeechSynthesisVoice | null => {
+    const langPrefix = langCode.split('-')[0]
+    let langVoices: SpeechSynthesisVoice[]
+
+    // For Chinese, strictly match zh-CN (Mandarin) only — exclude Cantonese, Taiwanese, etc.
+    if (langCode === 'zh-CN' || langCode === 'zh-TW') {
+      langVoices = voices.filter(v => v.lang === 'zh-CN' || v.lang === 'zh')
+    } else {
+      langVoices = voices.filter(v => v.lang.startsWith(langPrefix) || v.lang.startsWith(langCode))
+    }
+
+    if (langVoices.length === 0) return null
+
+    // Chinese-specific voice names (Microsoft Edge/Windows voices)
+    const chineseFemaleNames = [
+      'xiaoxiao', 'xiaoyi', 'xiaohan', 'xiaomeng', 'xiaomo', 'xiaorui', 'xiaoshuang',
+      'xiaoxuan', 'xiaozhen', 'xiaoqiu', 'xiaoyan', 'xiaoyou',
+      'huihui', 'yaoyao',
+      'hanhan', 'lili', 'meimei',
+      'hsiao-chen', 'hsiao-yu', // zh-TW female
+      'ting-ting', 'mei-jia', // macOS Chinese female
+    ]
+    const chineseMaleNames = [
+      'yunyang',  // best natural male voice (news anchor style)
+      'yunxi',    // young male, natural
+      'yunjian',  // sports commentary style
+      'yunhao', 'yunfeng', 'yunze', 'yunda', 'yunqi',
+      'kangkang', // older Microsoft male voice
+      'zhiwei',
+      'wan-lung', 'yun-jhe', // zh-TW male
+    ]
+
+    // Japanese-specific voice names
+    const japaneseFemaleNames = ['nanami', 'aoi', 'shiori', 'mayu', 'kyoko', 'o-ren', 'haruka']
+    const japaneseMaleNames = ['keita', 'daichi', 'naoki', 'otoya', 'hattori']
+
+    // Korean-specific voice names
+    const koreanFemaleNames = ['sun-hi', 'ji-min', 'seo-hyeon', 'soon-bok', 'yuna']
+    const koreanMaleNames = ['in-joon', 'bong-jin', 'hyun-su']
+
+    // Language-specific voice lookup
+    const langSpecific: Record<string, { female: string[], male: string[] }> = {
+      'zh': { female: chineseFemaleNames, male: chineseMaleNames },
+      'ja': { female: japaneseFemaleNames, male: japaneseMaleNames },
+      'ko': { female: koreanFemaleNames, male: koreanMaleNames },
+    }
+
+    // Try language-specific names first
+    const specificNames = langSpecific[langPrefix]
+    if (specificNames) {
+      const nameList = gender === 'female' ? specificNames.female : specificNames.male
+      for (const v of langVoices) {
+        const nameLower = v.name.toLowerCase()
+        if (nameList.some(n => nameLower.includes(n))) {
+          return v
+        }
+      }
+    }
+
+    // General premium voices
+    const premiumFemale = ['google us english female', 'google uk english female', 'microsoft zira',
+      'microsoft eva', 'samantha', 'karen', 'moira', 'tessa', 'fiona', 'victoria']
+    const premiumMale = ['google us english male', 'google uk english male', 'microsoft david',
+      'microsoft mark', 'daniel', 'alex', 'thomas', 'oliver', 'james']
+
+    // General gender indicators
+    const femaleIndicators = ['female', 'woman', 'girl', 'samantha', 'victoria', 'karen', 'moira',
+      'susan', 'zira', 'hazel', 'fiona', 'kate', 'serena', 'veena', 'paulina', 'monica',
+      'luciana', 'joana', 'helena', 'milena', 'laura', 'alice', 'amelie', 'anna', 'ellen',
+      'sara', 'tessa', 'eva', 'cortana']
+    const maleIndicators = ['male', 'man', 'boy', 'daniel', 'alex', 'fred', 'thomas', 'david',
+      'george', 'james', 'richard', 'mark', 'lee', 'rishi', 'diego', 'jorge', 'juan',
+      'luca', 'oliver', 'aaron', 'carlos', 'ivan', 'tom', 'reed', 'gordon']
+
+    const premiumList = gender === 'female' ? premiumFemale : premiumMale
+    const indicators = gender === 'female' ? femaleIndicators : maleIndicators
+
+    // Try premium voices
+    for (const v of langVoices) {
+      const nameLower = v.name.toLowerCase()
+      if (premiumList.some(p => nameLower.includes(p))) {
+        return v
+      }
+    }
+
+    // Try standard gendered voice
+    for (const v of langVoices) {
+      const nameLower = v.name.toLowerCase()
+      if (indicators.some(ind => nameLower.includes(ind))) {
+        return v
+      }
+    }
+
+    // For CJK: if no gendered match found, try to exclude opposite gender voices
+    if (['zh', 'ja', 'ko'].includes(langPrefix)) {
+      const allFemaleNames = [...(langSpecific[langPrefix]?.female || []), 'female']
+      const allMaleNames = [...(langSpecific[langPrefix]?.male || []), 'male']
+      const oppositeNames = gender === 'female' ? allMaleNames : allFemaleNames
+      const filtered = langVoices.filter(v => !oppositeNames.some(n => v.name.toLowerCase().includes(n)))
+      if (filtered.length > 0) return filtered[0]
+    }
+
+    return langVoices[0] || null
+  }
+
+  // Audio functions using Web Speech API
+  const handleReadAloud = () => {
+    if (!storybook || !storybook.frames[currentPage]) return
+    if (!('speechSynthesis' in window)) {
+      message.error(t('audio.failedToGenerate'))
+      return
+    }
+
+    // Stop any current speech
+    window.speechSynthesis.cancel()
+
+    const speakWithVoices = () => {
+      const text = storybook.frames[currentPage].caption
+      const utterance = new SpeechSynthesisUtterance(text)
+      utteranceRef.current = utterance
+
+      // Detect language from the actual text content
+      const detectedLang = storybook.language || detectLanguageFromText(text)
+      const langCode = languageCodeMap[detectedLang] || 'en-US'
+      utterance.lang = langCode
+
+      // Natural speaking rate
+      utterance.rate = 0.9
+
+      // Get all available voices
+      const voices = window.speechSynthesis.getVoices()
+
+      // Find the best voice for the selected gender
+      const gender = voice === 'mom' ? 'female' : 'male'
+      // Log available voices for debugging
+      const langPrefix = langCode.split('-')[0]
+      const availableLangVoices = voices.filter(v => v.lang.startsWith(langPrefix) || v.lang === langCode)
+      console.log('Available voices for', langCode, ':', availableLangVoices.map(v => `${v.name} [${v.lang}]`))
+
+      const selectedVoice = findBestVoice(voices, langCode, gender)
+      console.log('Selected voice:', selectedVoice?.name, 'for gender:', gender)
+
+      if (selectedVoice) {
+        utterance.voice = selectedVoice
+        // Adjust pitch more noticeably for dad's voice to sound deeper
+        utterance.pitch = voice === 'mom' ? 1.05 : 0.8
+      } else {
+        // Fallback: use pitch to differentiate more strongly
+        utterance.pitch = voice === 'mom' ? 1.2 : 0.6
+      }
+
+      utterance.onstart = () => setIsPlaying(true)
+      utterance.onend = () => {
+        setIsPlaying(false)
+        utteranceRef.current = null
+      }
+      utterance.onerror = () => {
+        setIsPlaying(false)
+        utteranceRef.current = null
+      }
+
+      window.speechSynthesis.speak(utterance)
+    }
+
+    // Voices may not be loaded yet, wait for them
+    const voices = window.speechSynthesis.getVoices()
+    if (voices.length > 0) {
+      speakWithVoices()
+    } else {
+      // Wait for voices to load
+      window.speechSynthesis.onvoiceschanged = () => {
+        speakWithVoices()
+        window.speechSynthesis.onvoiceschanged = null
+      }
+      // Fallback timeout
+      setTimeout(() => {
+        if (!isPlaying) speakWithVoices()
+      }, 100)
+    }
+  }
+
+  const handleStopAudio = () => {
+    window.speechSynthesis.cancel()
+    setIsPlaying(false)
+    utteranceRef.current = null
+  }
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel()
+    }
+  }, [])
+
+  // Stop audio when changing pages
+  useEffect(() => {
+    handleStopAudio()
+  }, [currentPage])
+
   if (loading) {
     return (
       <div style={{
@@ -146,6 +425,16 @@ function StorybookView() {
                   </span>
                 </Text>
               )}
+            </div>
+            <div style={{ marginTop: 8 }}>
+              <Text type="secondary" style={{ fontSize: 13 }}>
+                {t('home.created')}: {storybook.createdAt.toDate().toLocaleString()}
+                {storybook.updatedAt.toMillis() !== storybook.createdAt.toMillis() && (
+                  <span style={{ marginLeft: 16 }}>
+                    {t('home.updated')}: {storybook.updatedAt.toDate().toLocaleString()}
+                  </span>
+                )}
+              </Text>
             </div>
             {storybook.tags && storybook.tags.length > 0 && (
               <div style={{ marginTop: 8, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -241,6 +530,46 @@ function StorybookView() {
                   >
                     {frames[currentPage]?.caption}
                   </Paragraph>
+
+                  {/* Audio Controls */}
+                  <div style={{
+                    marginTop: 16,
+                    paddingTop: 16,
+                    borderTop: '1px solid #eee',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 12,
+                    flexWrap: 'wrap'
+                  }}>
+                    <Select
+                      value={voice}
+                      onChange={(v) => setVoice(v)}
+                      style={{ width: 140 }}
+                      disabled={isPlaying}
+                      options={[
+                        { value: 'mom', label: t('audio.momsVoice') },
+                        { value: 'dad', label: t('audio.dadsVoice') },
+                      ]}
+                    />
+                    {isPlaying ? (
+                      <Button
+                        icon={<PauseCircleOutlined />}
+                        onClick={handleStopAudio}
+                        type="primary"
+                        danger
+                      >
+                        {t('audio.stop')}
+                      </Button>
+                    ) : (
+                      <Button
+                        icon={<SoundOutlined />}
+                        onClick={handleReadAloud}
+                        type="primary"
+                      >
+                        {t('audio.readAloud')}
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </div>
 

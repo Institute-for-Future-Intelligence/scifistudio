@@ -30,9 +30,13 @@
     "delete": "Elimina",
     "cancel": "Annulla",
     "pages": "pagine",
+    "created": "Creato",
+    "updated": "Aggiornato",
     "tabAll": "Tutto",
     "tabStories": "Storie",
-    "tabVideos": "Video"
+    "tabVideos": "Video",
+    "sortByUpdated": "Ordina per aggiornamento",
+    "sortByCreated": "Ordina per creazione"
   },
   "storyEditor": {
     "title": "Editor di Storie",
@@ -59,7 +63,7 @@
     "load": "Carica",
     "save": "Salva",
     "update": "Aggiorna",
-    "publish": "Pubblica",
+    "view": "Visualizza",
     "loadStorybook": "Carica Libro di Storie",
     "noSavedStorybooks": "Nessun libro salvato",
     "pleaseSignIn": "Accedi per creare storie.",
@@ -167,5 +171,16 @@
     "newTag": "Nuovo tag...",
     "generating": "Generazione tag...",
     "rememberToSave": "Ricorda di salvare le modifiche!"
+  },
+  "audio": {
+    "readAloud": "Leggi ad alta voce",
+    "stop": "Ferma",
+    "voice": "Voce",
+    "momsVoice": "Voce della mamma",
+    "dadsVoice": "Voce del papà",
+    "generating": "Generazione audio...",
+    "playing": "In riproduzione...",
+    "failedToGenerate": "Generazione audio fallita",
+    "readStory": "Leggi la storia"
   }
 }

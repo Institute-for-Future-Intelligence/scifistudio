@@ -7,8 +7,8 @@ const geminiApiKey = defineSecret('GEMINI_API_KEY')
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta'
 
 // Use stable model names
+// v2.2 - image generation with fallback models
 const TEXT_MODEL = 'gemini-2.5-flash'
-const IMAGE_MODEL = 'gemini-2.0-flash-exp-image-generation'
 
 interface GeminiResponse {
   candidates?: Array<{
@@ -56,7 +56,7 @@ export const generateText = onCall(
   }
 )
 
-// Generate image with Imagen 3.0
+// Generate image with fallback models
 export const generateImage = onCall(
   { secrets: [geminiApiKey], cors: true },
   async (request) => {
@@ -67,51 +67,49 @@ export const generateImage = onCall(
     }
 
     const apiKey = geminiApiKey.value()
+    const imageModels = [
+      'gemini-2.0-flash-exp-image-generation',
+      'gemini-2.0-flash-preview-image-generation',
+      'imagen-3.0-generate-001'
+    ]
 
-    // Try Imagen 3.0 first
-    const imagenResponse = await fetch(
-      `${API_BASE}/models/${IMAGE_MODEL}:predict?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          instances: [{ prompt: prompt }],
-          parameters: {
-            sampleCount: 1,
-          },
-        }),
-      }
-    )
+    // Try each model until one works
+    for (const model of imageModels) {
+      try {
+        console.log(`generateImage: Trying model ${model}`)
+        const response = await fetch(
+          `${API_BASE}/models/${model}:generateContent?key=${apiKey}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              contents: [{ parts: [{ text: `Generate an image: ${prompt}` }] }],
+              generationConfig: { responseModalities: ['image', 'text'] },
+            }),
+          }
+        )
 
-    if (imagenResponse.ok) {
-      const result = await imagenResponse.json() as {
-        predictions?: Array<{ bytesBase64Encoded?: string }>
-      }
-      if (result.predictions?.[0]?.bytesBase64Encoded) {
-        return {
-          imageUrl: `data:image/png;base64,${result.predictions[0].bytesBase64Encoded}`,
+        if (!response.ok) {
+          const errText = await response.text()
+          console.log(`Model ${model} failed:`, errText.substring(0, 200))
+          continue
         }
+
+        const imageData = await response.json() as GeminiResponse
+        for (const part of imageData.candidates?.[0]?.content?.parts || []) {
+          if (part.inlineData?.data) {
+            console.log(`generateImage: Got image from ${model}`)
+            return {
+              imageUrl: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
+            }
+          }
+        }
+      } catch (err) {
+        console.log(`Model ${model} error:`, err)
       }
     }
 
-    // Fallback to Gemini with image generation
-    const geminiResponse = await fetch(
-      `${API_BASE}/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          contents: [{ parts: [{ text: `Create a detailed description for an illustration: ${prompt}` }] }],
-        }),
-      }
-    )
-
-    if (!geminiResponse.ok) {
-      throw new HttpsError('internal', 'Image generation failed')
-    }
-
-    // For now, return empty - we'll need a working image model
-    throw new HttpsError('internal', 'Image generation model not available')
+    throw new HttpsError('internal', 'Image generation failed - no models available')
   }
 )
 
@@ -170,39 +168,56 @@ Make it a compelling narrative with a beginning, middle, and end.`
       throw new HttpsError('internal', 'Failed to parse story outline')
     }
 
-    // Generate images for each page
+    // Generate images for each page with fallback models
     const frames: Array<{ caption: string; imageUrl: string }> = []
+    const imageModels = [
+      'gemini-2.0-flash-exp-image-generation',
+      'gemini-2.0-flash-preview-image-generation',
+      'imagen-3.0-generate-001'
+    ]
 
     for (let i = 0; i < Math.min(pages.length, frameCount); i++) {
-      try {
-        const imagePrompt = `Create a beautiful sci-fi storybook illustration: ${pages[i].visual}. Style: cinematic, detailed, vibrant colors, suitable for a storybook.`
+      const imagePrompt = `Create a beautiful sci-fi storybook illustration: ${pages[i].visual}. Style: cinematic, detailed, vibrant colors, suitable for a storybook.`
+      let imageUrl = ''
 
-        const imageData = await fetchGemini(
-          `${API_BASE}/models/${IMAGE_MODEL}:generateContent?key=${apiKey}`,
-          {
-            contents: [{ parts: [{ text: `Generate an image: ${imagePrompt}` }] }],
-            generationConfig: { responseModalities: ['image', 'text'] },
+      // Try each model until one works
+      for (const model of imageModels) {
+        try {
+          console.log(`Page ${i + 1}: Trying model ${model}`)
+          const response = await fetch(
+            `${API_BASE}/models/${model}:generateContent?key=${apiKey}`,
+            {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                contents: [{ parts: [{ text: `Generate an image: ${imagePrompt}` }] }],
+                generationConfig: { responseModalities: ['image', 'text'] },
+              }),
+            }
+          )
+
+          if (!response.ok) {
+            const errText = await response.text()
+            console.log(`Model ${model} failed:`, errText.substring(0, 200))
+            continue
           }
-        )
 
-        let foundImage = false
-        for (const part of imageData.candidates?.[0]?.content?.parts || []) {
-          if (part.inlineData?.data) {
-            frames.push({
-              caption: pages[i].caption,
-              imageUrl: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
-            })
-            foundImage = true
-            break
+          const imageData = await response.json() as GeminiResponse
+          for (const part of imageData.candidates?.[0]?.content?.parts || []) {
+            if (part.inlineData?.data) {
+              imageUrl = `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`
+              console.log(`Page ${i + 1}: Got image from ${model}`)
+              break
+            }
           }
-        }
 
-        if (!foundImage) {
-          frames.push({ caption: pages[i].caption, imageUrl: '' })
+          if (imageUrl) break
+        } catch (err) {
+          console.log(`Model ${model} error:`, err)
         }
-      } catch {
-        frames.push({ caption: pages[i].caption, imageUrl: '' })
       }
+
+      frames.push({ caption: pages[i].caption, imageUrl })
 
       // Delay between requests
       if (i < pages.length - 1) {
@@ -218,13 +233,15 @@ Make it a compelling narrative with a beginning, middle, and end.`
 export const generateStoryTags = onCall(
   { secrets: [geminiApiKey], cors: true },
   async (request) => {
-    const { prompt, title } = request.data as { prompt?: string; title?: string }
+    const { prompt, title, language = 'en' } = request.data as { prompt?: string; title?: string; language?: string }
 
     if (!prompt && !title) {
       throw new HttpsError('invalid-argument', 'Prompt or title is required')
     }
 
-    const tagPrompt = `Analyze this story and generate 5-8 relevant tags.
+    const langName = languageNames[language] || 'English'
+
+    const tagPrompt = `Analyze this story and generate 5-8 relevant tags in ${langName}.
 
 Title: ${title || 'Untitled'}
 Story concept: ${prompt || 'No description'}
@@ -235,8 +252,9 @@ Generate tags that describe:
 - Setting (e.g., space station, alien planet, future earth)
 - Mood (e.g., adventure, mystery, action)
 
-Return ONLY a comma-separated list of lowercase tags, nothing else.
-Example: space exploration, alien contact, mystery, adventure, mars colony`
+IMPORTANT: Write ALL tags in ${langName} language.
+Return ONLY a comma-separated list of lowercase tags in ${langName}, nothing else.
+Example for English: space exploration, alien contact, mystery, adventure, mars colony`
 
     const data = await fetchGemini(
       `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
@@ -304,7 +322,12 @@ export const generateVideo = onCall(
         // predictLongRunning returns an operation name for polling
         if (result.name) {
           console.log('Got operation:', result.name)
-          return await pollVeoOperation(result.name, apiKey)
+          const videoResult = await pollVeoOperation(result.name, apiKey)
+          if (videoResult) {
+            return videoResult
+          }
+          // If polling returned null, fall through to image fallback
+          console.log('Veo polling completed but no video produced, falling back to image...')
         }
 
         if (result.error) {
@@ -315,8 +338,8 @@ export const generateVideo = onCall(
         console.log('Veo error response:', errText.substring(0, 300))
       }
 
-      // If Veo fails, try using imagen-3.0 to generate images as a fallback
-      console.log('Veo not available, falling back to image generation...')
+      // If Veo fails or returns no video, fall back to image generation
+      console.log('Video generation not available, falling back to image generation...')
 
       const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:generateImages?key=${apiKey}`
 
@@ -422,7 +445,8 @@ export const generateVideo = onCall(
 )
 
 // Poll Veo API operation for video completion
-async function pollVeoOperation(operationName: string, apiKey: string) {
+// Returns null if video generation fails (to allow fallback to image)
+async function pollVeoOperation(operationName: string, apiKey: string): Promise<{ videoUrl: string; durationSeconds: number } | null> {
   const maxWaitTime = 300000 // 5 minutes
   const pollInterval = 5000 // 5 seconds
   const startTime = Date.now()
@@ -458,37 +482,47 @@ async function pollVeoOperation(operationName: string, apiKey: string) {
 
     const result = await pollResponse.json() as VeoPollResult
     console.log('Poll result done:', result.done, 'error:', result.error?.message)
+    console.log('Poll result full:', JSON.stringify(result).substring(0, 1000))
 
     if (result.error) {
-      throw new HttpsError('internal', result.error.message || 'Video generation failed')
+      console.log('Veo operation error:', result.error.message)
+      return null // Return null to trigger fallback
     }
 
-    if (result.done && result.response?.videos?.[0]) {
-      const video = result.response.videos[0]
-      console.log('Video ready! URI:', video.uri?.substring(0, 100))
+    // If done is true, we must exit the loop
+    if (result.done) {
+      if (result.response?.videos?.[0]) {
+        const video = result.response.videos[0]
+        console.log('Video ready! URI:', video.uri?.substring(0, 100))
 
-      if (video.uri) {
-        // Fetch the video from the URI
-        const videoFetchUrl = `${video.uri}?key=${apiKey}`
-        const videoResponse = await fetch(videoFetchUrl)
+        if (video.uri) {
+          // Fetch the video from the URI
+          const videoFetchUrl = `${video.uri}?key=${apiKey}`
+          const videoResponse = await fetch(videoFetchUrl)
 
-        if (videoResponse.ok) {
-          const buffer = await videoResponse.arrayBuffer()
-          const base64 = Buffer.from(buffer).toString('base64')
-          return {
-            videoUrl: `data:video/mp4;base64,${base64}`,
-            durationSeconds: 8,
+          if (videoResponse.ok) {
+            const buffer = await videoResponse.arrayBuffer()
+            const base64 = Buffer.from(buffer).toString('base64')
+            return {
+              videoUrl: `data:video/mp4;base64,${base64}`,
+              durationSeconds: 8,
+            }
+          } else {
+            console.log('Failed to fetch video:', videoResponse.status)
+            return null // Fallback to image
           }
-        } else {
-          console.log('Failed to fetch video:', videoResponse.status)
         }
       }
 
-      throw new HttpsError('internal', 'Video completed but could not download')
+      // done=true but no video - return null to trigger image fallback
+      console.log('Operation done but no video found in response')
+      return null
     }
   }
 
-  throw new HttpsError('deadline-exceeded', 'Video generation timed out after 5 minutes')
+  // Timeout - return null to trigger fallback
+  console.log('Video generation timed out, falling back to image')
+  return null
 }
 
 // Enhance video prompt
@@ -557,21 +591,47 @@ Example: space battle, epic, cinematic, sci-fi, alien invasion`
   }
 )
 
+// Language name mapping
+const languageNames: Record<string, string> = {
+  'en': 'English',
+  'zh-CN': 'Simplified Chinese',
+  'zh-TW': 'Traditional Chinese',
+  'ja': 'Japanese',
+  'ko': 'Korean',
+  'de': 'German',
+  'es': 'Spanish',
+  'fr': 'French',
+  'it': 'Italian',
+  'pt': 'Portuguese',
+  'ru': 'Russian',
+  'ar': 'Arabic',
+  'el': 'Greek',
+  'fa': 'Persian',
+  'id': 'Indonesian',
+  'th': 'Thai',
+  'tr': 'Turkish',
+  'uk': 'Ukrainian',
+}
+
 // Enhance story prompt
 export const enhanceStoryPrompt = onCall(
   { secrets: [geminiApiKey], cors: true },
   async (request) => {
-    const { prompt } = request.data as { prompt?: string }
+    const { prompt, language = 'en' } = request.data as { prompt?: string; language?: string }
 
     if (!prompt) {
       throw new HttpsError('invalid-argument', 'Prompt is required')
     }
 
+    const langName = languageNames[language] || 'English'
+
     const systemPrompt = `You are a sci-fi story writer. Enhance the following story concept into a more detailed and compelling narrative premise. Add interesting characters, settings, and plot elements while keeping it suitable for a 10-page illustrated storybook. Keep it under 150 words.
+
+IMPORTANT: Write your response in ${langName} language.
 
 User's concept: ${prompt}
 
-Enhanced concept:`
+Enhanced concept (in ${langName}):`
 
     const data = await fetchGemini(
       `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
@@ -579,5 +639,107 @@ Enhanced concept:`
     )
 
     return { text: data.candidates?.[0]?.content?.parts?.[0]?.text ?? '' }
+  }
+)
+
+// Text-to-Speech with mom/dad voice options
+export const generateSpeech = onCall(
+  { secrets: [geminiApiKey], cors: true },
+  async (request) => {
+    const { text, voice = 'mom', languageCode = 'en-US' } = request.data as {
+      text?: string
+      voice?: 'mom' | 'dad'
+      languageCode?: string
+    }
+
+    if (!text) {
+      throw new HttpsError('invalid-argument', 'Text is required')
+    }
+
+    const apiKey = geminiApiKey.value()
+
+    // Voice configurations for mom and dad
+    // Using Neural2 voices for natural sound
+    const voiceConfigs: Record<string, { name: string; ssmlGender: string }> = {
+      'mom': { name: `${languageCode}-Neural2-F`, ssmlGender: 'FEMALE' },
+      'dad': { name: `${languageCode}-Neural2-D`, ssmlGender: 'MALE' },
+    }
+
+    // Fallback voice names for languages that might not have Neural2
+    const fallbackVoices: Record<string, { mom: string; dad: string }> = {
+      'en-US': { mom: 'en-US-Wavenet-F', dad: 'en-US-Wavenet-D' },
+      'en-GB': { mom: 'en-GB-Wavenet-F', dad: 'en-GB-Wavenet-D' },
+      'zh-CN': { mom: 'cmn-CN-Wavenet-A', dad: 'cmn-CN-Wavenet-B' },
+      'zh-TW': { mom: 'cmn-TW-Wavenet-A', dad: 'cmn-TW-Wavenet-B' },
+      'ja-JP': { mom: 'ja-JP-Wavenet-B', dad: 'ja-JP-Wavenet-D' },
+      'ko-KR': { mom: 'ko-KR-Wavenet-A', dad: 'ko-KR-Wavenet-C' },
+      'de-DE': { mom: 'de-DE-Wavenet-F', dad: 'de-DE-Wavenet-D' },
+      'es-ES': { mom: 'es-ES-Wavenet-C', dad: 'es-ES-Wavenet-B' },
+      'fr-FR': { mom: 'fr-FR-Wavenet-C', dad: 'fr-FR-Wavenet-D' },
+      'it-IT': { mom: 'it-IT-Wavenet-A', dad: 'it-IT-Wavenet-C' },
+      'pt-BR': { mom: 'pt-BR-Wavenet-A', dad: 'pt-BR-Wavenet-B' },
+      'ru-RU': { mom: 'ru-RU-Wavenet-C', dad: 'ru-RU-Wavenet-D' },
+      'ar-XA': { mom: 'ar-XA-Wavenet-A', dad: 'ar-XA-Wavenet-B' },
+      'el-GR': { mom: 'el-GR-Wavenet-A', dad: 'el-GR-Standard-B' },
+      'id-ID': { mom: 'id-ID-Wavenet-A', dad: 'id-ID-Wavenet-B' },
+      'th-TH': { mom: 'th-TH-Standard-A', dad: 'th-TH-Standard-A' },
+      'tr-TR': { mom: 'tr-TR-Wavenet-C', dad: 'tr-TR-Wavenet-B' },
+      'uk-UA': { mom: 'uk-UA-Wavenet-A', dad: 'uk-UA-Standard-A' },
+    }
+
+    const selectedVoice = voiceConfigs[voice]
+    const fallback = fallbackVoices[languageCode]
+
+    // Try Neural2 first, then Wavenet fallback
+    const voicesToTry = [
+      selectedVoice.name,
+      fallback?.[voice] || selectedVoice.name.replace('Neural2', 'Wavenet'),
+      fallback?.[voice] || selectedVoice.name.replace('Neural2', 'Standard'),
+    ]
+
+    console.log('generateSpeech: text length:', text.length, 'voice:', voice, 'language:', languageCode)
+
+    for (const voiceName of voicesToTry) {
+      try {
+        console.log('Trying voice:', voiceName)
+        const ttsUrl = `https://texttospeech.googleapis.com/v1/text:synthesize?key=${apiKey}`
+
+        const response = await fetch(ttsUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            input: { text },
+            voice: {
+              languageCode: languageCode,
+              name: voiceName,
+              ssmlGender: selectedVoice.ssmlGender,
+            },
+            audioConfig: {
+              audioEncoding: 'MP3',
+              speakingRate: 0.9, // Slightly slower for storytelling
+              pitch: voice === 'mom' ? 1.0 : -2.0, // Lower pitch for dad
+            },
+          }),
+        })
+
+        if (response.ok) {
+          const result = await response.json() as { audioContent?: string }
+          if (result.audioContent) {
+            console.log('Speech generated successfully with voice:', voiceName)
+            return {
+              audioUrl: `data:audio/mp3;base64,${result.audioContent}`,
+              voice: voiceName,
+            }
+          }
+        } else {
+          const errText = await response.text()
+          console.log(`Voice ${voiceName} failed:`, errText.substring(0, 200))
+        }
+      } catch (err) {
+        console.log(`Voice ${voiceName} error:`, err)
+      }
+    }
+
+    throw new HttpsError('internal', 'Text-to-speech generation failed. Please try again.')
   }
 )

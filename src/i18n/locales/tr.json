@@ -30,9 +30,13 @@
     "delete": "Sil",
     "cancel": "İptal",
     "pages": "sayfa",
+    "created": "Oluşturuldu",
+    "updated": "Güncellendi",
     "tabAll": "Tümü",
     "tabStories": "Hikayeler",
-    "tabVideos": "Videolar"
+    "tabVideos": "Videolar",
+    "sortByUpdated": "Güncellemeye göre sırala",
+    "sortByCreated": "Oluşturmaya göre sırala"
   },
   "storyEditor": {
     "title": "Hikaye Editörü",
@@ -59,7 +63,7 @@
     "load": "Yükle",
     "save": "Kaydet",
     "update": "Güncelle",
-    "publish": "Yayınla",
+    "view": "Görüntüle",
     "loadStorybook": "Kitap Yükle",
     "noSavedStorybooks": "Kayıtlı kitap yok",
     "pleaseSignIn": "Hikaye oluşturmak için giriş yapın.",
@@ -167,5 +171,16 @@
     "newTag": "Yeni etiket...",
     "generating": "Etiketler oluşturuluyor...",
     "rememberToSave": "Değişiklikleri kaydetmeyi unutmayın!"
+  },
+  "audio": {
+    "readAloud": "Sesli Oku",
+    "stop": "Durdur",
+    "voice": "Ses",
+    "momsVoice": "Annenin Sesi",
+    "dadsVoice": "Babanın Sesi",
+    "generating": "Ses oluşturuluyor...",
+    "playing": "Oynatılıyor...",
+    "failedToGenerate": "Ses oluşturulamadı",
+    "readStory": "Hikayeyi Oku"
   }
 }

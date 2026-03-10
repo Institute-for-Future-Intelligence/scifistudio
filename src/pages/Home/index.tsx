@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs } from 'antd'
+import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Select } from 'antd'
 import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined, PlayCircleOutlined, EyeOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -16,6 +16,7 @@ function Home() {
   const [videos, setVideos] = useState<Video[]>([])
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('all')
+  const [sortBy, setSortBy] = useState<'updatedAt' | 'createdAt'>('updatedAt')
 
   useEffect(() => {
     if (user) {
@@ -124,7 +125,13 @@ function Home() {
           title={storybook.title}
           description={
             <div>
-              <div>{storybook.frames.length} {t('home.pages')} • {storybook.createdAt.toDate().toLocaleDateString()}</div>
+              <div>
+                {storybook.frames.length} {t('home.pages')} • {
+                  storybook.updatedAt.toMillis() === storybook.createdAt.toMillis()
+                    ? `${t('home.created')} ${storybook.createdAt.toDate().toLocaleDateString()}`
+                    : `${t('home.updated')} ${storybook.updatedAt.toDate().toLocaleDateString()}`
+                }
+              </div>
               {storybook.tags && storybook.tags.length > 0 && (
                 <div style={{ marginTop: 8, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                   {storybook.tags.slice(0, 3).map(tag => (
@@ -201,7 +208,13 @@ function Home() {
           title={video.title}
           description={
             <div>
-              <div>{video.durationSeconds}s • {video.createdAt.toDate().toLocaleDateString()}</div>
+              <div>
+                {video.durationSeconds}s • {
+                  video.updatedAt.toMillis() === video.createdAt.toMillis()
+                    ? `${t('home.created')} ${video.createdAt.toDate().toLocaleDateString()}`
+                    : `${t('home.updated')} ${video.updatedAt.toDate().toLocaleDateString()}`
+                }
+              </div>
               {video.tags && video.tags.length > 0 && (
                 <div style={{ marginTop: 8, display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                   {video.tags.slice(0, 3).map(tag => (
@@ -235,7 +248,7 @@ function Home() {
     return (
       <List
         grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4 }}
-        dataSource={storybooks}
+        dataSource={sortedStorybooks}
         renderItem={renderStorybookCard}
       />
     )
@@ -257,17 +270,24 @@ function Home() {
     return (
       <List
         grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 4 }}
-        dataSource={videos}
+        dataSource={sortedVideos}
         renderItem={renderVideoCard}
       />
     )
   }
 
+  const sortedStorybooks = [...storybooks].sort((a, b) =>
+    b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime()
+  )
+
+  const sortedVideos = [...videos].sort((a, b) =>
+    b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime()
+  )
+
   const renderAllProjects = () => {
-    // Combine and sort by creation date (newest first)
     const allProjects = [
-      ...storybooks.map(s => ({ type: 'storybook' as const, item: s, date: s.createdAt.toDate() })),
-      ...videos.map(v => ({ type: 'video' as const, item: v, date: v.createdAt.toDate() }))
+      ...sortedStorybooks.map(s => ({ type: 'storybook' as const, item: s, date: s[sortBy].toDate() })),
+      ...sortedVideos.map(v => ({ type: 'video' as const, item: v, date: v[sortBy].toDate() }))
     ].sort((a, b) => b.date.getTime() - a.date.getTime())
 
     return (
@@ -300,7 +320,18 @@ function Home() {
   return (
     <div>
       <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Title level={3} style={{ margin: 0 }}>{t('home.myProjects')}</Title>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <Title level={3} style={{ margin: 0 }}>{t('home.myProjects')}</Title>
+          <Select
+            value={sortBy}
+            onChange={setSortBy}
+            style={{ width: 180 }}
+            options={[
+              { value: 'updatedAt', label: t('home.sortByUpdated') },
+              { value: 'createdAt', label: t('home.sortByCreated') },
+            ]}
+          />
+        </div>
         <div style={{ display: 'flex', gap: 12 }}>
           <Button
             type="primary"

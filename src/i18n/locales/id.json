@@ -30,9 +30,13 @@
     "delete": "Hapus",
     "cancel": "Batal",
     "pages": "halaman",
+    "created": "Dibuat",
+    "updated": "Diperbarui",
     "tabAll": "Semua",
     "tabStories": "Cerita",
-    "tabVideos": "Video"
+    "tabVideos": "Video",
+    "sortByUpdated": "Urutkan berdasarkan diperbarui",
+    "sortByCreated": "Urutkan berdasarkan dibuat"
   },
   "storyEditor": {
     "title": "Editor Cerita",
@@ -59,7 +63,7 @@
     "load": "Muat",
     "save": "Simpan",
     "update": "Perbarui",
-    "publish": "Terbitkan",
+    "view": "Lihat",
     "loadStorybook": "Muat Buku Cerita",
     "noSavedStorybooks": "Tidak ada buku tersimpan",
     "pleaseSignIn": "Silakan masuk untuk membuat cerita.",
@@ -167,5 +171,16 @@
     "newTag": "Tag baru...",
     "generating": "Membuat tag...",
     "rememberToSave": "Ingat untuk menyimpan perubahan!"
+  },
+  "audio": {
+    "readAloud": "Baca dengan suara keras",
+    "stop": "Berhenti",
+    "voice": "Suara",
+    "momsVoice": "Suara Ibu",
+    "dadsVoice": "Suara Ayah",
+    "generating": "Membuat audio...",
+    "playing": "Memutar...",
+    "failedToGenerate": "Gagal membuat audio",
+    "readStory": "Baca Cerita"
   }
 }

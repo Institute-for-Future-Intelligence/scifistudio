@@ -30,9 +30,13 @@
     "delete": "Löschen",
     "cancel": "Abbrechen",
     "pages": "Seiten",
+    "created": "Erstellt",
+    "updated": "Aktualisiert",
     "tabAll": "Alle",
     "tabStories": "Geschichten",
-    "tabVideos": "Videos"
+    "tabVideos": "Videos",
+    "sortByUpdated": "Nach Aktualisierung sortieren",
+    "sortByCreated": "Nach Erstellung sortieren"
   },
   "storyEditor": {
     "title": "Geschichten-Editor",
@@ -59,7 +63,7 @@
     "load": "Laden",
     "save": "Speichern",
     "update": "Aktualisieren",
-    "publish": "Veröffentlichen",
+    "view": "Ansehen",
     "loadStorybook": "Geschichtenbuch Laden",
     "noSavedStorybooks": "Keine gespeicherten Bücher",
     "pleaseSignIn": "Bitte melden Sie sich an, um Geschichten zu erstellen.",
@@ -167,5 +171,16 @@
     "newTag": "Neuer Tag...",
     "generating": "Tags werden generiert...",
     "rememberToSave": "Vergessen Sie nicht zu speichern!"
+  },
+  "audio": {
+    "readAloud": "Vorlesen",
+    "stop": "Stopp",
+    "voice": "Stimme",
+    "momsVoice": "Mamas Stimme",
+    "dadsVoice": "Papas Stimme",
+    "generating": "Audio wird generiert...",
+    "playing": "Wird abgespielt...",
+    "failedToGenerate": "Audio-Generierung fehlgeschlagen",
+    "readStory": "Geschichte vorlesen"
   }
 }

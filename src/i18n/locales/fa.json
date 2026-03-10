@@ -30,9 +30,13 @@
     "delete": "حذف",
     "cancel": "لغو",
     "pages": "صفحه",
+    "created": "ایجاد شده",
+    "updated": "به‌روز شده",
     "tabAll": "همه",
     "tabStories": "داستان‌ها",
-    "tabVideos": "ویدیوها"
+    "tabVideos": "ویدیوها",
+    "sortByUpdated": "مرتب‌سازی بر اساس به‌روزرسانی",
+    "sortByCreated": "مرتب‌سازی بر اساس ایجاد"
   },
   "storyEditor": {
     "title": "ویرایشگر داستان",
@@ -59,7 +63,7 @@
     "load": "بارگذاری",
     "save": "ذخیره",
     "update": "به‌روزرسانی",
-    "publish": "انتشار",
+    "view": "مشاهده",
     "loadStorybook": "بارگذاری کتاب",
     "noSavedStorybooks": "کتاب ذخیره‌شده‌ای نیست",
     "pleaseSignIn": "برای ساخت داستان وارد شوید.",
@@ -167,5 +171,16 @@
     "newTag": "برچسب جدید...",
     "generating": "در حال ایجاد برچسب‌ها...",
     "rememberToSave": "فراموش نکنید ذخیره کنید!"
+  },
+  "audio": {
+    "readAloud": "خواندن با صدای بلند",
+    "stop": "توقف",
+    "voice": "صدا",
+    "momsVoice": "صدای مادر",
+    "dadsVoice": "صدای پدر",
+    "generating": "در حال ایجاد صوت...",
+    "playing": "در حال پخش...",
+    "failedToGenerate": "ایجاد صوت ناموفق بود",
+    "readStory": "خواندن داستان"
   }
 }

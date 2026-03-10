@@ -31,34 +31,60 @@ export const generateImage = async (prompt: string): Promise<string> => {
   return result.data.imageUrl
 }
 
+// Language name mapping for prompts
+const languageNames: Record<string, string> = {
+  'en': 'English',
+  'zh-CN': 'Simplified Chinese',
+  'zh-TW': 'Traditional Chinese',
+  'ja': 'Japanese',
+  'ko': 'Korean',
+  'de': 'German',
+  'es': 'Spanish',
+  'fr': 'French',
+  'it': 'Italian',
+  'pt': 'Portuguese',
+  'ru': 'Russian',
+  'ar': 'Arabic',
+  'el': 'Greek',
+  'fa': 'Persian',
+  'id': 'Indonesian',
+  'th': 'Thai',
+  'tr': 'Turkish',
+  'uk': 'Ukrainian',
+}
+
 export const generateStorybook = async (
   prompt: string,
   frameCount: number = 10,
+  language: string = 'en',
   onProgress?: (status: string, frame: number) => void
 ): Promise<StoryFrame[]> => {
   const frames: StoryFrame[] = []
+  const langName = languageNames[language] || 'English'
 
   // Step 1: Generate story outline
   onProgress?.(`Creating story outline...`, 0)
 
   const outlinePrompt = `Create a ${frameCount}-page sci-fi storybook based on this concept: "${prompt}"
 
+IMPORTANT: Write ALL captions in ${langName} language.
+
 For each page, provide:
-1. A short caption (1-2 sentences) that tells the story
-2. A detailed visual description for illustration
+1. A short caption (1-2 sentences) that tells the story - MUST be in ${langName}
+2. A detailed visual description for illustration (in English for the image generator)
 
 Format EXACTLY as:
 PAGE 1:
-Caption: [story text for this page]
-Visual: [detailed illustration description]
+Caption: [story text in ${langName}]
+Visual: [detailed illustration description in English]
 
 PAGE 2:
-Caption: [story text for this page]
-Visual: [detailed illustration description]
+Caption: [story text in ${langName}]
+Visual: [detailed illustration description in English]
 
 ...continue for all ${frameCount} pages.
 
-Make it a compelling narrative with a beginning, middle, and end.`
+Make it a compelling narrative with a beginning, middle, and end. Remember: Captions MUST be in ${langName}.`
 
   const outline = await generateWithGemini(outlinePrompt)
 
@@ -106,12 +132,12 @@ Make it a compelling narrative with a beginning, middle, and end.`
   return frames
 }
 
-export const enhanceStoryPrompt = async (userPrompt: string): Promise<string> => {
-  const enhancePromptFn = httpsCallable<{ prompt: string }, { text: string }>(
+export const enhanceStoryPrompt = async (userPrompt: string, language: string = 'en'): Promise<string> => {
+  const enhancePromptFn = httpsCallable<{ prompt: string; language: string }, { text: string }>(
     functions,
     'enhanceStoryPrompt'
   )
-  const result = await enhancePromptFn({ prompt: userPrompt })
+  const result = await enhancePromptFn({ prompt: userPrompt, language })
   return result.data.text
 }
 
@@ -156,11 +182,30 @@ export const generateVideoTags = async (prompt: string, title: string): Promise<
   return result.data.tags
 }
 
-export const generateStoryTags = async (prompt: string, title: string): Promise<string[]> => {
-  const generateTagsFn = httpsCallable<{ prompt: string; title: string }, { tags: string[] }>(
+export const generateStoryTags = async (prompt: string, title: string, language: string = 'en'): Promise<string[]> => {
+  const generateTagsFn = httpsCallable<{ prompt: string; title: string; language: string }, { tags: string[] }>(
     functions,
     'generateStoryTags'
   )
-  const result = await generateTagsFn({ prompt, title })
+  const result = await generateTagsFn({ prompt, title, language })
   return result.data.tags
+}
+
+export interface SpeechResult {
+  audioUrl: string
+  voice: string
+}
+
+export const generateSpeech = async (
+  text: string,
+  voice: 'mom' | 'dad' = 'mom',
+  languageCode: string = 'en-US'
+): Promise<SpeechResult> => {
+  const generateSpeechFn = httpsCallable<
+    { text: string; voice: 'mom' | 'dad'; languageCode: string },
+    { audioUrl: string; voice: string }
+  >(functions, 'generateSpeech', { timeout: 60000 })
+
+  const result = await generateSpeechFn({ text, voice, languageCode })
+  return result.data
 }

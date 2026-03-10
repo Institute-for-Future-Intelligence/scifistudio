@@ -30,9 +30,13 @@
     "delete": "削除",
     "cancel": "キャンセル",
     "pages": "ページ",
+    "created": "作成日",
+    "updated": "更新日",
     "tabAll": "すべて",
     "tabStories": "ストーリー",
-    "tabVideos": "ビデオ"
+    "tabVideos": "ビデオ",
+    "sortByUpdated": "更新日順",
+    "sortByCreated": "作成日順"
   },
   "storyEditor": {
     "title": "ストーリーエディター",
@@ -59,7 +63,7 @@
     "load": "読み込み",
     "save": "保存",
     "update": "更新",
-    "publish": "公開",
+    "view": "表示",
     "loadStorybook": "ストーリーブックを読み込む",
     "noSavedStorybooks": "保存されたストーリーブックはありません",
     "pleaseSignIn": "ストーリーを作成するにはログインしてください。",
@@ -167,5 +171,16 @@
     "newTag": "新しいタグ...",
     "generating": "タグを生成中...",
     "rememberToSave": "保存を忘れずに！"
+  },
+  "audio": {
+    "readAloud": "読み上げ",
+    "stop": "停止",
+    "voice": "音声",
+    "momsVoice": "お母さんの声",
+    "dadsVoice": "お父さんの声",
+    "generating": "音声を生成中...",
+    "playing": "再生中...",
+    "failedToGenerate": "音声の生成に失敗しました",
+    "readStory": "ストーリーを読む"
   }
 }

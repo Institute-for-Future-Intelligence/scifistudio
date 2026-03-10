@@ -30,9 +30,13 @@
     "delete": "刪除",
     "cancel": "取消",
     "pages": "頁",
+    "created": "建立於",
+    "updated": "更新於",
     "tabAll": "全部",
     "tabStories": "故事",
-    "tabVideos": "影片"
+    "tabVideos": "影片",
+    "sortByUpdated": "按更新排序",
+    "sortByCreated": "按建立排序"
   },
   "storyEditor": {
     "title": "故事編輯器",
@@ -59,7 +63,7 @@
     "load": "載入",
     "save": "儲存",
     "update": "更新",
-    "publish": "發佈",
+    "view": "查看",
     "loadStorybook": "載入故事書",
     "noSavedStorybooks": "沒有已儲存的故事書",
     "pleaseSignIn": "請登入以創作故事。",
@@ -167,5 +171,16 @@
     "newTag": "新標籤...",
     "generating": "產生標籤中...",
     "rememberToSave": "記得儲存以保留標籤更改！"
+  },
+  "audio": {
+    "readAloud": "朗讀",
+    "stop": "停止",
+    "voice": "語音",
+    "momsVoice": "媽媽的聲音",
+    "dadsVoice": "爸爸的聲音",
+    "generating": "正在產生音訊...",
+    "playing": "正在播放...",
+    "failedToGenerate": "音訊產生失敗",
+    "readStory": "朗讀故事"
   }
 }

@@ -30,9 +30,13 @@
     "delete": "삭제",
     "cancel": "취소",
     "pages": "페이지",
+    "created": "생성됨",
+    "updated": "수정됨",
     "tabAll": "전체",
     "tabStories": "스토리",
-    "tabVideos": "비디오"
+    "tabVideos": "비디오",
+    "sortByUpdated": "수정일순",
+    "sortByCreated": "생성일순"
   },
   "storyEditor": {
     "title": "스토리 편집기",
@@ -59,7 +63,7 @@
     "load": "불러오기",
     "save": "저장",
     "update": "업데이트",
-    "publish": "게시",
+    "view": "보기",
     "loadStorybook": "스토리북 불러오기",
     "noSavedStorybooks": "저장된 스토리북이 없습니다",
     "pleaseSignIn": "스토리를 만들려면 로그인하세요.",
@@ -167,5 +171,16 @@
     "newTag": "새 태그...",
     "generating": "태그 생성 중...",
     "rememberToSave": "변경 사항을 저장하세요!"
+  },
+  "audio": {
+    "readAloud": "소리내어 읽기",
+    "stop": "정지",
+    "voice": "음성",
+    "momsVoice": "엄마 목소리",
+    "dadsVoice": "아빠 목소리",
+    "generating": "오디오 생성 중...",
+    "playing": "재생 중...",
+    "failedToGenerate": "오디오 생성 실패",
+    "readStory": "스토리 읽기"
   }
 }

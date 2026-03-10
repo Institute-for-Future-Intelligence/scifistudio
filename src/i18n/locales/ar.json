@@ -30,9 +30,13 @@
     "delete": "حذف",
     "cancel": "إلغاء",
     "pages": "صفحات",
+    "created": "تم الإنشاء",
+    "updated": "تم التحديث",
     "tabAll": "الكل",
     "tabStories": "القصص",
-    "tabVideos": "الفيديوهات"
+    "tabVideos": "الفيديوهات",
+    "sortByUpdated": "ترتيب حسب التحديث",
+    "sortByCreated": "ترتيب حسب الإنشاء"
   },
   "storyEditor": {
     "title": "محرر القصص",
@@ -59,7 +63,7 @@
     "load": "تحميل",
     "save": "حفظ",
     "update": "تحديث",
-    "publish": "نشر",
+    "view": "عرض",
     "loadStorybook": "تحميل كتاب",
     "noSavedStorybooks": "لا توجد كتب محفوظة",
     "pleaseSignIn": "سجّل الدخول لإنشاء القصص.",
@@ -167,5 +171,16 @@
     "newTag": "وسم جديد...",
     "generating": "جاري إنشاء الوسوم...",
     "rememberToSave": "تذكر الحفظ للاحتفاظ بالتغييرات!"
+  },
+  "audio": {
+    "readAloud": "القراءة بصوت عالٍ",
+    "stop": "إيقاف",
+    "voice": "صوت",
+    "momsVoice": "صوت الأم",
+    "dadsVoice": "صوت الأب",
+    "generating": "جاري إنشاء الصوت...",
+    "playing": "جاري التشغيل...",
+    "failedToGenerate": "فشل إنشاء الصوت",
+    "readStory": "قراءة القصة"
   }
 }
