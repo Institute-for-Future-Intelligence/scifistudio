@@ -23,8 +23,16 @@
         var redirect = sessionStorage.getItem('spa-redirect');
         if (redirect) {
           sessionStorage.removeItem('spa-redirect');
-          var base = document.querySelector('base');
-          var basePath = base ? base.getAttribute('href') : '/';
+          // Detect base path from the first script src (e.g. /scifistudio/assets/...)
+          var scripts = document.querySelectorAll('script[src]');
+          var basePath = '/';
+          for (var i = 0; i < scripts.length; i++) {
+            var src = scripts[i].getAttribute('src');
+            if (src && src.indexOf('/assets/') !== -1) {
+              basePath = src.substring(0, src.indexOf('/assets/') + 1);
+              break;
+            }
+          }
           history.replaceState(null, '', basePath + redirect);
         }
       })();
