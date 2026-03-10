@@ -2,19 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sci-Fi Studio</title>
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-B0RXQKFDN0"></script>
     <script>
-      // Single Page App redirect for GitHub Pages
-      // https://github.com/rafgraph/spa-github-pages
-      const segmentCount = 1; // scifistudio
-      const path = window.location.pathname.split('/').slice(segmentCount + 1).join('/');
-      const search = window.location.search;
-      const hash = window.location.hash;
-      sessionStorage.setItem('spa-redirect', path + search + hash);
-      window.location.replace('/scifistudio/');
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-B0RXQKFDN0');
     </script>
+    <script type="module" crossorigin src="/scifistudio/assets/index-BB4IgxkL.js"></script>
+    <link rel="stylesheet" crossorigin href="/scifistudio/assets/index-CTvwFNew.css">
   </head>
   <body>
-    Redirecting...
+    <div id="root"></div>
   </body>
 </html>
