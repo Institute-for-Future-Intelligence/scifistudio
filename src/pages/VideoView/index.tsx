@@ -221,7 +221,6 @@ function VideoView() {
                 <video
                   src={video.videoUrl}
                   controls
-                  autoPlay
                   loop
                   style={{
                     maxWidth: '100%',
@@ -265,7 +264,7 @@ function VideoView() {
         </Card>
 
         <div style={{ textAlign: 'center', marginTop: 24, color: '#999', fontSize: 12 }}>
-          &copy; {new Date().getFullYear()} {t('app.copyright')}
+          &copy; {new Date().getFullYear()} {t('app.copyright')} Version {__APP_VERSION__}
         </div>
       </div>
     </div>

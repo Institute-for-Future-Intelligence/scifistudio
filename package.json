@@ -1,6 +1,6 @@
 {
   "name": "scifistudio",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Sci-Fi Studio - Create sci-fi storybooks and short videos using GenAI",
   "type": "module",
   "homepage": "https://charl.github.io/scifistudio",

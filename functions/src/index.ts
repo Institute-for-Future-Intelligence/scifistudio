@@ -103,9 +103,9 @@ export const generateImage = onCall(
 
     const apiKey = geminiApiKey.value()
     const imageModels = [
-      'gemini-2.0-flash-exp-image-generation',
-      'gemini-2.0-flash-preview-image-generation',
-      'imagen-3.0-generate-001'
+      'gemini-2.5-flash-image',
+      'gemini-3.1-flash-image-preview',
+      'gemini-3-pro-image-preview'
     ]
 
     // Try each model until one works
@@ -206,9 +206,9 @@ Make it a compelling narrative with a beginning, middle, and end.`
     // Generate images for each page with fallback models
     const frames: Array<{ caption: string; imageUrl: string }> = []
     const imageModels = [
-      'gemini-2.0-flash-exp-image-generation',
-      'gemini-2.0-flash-preview-image-generation',
-      'imagen-3.0-generate-001'
+      'gemini-2.5-flash-image',
+      'gemini-3.1-flash-image-preview',
+      'gemini-3-pro-image-preview'
     ]
 
     for (let i = 0; i < Math.min(pages.length, frameCount); i++) {
@@ -393,7 +393,7 @@ export const generateVideo = onCall(
       // If Veo fails or returns no video, fall back to image generation
       console.log('Video generation not available, falling back to image generation...')
 
-      const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/imagen-3.0-generate-002:generateImages?key=${apiKey}`
+      const imagenUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${apiKey}`
 
       const imagenResponse = await fetch(imagenUrl, {
         method: 'POST',
@@ -426,13 +426,13 @@ export const generateVideo = onCall(
         }
       }
 
-      // Final fallback: use gemini-2.0-flash-exp-image-generation for image
+      // Final fallback: use Gemini image generation
       console.log('Trying Gemini image generation...')
 
       const imageModels = [
-        'gemini-2.0-flash-exp-image-generation',
-        'gemini-2.0-flash-preview-image-generation',
-        'imagen-3.0-generate-001'
+        'gemini-2.5-flash-image',
+        'gemini-3.1-flash-image-preview',
+        'gemini-3-pro-image-preview'
       ]
 
       let flashResponse: Response | null = null

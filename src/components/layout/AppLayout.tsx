@@ -178,7 +178,7 @@ function AppLayout() {
           <Outlet />
         </Content>
         <Footer style={{ textAlign: 'center', color: '#999', background: 'transparent' }}>
-          &copy; {new Date().getFullYear()} {t('app.copyright')}
+          &copy; {new Date().getFullYear()} {t('app.copyright')} Version {__APP_VERSION__}
         </Footer>
       </Layout>
       <CookieConsent />
