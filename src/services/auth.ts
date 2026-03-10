@@ -4,13 +4,19 @@ import {
   signInAnonymously as firebaseSignInAnonymously,
   signOut as firebaseSignOut,
   onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence,
   User,
 } from 'firebase/auth'
 import { auth } from './firebase'
 
 const googleProvider = new GoogleAuthProvider()
 
+// Ensure local persistence is set before any sign-in
+const ensurePersistence = setPersistence(auth, browserLocalPersistence)
+
 export const signInWithGoogle = async (): Promise<User | null> => {
+  await ensurePersistence
   try {
     const result = await signInWithPopup(auth, googleProvider)
     return result.user
