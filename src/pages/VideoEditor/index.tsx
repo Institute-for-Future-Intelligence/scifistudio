@@ -38,8 +38,10 @@ import {
   deleteVideo,
   Video,
 } from '../../services/firestore'
-import { uploadBase64Video } from '../../services/storage'
+import { uploadBase64Video, deleteVideoFiles } from '../../services/storage'
 import TagEditor from '../../components/common/TagEditor'
+
+import { Timestamp } from 'firebase/firestore'
 
 const { Title, Paragraph, Text } = Typography
 const { TextArea } = Input
@@ -58,6 +60,7 @@ function VideoEditor() {
 
   // Video state
   const [videoUrl, setVideoUrl] = useState('')
+  const [thumbnailDataUrl, setThumbnailDataUrl] = useState('')
   const [isImage, setIsImage] = useState(false)
   const [tags, setTags] = useState<string[]>([])
 
@@ -72,10 +75,51 @@ function VideoEditor() {
   const [videoId, setVideoId] = useState<string | null>(null)
   const [generationStatus, setGenerationStatus] = useState('')
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
+  const [createdAt, setCreatedAt] = useState<Timestamp | null>(null)
+  const [updatedAt, setUpdatedAt] = useState<Timestamp | null>(null)
 
   // Refs for async operations
   const videoIdRef = useRef<string | null>(null)
   const pendingTagsRef = useRef<string[] | null>(null)
+
+  // Extract thumbnail from video element
+  const extractThumbnail = (videoSrc: string): Promise<string> => {
+    return new Promise((resolve, reject) => {
+      const video = document.createElement('video')
+      video.crossOrigin = 'anonymous'
+      video.muted = true
+      video.preload = 'auto'
+
+      video.onloadeddata = () => {
+        // Seek to 1 second or 25% of duration, whichever is smaller
+        video.currentTime = Math.min(1, video.duration * 0.25)
+      }
+
+      video.onseeked = () => {
+        try {
+          const canvas = document.createElement('canvas')
+          canvas.width = video.videoWidth
+          canvas.height = video.videoHeight
+          const ctx = canvas.getContext('2d')
+          if (!ctx) { reject(new Error('No canvas context')); return }
+          ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+          const dataUrl = canvas.toDataURL('image/jpeg', 0.85)
+          resolve(dataUrl)
+        } catch (err) {
+          reject(err)
+        } finally {
+          video.remove()
+        }
+      }
+
+      video.onerror = () => {
+        video.remove()
+        reject(new Error('Failed to load video for thumbnail'))
+      }
+
+      video.src = videoSrc
+    })
+  }
 
   // Track unsaved changes
   useEffect(() => {
@@ -110,7 +154,11 @@ function VideoEditor() {
         setTitle(video.title)
         setPrompt(video.prompt)
         setVideoUrl(video.videoUrl)
+        setIsImage(video.videoUrl.includes('.png') || video.videoUrl.startsWith('data:image'))
+        setDuration(video.durationSeconds || 8)
         setTags(video.tags || [])
+        setCreatedAt(video.createdAt)
+        setUpdatedAt(video.updatedAt)
         setVideoId(id)
         videoIdRef.current = id
         setHasUnsavedChanges(false)
@@ -155,6 +203,7 @@ function VideoEditor() {
 
     setGenerating(true)
     setVideoUrl('')
+    setThumbnailDataUrl('')
     setIsImage(false)
     setTags([])
     setVideoId(null)
@@ -162,16 +211,22 @@ function VideoEditor() {
 
     try {
       const finalPrompt = enhancedPrompt || prompt
-      const result: VideoResult = await generateVideo(finalPrompt, setGenerationStatus)
+      const result: VideoResult = await generateVideo(finalPrompt, duration, setGenerationStatus)
 
       setVideoUrl(result.videoUrl)
       setIsImage(result.isImage || false)
       setHasUnsavedChanges(true)
 
+      // Extract thumbnail from video, or use image directly as thumbnail
       if (result.isImage) {
+        setThumbnailDataUrl(result.videoUrl) // Image itself is the thumbnail
         message.info(result.message || 'Video generation not available. Generated image instead.')
       } else {
         message.success(t('videoEditor.videoGenerated'))
+        // Extract a frame from the video for thumbnail
+        extractThumbnail(result.videoUrl)
+          .then(thumb => setThumbnailDataUrl(thumb))
+          .catch(err => console.error('Failed to extract thumbnail:', err))
       }
 
       // Generate tags (non-blocking)
@@ -214,20 +269,40 @@ function VideoEditor() {
 
       // Upload video/image to Storage if it's a base64 data URI
       let savedUrl = videoUrl
+      const saveId = videoId || crypto.randomUUID()
       if (videoUrl.startsWith('data:')) {
+        // Delete old files first when updating to avoid orphaned files
+        if (videoId) {
+          await deleteVideoFiles(user.uid, videoId)
+        }
         const ext = videoUrl.startsWith('data:video') ? 'mp4' : 'png'
-        const saveId = videoId || crypto.randomUUID()
         const path = `videos/${user.uid}/${saveId}/video.${ext}`
         savedUrl = await uploadBase64Video(videoUrl, path)
       }
 
+      // Upload thumbnail to Storage
+      let savedThumbnailUrl = ''
+      if (thumbnailDataUrl && thumbnailDataUrl.startsWith('data:')) {
+        try {
+          const thumbPath = `videos/${user.uid}/${saveId}/thumbnail.jpg`
+          savedThumbnailUrl = await uploadBase64Video(thumbnailDataUrl, thumbPath)
+        } catch (err) {
+          console.error('Failed to upload thumbnail:', err)
+        }
+      }
+
       if (videoId) {
-        await updateVideo(videoId, {
+        const updateData: Record<string, unknown> = {
           title,
           prompt: enhancedPrompt || prompt,
           videoUrl: savedUrl,
+          durationSeconds: duration,
           tags: tagsToSave,
-        })
+        }
+        if (savedThumbnailUrl) {
+          updateData.thumbnailUrl = savedThumbnailUrl
+        }
+        await updateVideo(videoId, updateData)
         message.success(t('videoEditor.videoUpdated'))
       } else {
         const newId = await createVideo({
@@ -236,6 +311,8 @@ function VideoEditor() {
           title,
           prompt: enhancedPrompt || prompt,
           videoUrl: savedUrl,
+          thumbnailUrl: savedThumbnailUrl,
+          durationSeconds: duration,
           tags: tagsToSave,
           status: 'completed',
         })
@@ -259,7 +336,10 @@ function VideoEditor() {
       setPrompt('')
       setEnhancedPrompt('')
       setVideoUrl('')
+      setThumbnailDataUrl('')
       setTags([])
+      setCreatedAt(null)
+      setUpdatedAt(null)
       setVideoId(null)
       videoIdRef.current = null
       setHasUnsavedChanges(false)
@@ -287,7 +367,11 @@ function VideoEditor() {
       setTitle(video.title)
       setPrompt(video.prompt)
       setVideoUrl(video.videoUrl)
+      setIsImage(video.videoUrl.includes('.png') || video.videoUrl.startsWith('data:image'))
+      setDuration(video.durationSeconds || 8)
       setTags(video.tags || [])
+      setCreatedAt(video.createdAt)
+      setUpdatedAt(video.updatedAt)
       setVideoId(video.id || null)
       videoIdRef.current = video.id || null
       setHasUnsavedChanges(false)
@@ -339,6 +423,16 @@ function VideoEditor() {
           <Paragraph style={{ color: '#666', margin: 0 }}>
             {t('videoEditor.description')}
           </Paragraph>
+          {createdAt && (
+            <Text type="secondary" style={{ fontSize: 13 }}>
+              {t('home.created')}: {createdAt.toDate().toLocaleString()}
+              {updatedAt && updatedAt.toMillis() !== createdAt.toMillis() && (
+                <span style={{ marginLeft: 16 }}>
+                  {t('home.updated')}: {updatedAt.toDate().toLocaleString()}
+                </span>
+              )}
+            </Text>
+          )}
         </div>
         <Space>
           <Button icon={<HomeOutlined />} onClick={handleHomeClick}>
@@ -439,11 +533,11 @@ function VideoEditor() {
                 <div style={{ padding: '8px 0' }}>
                   <Slider
                     min={4}
-                    max={16}
-                    step={4}
+                    max={8}
+                    step={2}
                     value={duration}
                     onChange={setDuration}
-                    marks={{ 4: '4s', 8: '8s', 12: '12s', 16: '16s' }}
+                    marks={{ 4: '4s', 6: '6s', 8: '8s' }}
                     disabled={generating}
                   />
                 </div>

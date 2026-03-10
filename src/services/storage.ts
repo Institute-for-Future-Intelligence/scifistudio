@@ -1,4 +1,4 @@
-import { ref, uploadString, uploadBytes, getDownloadURL } from 'firebase/storage'
+import { ref, uploadString, uploadBytes, getDownloadURL, deleteObject } from 'firebase/storage'
 import { storage } from './firebase'
 
 export const uploadBase64Video = async (
@@ -47,6 +47,15 @@ export const uploadBase64Image = async (
 
   const downloadUrl = await getDownloadURL(storageRef)
   return downloadUrl
+}
+
+export const deleteVideoFiles = async (userId: string, videoId: string): Promise<void> => {
+  const files = ['video.mp4', 'video.png', 'thumbnail.jpg']
+  await Promise.all(
+    files.map(file =>
+      deleteObject(ref(storage, `videos/${userId}/${videoId}/${file}`)).catch(() => {})
+    )
+  )
 }
 
 export const uploadStorybookImages = async (

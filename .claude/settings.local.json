@@ -21,7 +21,8 @@
       "Bash(firebase functions:log:*)",
       "Bash(dir /b C:UserscharlWebstormProjectsscifistudiosrci18nlocales)",
       "Bash(dir:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(cd \"C:/Users/charl/WebstormProjects/scifistudio\" && npx firebase storage:rules:list 2>&1; npx firebase target:list 2>&1)"
     ]
   }
 }

@@ -120,7 +120,7 @@ function VideoView() {
   }
 
   // Check if it's an image (fallback from video generation)
-  const isImage = video.videoUrl?.startsWith('data:image/')
+  const isImage = video.videoUrl?.startsWith('data:image/') || video.videoUrl?.includes('.png')
 
   return (
     <div style={{ minHeight: '100vh', background: '#f5f5f5', padding: 24 }}>
@@ -147,6 +147,18 @@ function VideoView() {
                 {video.tags.map(tag => (
                   <Tag key={tag} color="blue">{tag}</Tag>
                 ))}
+              </div>
+            )}
+            {video.createdAt && (
+              <div style={{ marginTop: 8 }}>
+                <Text type="secondary" style={{ fontSize: 13 }}>
+                  {t('home.created')}: {video.createdAt.toDate().toLocaleString()}
+                  {video.updatedAt && video.updatedAt.toMillis() !== video.createdAt.toMillis() && (
+                    <span style={{ marginLeft: 16 }}>
+                      {t('home.updated')}: {video.updatedAt.toDate().toLocaleString()}
+                    </span>
+                  )}
+                </Text>
               </div>
             )}
           </div>

@@ -150,16 +150,17 @@ export interface VideoResult {
 
 export const generateVideo = async (
   prompt: string,
+  durationSeconds: number = 8,
   onProgress?: (status: string) => void
 ): Promise<VideoResult> => {
   onProgress?.('Generating video with AI...')
 
   const generateVideoFn = httpsCallable<
-    { prompt: string },
+    { prompt: string; durationSeconds: number },
     { videoUrl: string; durationSeconds: number; isImage?: boolean; message?: string }
   >(functions, 'generateVideo', { timeout: 600000 }) // 10 min timeout
 
-  const result = await generateVideoFn({ prompt })
+  const result = await generateVideoFn({ prompt, durationSeconds })
   onProgress?.('Generation complete!')
   return result.data
 }

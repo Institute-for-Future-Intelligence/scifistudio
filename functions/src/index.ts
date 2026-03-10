@@ -1,10 +1,24 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https'
 import { defineSecret } from 'firebase-functions/params'
+import { GoogleAuth } from 'google-auth-library'
 
 // Define the secret - this will be stored in Google Cloud Secret Manager
 const geminiApiKey = defineSecret('GEMINI_API_KEY')
 
 const API_BASE = 'https://generativelanguage.googleapis.com/v1beta'
+
+// Vertex AI config
+const GCP_PROJECT = 'sci-fi-studio'
+const GCP_REGION = 'us-central1'
+const VERTEX_BASE = `https://${GCP_REGION}-aiplatform.googleapis.com/v1beta1`
+
+// Get access token for Vertex AI (uses Cloud Functions service account)
+async function getAccessToken(): Promise<string> {
+  const auth = new GoogleAuth({ scopes: ['https://www.googleapis.com/auth/cloud-platform'] })
+  const client = await auth.getClient()
+  const token = await client.getAccessToken()
+  return token.token || ''
+}
 
 // Use stable model names
 // v2.2 - image generation with fallback models
@@ -274,37 +288,46 @@ Example for English: space exploration, alien contact, mystery, adventure, mars 
   }
 )
 
-// Generate video with Veo via Gemini API
+// Generate video with Veo via Vertex AI
 export const generateVideo = onCall(
   { secrets: [geminiApiKey], cors: true, timeoutSeconds: 540 },
   async (request) => {
-    const { prompt } = request.data as { prompt?: string }
+    const { prompt, durationSeconds = 8 } = request.data as { prompt?: string; durationSeconds?: number }
 
     if (!prompt) {
       throw new HttpsError('invalid-argument', 'Prompt is required')
     }
 
     const apiKey = geminiApiKey.value()
+    // Veo supports durations: 4, 6, 8 seconds
+    const validDurations = [4, 6, 8]
+    const videoDuration = validDurations.reduce((prev, curr) =>
+      Math.abs(curr - durationSeconds) < Math.abs(prev - durationSeconds) ? curr : prev
+    )
 
     try {
-      console.log('Starting video generation with prompt:', prompt.substring(0, 100))
+      console.log('Starting video generation with prompt:', prompt.substring(0, 100), 'duration:', videoDuration)
 
-      // Use Veo 3.1 with predictLongRunning method
+      // Use Veo 3.1 via Vertex AI for higher rate limits
+      const accessToken = await getAccessToken()
       const veoModel = 'veo-3.1-generate-preview'
-      const veoUrl = `https://generativelanguage.googleapis.com/v1beta/models/${veoModel}:predictLongRunning?key=${apiKey}`
+      const veoUrl = `${VERTEX_BASE}/projects/${GCP_PROJECT}/locations/${GCP_REGION}/publishers/google/models/${veoModel}:predictLongRunning`
 
-      console.log('Calling Veo 3.1 with predictLongRunning...')
+      console.log('Calling Veo 3.1 via Vertex AI...')
 
       const veoResponse = await fetch(veoUrl, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`,
+        },
         body: JSON.stringify({
           instances: [{
             prompt: prompt
           }],
           parameters: {
             aspectRatio: '16:9',
-            durationSeconds: 8,
+            durationSeconds: videoDuration,
           },
         }),
       })
@@ -322,7 +345,7 @@ export const generateVideo = onCall(
         // predictLongRunning returns an operation name for polling
         if (result.name) {
           console.log('Got operation:', result.name)
-          const videoResult = await pollVeoOperation(result.name, apiKey)
+          const videoResult = await pollVertexVeoOperation(result.name, accessToken, videoDuration)
           if (videoResult) {
             return videoResult
           }
@@ -335,7 +358,15 @@ export const generateVideo = onCall(
         }
       } else {
         const errText = await veoResponse.text()
-        console.log('Veo error response:', errText.substring(0, 300))
+        console.log('Veo Vertex AI error response:', errText.substring(0, 500))
+
+        // If rate limited, tell the user directly instead of falling back silently
+        if (veoResponse.status === 429) {
+          throw new HttpsError(
+            'resource-exhausted',
+            'Veo API rate limit exceeded. Please wait a few minutes and try again.'
+          )
+        }
       }
 
       // If Veo fails or returns no video, fall back to image generation
@@ -432,7 +463,7 @@ export const generateVideo = onCall(
 
       throw new HttpsError(
         'unimplemented',
-        'Video generation (Veo API) is not available for this project. Please ensure you have access to the Veo API in Google AI Studio.'
+        'Video and image generation both failed. Please try again later.'
       )
     } catch (error) {
       console.error('generateVideo error:', error)
@@ -444,9 +475,9 @@ export const generateVideo = onCall(
   }
 )
 
-// Poll Veo API operation for video completion
+// Poll Vertex AI Veo operation for video completion
 // Returns null if video generation fails (to allow fallback to image)
-async function pollVeoOperation(operationName: string, apiKey: string): Promise<{ videoUrl: string; durationSeconds: number } | null> {
+async function pollVertexVeoOperation(operationName: string, accessToken: string, videoDuration: number = 8): Promise<{ videoUrl: string; durationSeconds: number } | null> {
   const maxWaitTime = 300000 // 5 minutes
   const pollInterval = 5000 // 5 seconds
   const startTime = Date.now()
@@ -454,16 +485,33 @@ async function pollVeoOperation(operationName: string, apiKey: string): Promise<
   while (Date.now() - startTime < maxWaitTime) {
     await new Promise(resolve => setTimeout(resolve, pollInterval))
 
-    // The operation name format is like "operations/xxx" - we need full URL
-    const pollUrl = `https://generativelanguage.googleapis.com/v1beta/${operationName}?key=${apiKey}`
-    console.log('Polling Veo operation:', operationName)
+    // Vertex AI Veo: poll using fetchPredictOperation on the model endpoint
+    const modelMatch = operationName.match(/(projects\/[^/]+\/locations\/[^/]+\/publishers\/google\/models\/[^/]+)\/operations\//)
+    const modelPath = modelMatch ? modelMatch[1] : `projects/${GCP_PROJECT}/locations/${GCP_REGION}/publishers/google/models/veo-3.1-generate-preview`
+    const locationMatch = operationName.match(/locations\/([^/]+)/)
+    const region = locationMatch ? locationMatch[1] : GCP_REGION
+    const pollUrl = `https://${region}-aiplatform.googleapis.com/v1beta1/${modelPath}:fetchPredictOperation`
+    console.log('Polling Vertex AI Veo operation:', pollUrl, 'opName:', operationName)
 
-    const pollResponse = await fetch(pollUrl)
+    const pollResponse = await fetch(pollUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify({ operationName }),
+    })
 
     if (!pollResponse.ok) {
       console.log('Poll error:', pollResponse.status)
       const errText = await pollResponse.text()
       console.log('Poll error body:', errText.substring(0, 200))
+
+      // If token expired during long poll, refresh it
+      if (pollResponse.status === 401) {
+        console.log('Token expired, refreshing...')
+        accessToken = await getAccessToken()
+      }
       continue
     }
 
@@ -473,25 +521,26 @@ async function pollVeoOperation(operationName: string, apiKey: string): Promise<
       error?: { message?: string; code?: number }
       metadata?: unknown
       response?: {
-        // Actual API response structure
         generateVideoResponse?: {
           generatedSamples?: Array<{
             video?: {
               uri?: string
+              gcsUri?: string
+              bytesBase64Encoded?: string
             }
           }>
         }
-        // Legacy structure (kept for compatibility)
         videos?: Array<{
           uri?: string
           encoding?: string
+          bytesBase64Encoded?: string
         }>
       }
     }
 
     const result = await pollResponse.json() as VeoPollResult
     console.log('Poll result done:', result.done, 'error:', result.error?.message)
-    console.log('Poll result full:', JSON.stringify(result).substring(0, 1000))
+    console.log('Poll result full:', JSON.stringify(result).substring(0, 500))
 
     if (result.error) {
       console.log('Veo operation error:', result.error.message)
@@ -500,34 +549,69 @@ async function pollVeoOperation(operationName: string, apiKey: string): Promise<
 
     // If done is true, we must exit the loop
     if (result.done) {
-      // Extract video URI from actual API response structure
-      const videoUri =
-        result.response?.generateVideoResponse?.generatedSamples?.[0]?.video?.uri ||
-        result.response?.videos?.[0]?.uri
+      // Check for inline base64 video data first (Veo returns this format)
+      const inlineVideo = result.response?.videos?.[0]
+      if (inlineVideo?.bytesBase64Encoded) {
+        console.log('Video ready! Inline base64, size:', inlineVideo.bytesBase64Encoded.length)
+        return {
+          videoUrl: `data:video/mp4;base64,${inlineVideo.bytesBase64Encoded}`,
+          durationSeconds: videoDuration,
+        }
+      }
+
+      // Check generateVideoResponse format
+      const sample = result.response?.generateVideoResponse?.generatedSamples?.[0]
+      if (sample?.video?.bytesBase64Encoded) {
+        console.log('Video ready! Inline base64 from generatedSamples, size:', sample.video.bytesBase64Encoded.length)
+        return {
+          videoUrl: `data:video/mp4;base64,${sample.video.bytesBase64Encoded}`,
+          durationSeconds: videoDuration,
+        }
+      }
+
+      // Check for URI-based video
+      const videoUri = sample?.video?.uri || sample?.video?.gcsUri || inlineVideo?.uri
 
       if (videoUri) {
         console.log('Video ready! URI:', videoUri.substring(0, 100))
 
-        // Fetch the video from the URI (use & if URL already has query params)
-        const separator = videoUri.includes('?') ? '&' : '?'
-        const videoFetchUrl = `${videoUri}${separator}key=${apiKey}`
-        const videoResponse = await fetch(videoFetchUrl)
+        // Fetch the video - use auth header for Vertex AI URIs
+        let videoResponse: Response
+        if (videoUri.startsWith('https://')) {
+          const separator = videoUri.includes('?') ? '&' : '?'
+          videoResponse = await fetch(`${videoUri}${separator}key=${geminiApiKey.value()}`, {
+            headers: { 'Authorization': `Bearer ${accessToken}` },
+          })
+          if (!videoResponse.ok) {
+            console.log('Fetch with auth failed:', videoResponse.status, ', retrying without auth...')
+            videoResponse = await fetch(`${videoUri}${separator}key=${geminiApiKey.value()}`)
+          }
+        } else {
+          const gcsUrl = videoUri.replace('gs://', 'https://storage.googleapis.com/')
+          videoResponse = await fetch(gcsUrl, {
+            headers: { 'Authorization': `Bearer ${accessToken}` },
+          })
+        }
 
         if (videoResponse.ok) {
           const buffer = await videoResponse.arrayBuffer()
           const base64 = Buffer.from(buffer).toString('base64')
+          console.log('Video fetched successfully, size:', buffer.byteLength)
           return {
             videoUrl: `data:video/mp4;base64,${base64}`,
-            durationSeconds: 8,
+            durationSeconds: videoDuration,
           }
         } else {
           console.log('Failed to fetch video:', videoResponse.status)
-          return null // Fallback to image
+          const errText = await videoResponse.text()
+          console.log('Fetch error:', errText.substring(0, 200))
+          return null
         }
       }
 
       // done=true but no video - return null to trigger image fallback
       console.log('Operation done but no video found in response')
+      console.log('Response keys:', JSON.stringify(Object.keys(result.response || {})))
       return null
     }
   }
