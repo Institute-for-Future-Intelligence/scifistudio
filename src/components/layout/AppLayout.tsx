@@ -46,7 +46,7 @@ function AppLayout() {
   const { sidebarCollapsed: collapsed, toggleSidebar } = useAppStore()
   const navigate = useNavigate()
   const location = useLocation()
-  const { user, loading, signIn, signInAnonymous, signOut } = useAuth()
+  const { user, loading, signIn, signInAnonymous, linkWithGoogle, signOut } = useAuth()
   const { t } = useTranslation()
 
   const menuItems = [
@@ -86,6 +86,12 @@ function AppLayout() {
     {
       type: 'divider' as const,
     },
+    ...(user?.isAnonymous ? [{
+      key: 'upgrade',
+      icon: <GoogleOutlined />,
+      label: t('auth.upgradeToGoogle'),
+      onClick: linkWithGoogle,
+    }] : []),
     {
       key: 'signout',
       icon: <LogoutOutlined />,

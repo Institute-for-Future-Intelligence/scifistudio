@@ -20,13 +20,14 @@
  * SOFTWARE.
  */
 import { createContext, useEffect, useState, useRef, ReactNode } from 'react'
-import { User, subscribeToAuthChanges, signInWithGoogle, signInAnonymously, signOut } from '../services/auth'
+import { User, subscribeToAuthChanges, signInWithGoogle, signInAnonymously, linkAnonymousWithGoogle, signOut } from '../services/auth'
 
 interface AuthContextType {
   user: User | null
   loading: boolean
   signIn: () => Promise<void>
   signInAnonymous: () => Promise<void>
+  linkWithGoogle: () => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -74,6 +75,14 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
   }
 
+  const handleLinkWithGoogle = async () => {
+    try {
+      await linkAnonymousWithGoogle()
+    } catch (error) {
+      console.error('Link with Google failed:', error)
+    }
+  }
+
   const handleSignOut = async () => {
     await signOut()
   }
@@ -85,6 +94,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
         loading,
         signIn: handleSignIn,
         signInAnonymous: handleSignInAnonymous,
+        linkWithGoogle: handleLinkWithGoogle,
         signOut: handleSignOut,
       }}
     >

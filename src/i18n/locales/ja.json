@@ -16,7 +16,8 @@
     "signInWithGoogle": "Googleでログイン",
     "continueAsGuest": "ゲストとして続ける",
     "welcome": "ようこそ",
-    "guest": "ゲスト"
+    "guest": "ゲスト",
+    "upgradeToGoogle": "Google でサインイン"
   },
   "home": {
     "title": "SF スタジオへようこそ",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "私たちについて",
-    "description": "SF スタジオは、Institute for Future Intelligence, Inc.が開発した創造的なプラットフォームで、最先端の生成AI技術を使用して、誰でも素晴らしいSFストーリーブックや短編動画を作成できるようにします。",
+    "description": "SF スタジオは、<1>Institute for Future Intelligence, Inc.</1>が開発した創造的なプラットフォームで、最先端の生成AI技術を使用して、誰でも素晴らしいSFストーリーブックや短編動画を作成できるようにします。",
     "missionTitle": "私たちの使命",
     "missionDescription": "私たちは、人工知能を通じて創造的なストーリーテリングを民主化することを信じています。私たちの使命は、志望する作家からベテランのクリエイターまで、すべての人がAI生成のイラストや動画を使って、SFのビジョンを簡単に実現できるようにすることです。",
     "technologyTitle": "テクノロジー",
     "technologyDescription": "SF スタジオは、ストーリー生成と画像作成のためのGoogle Gemini、動画生成のためのVertex AI Veoなど、最先端のAIモデルを活用しています。プラットフォームはReact、TypeScript、Firebaseで構築されています。",
     "contactTitle": "お問い合わせ",
-    "contactDescription": "ご質問、フィードバック、コラボレーションのお問い合わせは、Institute for Future Intelligenceのウェブサイト intofuture.org をご覧ください。"
+    "contactDescription": "ご質問、フィードバック、コラボレーションのお問い合わせは、<1>Institute for Future Intelligence</1>をご覧ください。",
+    "contactPerson": "連絡先：Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "設定",

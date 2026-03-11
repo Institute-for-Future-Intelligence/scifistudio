@@ -16,7 +16,8 @@
     "signInWithGoogle": "Google ile Giriş Yap",
     "continueAsGuest": "Misafir Olarak Devam Et",
     "welcome": "Hoş Geldiniz",
-    "guest": "Misafir"
+    "guest": "Misafir",
+    "upgradeToGoogle": "Google ile giriş yap"
   },
   "home": {
     "title": "Sci-Fi Stüdyo'ya Hoş Geldiniz",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "Hakkımızda",
-    "description": "Sci-Fi Stüdyo, Institute for Future Intelligence, Inc. tarafından geliştirilen, en son üretken yapay zeka teknolojisini kullanarak herkesin etkileyici bilim kurgu hikaye kitapları ve kısa videolar oluşturmasını sağlayan yaratıcı bir platformdur.",
+    "description": "Sci-Fi Stüdyo, <1>Institute for Future Intelligence, Inc.</1> tarafından geliştirilen, en son üretken yapay zeka teknolojisini kullanarak herkesin etkileyici bilim kurgu hikaye kitapları ve kısa videolar oluşturmasını sağlayan yaratıcı bir platformdur.",
     "missionTitle": "Misyonumuz",
     "missionDescription": "Yapay zeka aracılığıyla yaratıcı hikaye anlatımını demokratikleştirmeye inanıyoruz. Misyonumuz, hevesli yazarlardan deneyimli yaratıcılara kadar herkesin yapay zeka tarafından üretilen illüstrasyonlar ve videolarla bilim kurgu vizyonlarını kolayca hayata geçirmesini sağlamaktır.",
     "technologyTitle": "Teknoloji",
     "technologyDescription": "Sci-Fi Stüdyo, hikaye oluşturma ve görüntü üretimi için Google Gemini ve video üretimi için Vertex AI Veo dahil olmak üzere en son yapay zeka modellerini kullanır. Platform React, TypeScript ve Firebase ile oluşturulmuştur.",
     "contactTitle": "İletişim",
-    "contactDescription": "Sorularınız, geri bildirimleriniz veya işbirliği talepleriniz için lütfen Institute for Future Intelligence'ı intofuture.org adresinden ziyaret edin."
+    "contactDescription": "Sorularınız, geri bildirimleriniz veya işbirliği talepleriniz için lütfen <1>Institute for Future Intelligence</1>'ı ziyaret edin.",
+    "contactPerson": "İletişim: Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "Ayarlar",

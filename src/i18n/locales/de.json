@@ -16,7 +16,8 @@
     "signInWithGoogle": "Mit Google anmelden",
     "continueAsGuest": "Als Gast fortfahren",
     "welcome": "Willkommen",
-    "guest": "Gast"
+    "guest": "Gast",
+    "upgradeToGoogle": "Mit Google anmelden"
   },
   "home": {
     "title": "Willkommen im Sci-Fi Studio",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "Über uns",
-    "description": "Sci-Fi Studio ist eine kreative Plattform, die vom Institute for Future Intelligence, Inc. entwickelt wurde und es jedem ermöglicht, mit modernster generativer KI-Technologie beeindruckende Sci-Fi-Geschichtenbücher und Kurzvideos zu erstellen.",
+    "description": "Sci-Fi Studio ist eine kreative Plattform, die vom <1>Institute for Future Intelligence, Inc.</1> entwickelt wurde und es jedem ermöglicht, mit modernster generativer KI-Technologie beeindruckende Sci-Fi-Geschichtenbücher und Kurzvideos zu erstellen.",
     "missionTitle": "Unsere Mission",
     "missionDescription": "Wir glauben an die Demokratisierung des kreativen Geschichtenerzählens durch künstliche Intelligenz. Unsere Mission ist es, es jedem — vom angehenden Autor bis zum erfahrenen Kreativen — leicht zu machen, seine Sci-Fi-Visionen mit KI-generierten Illustrationen und Videos zum Leben zu erwecken.",
     "technologyTitle": "Technologie",
     "technologyDescription": "Sci-Fi Studio nutzt modernste KI-Modelle, darunter Google Gemini für die Geschichtenerstellung und Bildgenerierung sowie Vertex AI Veo für die Videogenerierung. Die Plattform wurde mit React, TypeScript und Firebase entwickelt.",
     "contactTitle": "Kontakt",
-    "contactDescription": "Für Fragen, Feedback oder Kooperationsanfragen besuchen Sie bitte das Institute for Future Intelligence unter intofuture.org."
+    "contactDescription": "Für Fragen, Feedback oder Kooperationsanfragen besuchen Sie bitte <1>das Institute for Future Intelligence</1>.",
+    "contactPerson": "Kontakt: Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "Einstellungen",

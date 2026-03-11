@@ -22,6 +22,7 @@
 import {
   GoogleAuthProvider,
   signInWithPopup,
+  linkWithPopup,
   signInAnonymously as firebaseSignInAnonymously,
   signOut as firebaseSignOut,
   onAuthStateChanged,
@@ -53,6 +54,27 @@ export const signInAnonymously = async (): Promise<User | null> => {
   } catch (error: unknown) {
     const firebaseError = error as { code?: string; message?: string }
     console.error('Anonymous sign in error:', firebaseError.message)
+    throw error
+  }
+}
+
+export const linkAnonymousWithGoogle = async (): Promise<User | null> => {
+  const currentUser = auth.currentUser
+  if (!currentUser || !currentUser.isAnonymous) return null
+
+  try {
+    const result = await linkWithPopup(currentUser, googleProvider)
+    return result.user
+  } catch (error: unknown) {
+    const firebaseError = error as { code?: string; message?: string }
+    if (firebaseError.code === 'auth/popup-closed-by-user') {
+      return null
+    }
+    // If the Google account is already linked to another user, sign in with Google instead
+    if (firebaseError.code === 'auth/credential-already-in-use') {
+      const result = await signInWithPopup(auth, googleProvider)
+      return result.user
+    }
     throw error
   }
 }

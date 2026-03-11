@@ -276,20 +276,20 @@ export const generateStoryTags = onCall(
 
     const langName = languageNames[language] || 'English'
 
-    const tagPrompt = `Analyze this story and generate 5-8 relevant tags in ${langName}.
+    const tagPrompt = `Analyze this story and generate 5-8 relevant STEM concept tags in ${langName}.
 
 Title: ${title || 'Untitled'}
 Story concept: ${prompt || 'No description'}
 
-Generate tags that describe:
-- Genre (e.g., space opera, cyberpunk, dystopian)
-- Themes (e.g., exploration, survival, first contact)
-- Setting (e.g., space station, alien planet, future earth)
-- Mood (e.g., adventure, mystery, action)
+Generate tags focused on STEM (Science, Technology, Engineering, Mathematics) concepts found in the story:
+- Science (e.g., black holes, relativity, evolution, quantum mechanics, photosynthesis)
+- Technology (e.g., artificial intelligence, robotics, nuclear fusion, 3D printing)
+- Engineering (e.g., rocket propulsion, terraforming, structural design, nanotechnology)
+- Mathematics (e.g., fractals, probability, cryptography, orbital mechanics)
 
-IMPORTANT: Write ALL tags in ${langName} language.
+IMPORTANT: Write ALL tags in ${langName} language. Focus on educational STEM concepts, not genres or moods.
 Return ONLY a comma-separated list of lowercase tags in ${langName}, nothing else.
-Example for English: space exploration, alien contact, mystery, adventure, mars colony`
+Example for English: black holes, quantum entanglement, terraforming, artificial intelligence, orbital mechanics`
 
     const data = await fetchGemini(
       `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
@@ -730,19 +730,20 @@ export const generateVideoTags = onCall(
       throw new HttpsError('invalid-argument', 'Prompt or title is required')
     }
 
-    const tagPrompt = `Analyze this video concept and generate 5-8 relevant tags.
+    const tagPrompt = `Analyze this video concept and generate 5-8 relevant STEM concept tags.
 
 Title: ${title || 'Untitled'}
 Video concept: ${prompt || 'No description'}
 
-Generate tags that describe:
-- Genre (e.g., space opera, cyberpunk, action)
-- Themes (e.g., exploration, battle, discovery)
-- Setting (e.g., space station, alien world, future city)
-- Style (e.g., cinematic, dramatic, epic)
+Generate tags focused on STEM (Science, Technology, Engineering, Mathematics) concepts found in the video:
+- Science (e.g., black holes, relativity, evolution, quantum mechanics, photosynthesis)
+- Technology (e.g., artificial intelligence, robotics, nuclear fusion, 3D printing)
+- Engineering (e.g., rocket propulsion, terraforming, structural design, nanotechnology)
+- Mathematics (e.g., fractals, probability, cryptography, orbital mechanics)
 
+Focus on educational STEM concepts, not genres or moods.
 Return ONLY a comma-separated list of lowercase tags, nothing else.
-Example: space battle, epic, cinematic, sci-fi, alien invasion`
+Example: black holes, quantum entanglement, terraforming, artificial intelligence, orbital mechanics`
 
     const data = await fetchGemini(
       `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,

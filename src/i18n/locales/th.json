@@ -16,7 +16,8 @@
     "signInWithGoogle": "เข้าสู่ระบบด้วย Google",
     "continueAsGuest": "ดำเนินการต่อในฐานะผู้เยี่ยมชม",
     "welcome": "ยินดีต้อนรับ",
-    "guest": "ผู้เยี่ยมชม"
+    "guest": "ผู้เยี่ยมชม",
+    "upgradeToGoogle": "เข้าสู่ระบบด้วย Google"
   },
   "home": {
     "title": "ยินดีต้อนรับสู่สตูดิโอ Sci-Fi",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "เกี่ยวกับเรา",
-    "description": "สตูดิโอ Sci-Fi เป็นแพลตฟอร์มสร้างสรรค์ที่พัฒนาโดย Institute for Future Intelligence, Inc. ที่ช่วยให้ทุกคนสามารถสร้างหนังสือนิทานไซไฟที่น่าทึ่งและวิดีโอสั้นโดยใช้เทคโนโลยี AI เชิงสร้างสรรค์ที่ล้ำสมัย",
+    "description": "สตูดิโอ Sci-Fi เป็นแพลตฟอร์มสร้างสรรค์ที่พัฒนาโดย <1>Institute for Future Intelligence, Inc.</1> ที่ช่วยให้ทุกคนสามารถสร้างหนังสือนิทานไซไฟที่น่าทึ่งและวิดีโอสั้นโดยใช้เทคโนโลยี AI เชิงสร้างสรรค์ที่ล้ำสมัย",
     "missionTitle": "พันธกิจของเรา",
     "missionDescription": "เราเชื่อในการทำให้การเล่าเรื่องอย่างสร้างสรรค์เป็นประชาธิปไตยผ่านปัญญาประดิษฐ์ พันธกิจของเราคือทำให้ทุกคน — ตั้งแต่นักเขียนมือใหม่ไปจนถึงครีเอเตอร์มืออาชีพ — สามารถทำให้วิสัยทัศน์ไซไฟของพวกเขาเป็นจริงได้ง่ายด้วยภาพประกอบและวิดีโอที่สร้างโดย AI",
     "technologyTitle": "เทคโนโลยี",
     "technologyDescription": "สตูดิโอ Sci-Fi ใช้โมเดล AI ที่ทันสมัยที่สุด รวมถึง Google Gemini สำหรับการสร้างเรื่องราวและภาพ และ Vertex AI Veo สำหรับการสร้างวิดีโอ แพลตฟอร์มนี้สร้างด้วย React, TypeScript และ Firebase",
     "contactTitle": "ติดต่อ",
-    "contactDescription": "สำหรับคำถาม ข้อเสนอแนะ หรือสอบถามเรื่องความร่วมมือ กรุณาเยี่ยมชม Institute for Future Intelligence ที่ intofuture.org"
+    "contactDescription": "สำหรับคำถาม ข้อเสนอแนะ หรือสอบถามเรื่องความร่วมมือ กรุณาเยี่ยมชม <1>Institute for Future Intelligence</1>",
+    "contactPerson": "ติดต่อ: Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "ตั้งค่า",

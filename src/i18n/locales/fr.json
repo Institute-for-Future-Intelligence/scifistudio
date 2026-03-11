@@ -16,7 +16,8 @@
     "signInWithGoogle": "Se connecter avec Google",
     "continueAsGuest": "Continuer en tant qu'Invité",
     "welcome": "Bienvenue",
-    "guest": "Invité"
+    "guest": "Invité",
+    "upgradeToGoogle": "Se connecter avec Google"
   },
   "home": {
     "title": "Bienvenue sur Studio Sci-Fi",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "À propos",
-    "description": "Studio Sci-Fi est une plateforme créative développée par l'Institute for Future Intelligence, Inc. qui permet à chacun de créer de superbes livres d'histoires de science-fiction et de courtes vidéos grâce à une technologie d'IA générative de pointe.",
+    "description": "Studio Sci-Fi est une plateforme créative développée par <1>l'Institute for Future Intelligence, Inc.</1> qui permet à chacun de créer de superbes livres d'histoires de science-fiction et de courtes vidéos grâce à une technologie d'IA générative de pointe.",
     "missionTitle": "Notre Mission",
     "missionDescription": "Nous croyons en la démocratisation de la narration créative grâce à l'intelligence artificielle. Notre mission est de permettre à tous — des écrivains en herbe aux créateurs chevronnés — de donner vie à leurs visions de science-fiction avec des illustrations et des vidéos générées par l'IA.",
     "technologyTitle": "Technologie",
     "technologyDescription": "Studio Sci-Fi exploite des modèles d'IA de pointe, notamment Google Gemini pour la génération d'histoires et la création d'images, et Vertex AI Veo pour la génération de vidéos. La plateforme est construite avec React, TypeScript et Firebase.",
     "contactTitle": "Contact",
-    "contactDescription": "Pour toute question, commentaire ou demande de collaboration, veuillez visiter l'Institute for Future Intelligence sur intofuture.org."
+    "contactDescription": "Pour toute question, commentaire ou demande de collaboration, veuillez visiter <1>l'Institute for Future Intelligence</1>.",
+    "contactPerson": "Contact : Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "Paramètres",

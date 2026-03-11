@@ -16,7 +16,8 @@
     "signInWithGoogle": "Iniciar sesión con Google",
     "continueAsGuest": "Continuar como Invitado",
     "welcome": "Bienvenido",
-    "guest": "Invitado"
+    "guest": "Invitado",
+    "upgradeToGoogle": "Iniciar sesión con Google"
   },
   "home": {
     "title": "Bienvenido a Estudio Sci-Fi",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "Sobre nosotros",
-    "description": "Estudio Sci-Fi es una plataforma creativa desarrollada por el Institute for Future Intelligence, Inc. que permite a cualquier persona crear impresionantes libros de cuentos de ciencia ficción y videos cortos utilizando tecnología de IA generativa de vanguardia.",
+    "description": "Estudio Sci-Fi es una plataforma creativa desarrollada por <1>el Institute for Future Intelligence, Inc.</1> que permite a cualquier persona crear impresionantes libros de cuentos de ciencia ficción y videos cortos utilizando tecnología de IA generativa de vanguardia.",
     "missionTitle": "Nuestra Misión",
     "missionDescription": "Creemos en democratizar la narrativa creativa a través de la inteligencia artificial. Nuestra misión es facilitar a todos — desde escritores aspirantes hasta creadores experimentados — dar vida a sus visiones de ciencia ficción con ilustraciones y videos generados por IA.",
     "technologyTitle": "Tecnología",
     "technologyDescription": "Estudio Sci-Fi aprovecha modelos de IA de última generación, incluyendo Google Gemini para la generación de historias y creación de imágenes, y Vertex AI Veo para la generación de videos. La plataforma está construida con React, TypeScript y Firebase.",
     "contactTitle": "Contacto",
-    "contactDescription": "Para preguntas, comentarios o consultas de colaboración, visite el Institute for Future Intelligence en intofuture.org."
+    "contactDescription": "Para preguntas, comentarios o consultas de colaboración, visite <1>el Institute for Future Intelligence</1>.",
+    "contactPerson": "Contacto: Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "Configuración",

@@ -16,7 +16,8 @@
     "signInWithGoogle": "Masuk dengan Google",
     "continueAsGuest": "Lanjutkan sebagai Tamu",
     "welcome": "Selamat Datang",
-    "guest": "Tamu"
+    "guest": "Tamu",
+    "upgradeToGoogle": "Masuk dengan Google"
   },
   "home": {
     "title": "Selamat Datang di Studio Sci-Fi",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "Tentang Kami",
-    "description": "Studio Sci-Fi adalah platform kreatif yang dikembangkan oleh Institute for Future Intelligence, Inc. yang memungkinkan siapa saja membuat buku cerita fiksi ilmiah yang menakjubkan dan video pendek menggunakan teknologi AI generatif mutakhir.",
+    "description": "Studio Sci-Fi adalah platform kreatif yang dikembangkan oleh <1>Institute for Future Intelligence, Inc.</1> yang memungkinkan siapa saja membuat buku cerita fiksi ilmiah yang menakjubkan dan video pendek menggunakan teknologi AI generatif mutakhir.",
     "missionTitle": "Misi Kami",
     "missionDescription": "Kami percaya pada demokratisasi penceritaan kreatif melalui kecerdasan buatan. Misi kami adalah memudahkan semua orang — dari penulis pemula hingga kreator berpengalaman — untuk mewujudkan visi fiksi ilmiah mereka dengan ilustrasi dan video yang dihasilkan AI.",
     "technologyTitle": "Teknologi",
     "technologyDescription": "Studio Sci-Fi memanfaatkan model AI mutakhir termasuk Google Gemini untuk pembuatan cerita dan gambar, serta Vertex AI Veo untuk pembuatan video. Platform ini dibangun dengan React, TypeScript, dan Firebase.",
     "contactTitle": "Kontak",
-    "contactDescription": "Untuk pertanyaan, umpan balik, atau pertanyaan kerja sama, silakan kunjungi Institute for Future Intelligence di intofuture.org."
+    "contactDescription": "Untuk pertanyaan, umpan balik, atau pertanyaan kerja sama, silakan kunjungi <1>Institute for Future Intelligence</1>.",
+    "contactPerson": "Kontak: Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "Pengaturan",

@@ -20,9 +20,11 @@
  * SOFTWARE.
  */
 import { Typography } from 'antd'
-import { useTranslation } from 'react-i18next'
+import { useTranslation, Trans } from 'react-i18next'
 
 const { Title, Paragraph } = Typography
+
+const ifiLink = <a href="https://intofuture.org" target="_blank" rel="noopener noreferrer" />
 
 function About() {
   const { t } = useTranslation()
@@ -31,19 +33,18 @@ function About() {
     <div style={{ maxWidth: 800, margin: '0 auto' }}>
       <Title level={2}>{t('about.title')}</Title>
       <Paragraph style={{ fontSize: 16 }}>
-        {t('about.description')}
+        <Trans i18nKey="about.description" components={{ 1: ifiLink }} />
       </Paragraph>
       <Title level={4}>{t('about.missionTitle')}</Title>
       <Paragraph>
         {t('about.missionDescription')}
       </Paragraph>
-      <Title level={4}>{t('about.technologyTitle')}</Title>
-      <Paragraph>
-        {t('about.technologyDescription')}
-      </Paragraph>
       <Title level={4}>{t('about.contactTitle')}</Title>
       <Paragraph>
-        {t('about.contactDescription')}
+        <Trans i18nKey="about.contactDescription" components={{ 1: ifiLink }} />
+      </Paragraph>
+      <Paragraph>
+        <Trans i18nKey="about.contactPerson" components={{ 1: <a href="mailto:charles@intofuture.org" /> }} />
       </Paragraph>
     </div>
   )

@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { initializeApp } from 'firebase/app'
+import { initializeApp, getApps, getApp } from 'firebase/app'
 import { getAuth, setPersistence, browserLocalPersistence } from 'firebase/auth'
 import { getFirestore } from 'firebase/firestore'
 import { getStorage } from 'firebase/storage'
@@ -34,7 +34,8 @@ const firebaseConfig = {
   appId: "1:231343877943:web:1fc46e72331eb5e488f4b2",
 }
 
-const app = initializeApp(firebaseConfig)
+// Guard against re-initialization during HMR
+const app = getApps().length ? getApp() : initializeApp(firebaseConfig)
 
 export const auth = getAuth(app)
 setPersistence(auth, browserLocalPersistence)

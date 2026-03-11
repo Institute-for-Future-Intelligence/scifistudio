@@ -16,7 +16,8 @@
     "signInWithGoogle": "使用 Google 登入",
     "continueAsGuest": "以訪客身份繼續",
     "welcome": "歡迎",
-    "guest": "訪客"
+    "guest": "訪客",
+    "upgradeToGoogle": "使用 Google 登入"
   },
   "home": {
     "title": "歡迎來到科幻工作室",
@@ -178,13 +179,14 @@
   },
   "about": {
     "title": "關於我們",
-    "description": "科幻工作室是由未來智能研究所開發的創意平台，利用前沿的生成式人工智慧技術，讓每個人都能創作出精美的科幻故事書和短影片。",
+    "description": "科幻工作室是由<1>未來智能研究所</1>開發的創意平台，利用前沿的生成式人工智慧技術，讓每個人都能創作出精美的科幻故事書和短影片。",
     "missionTitle": "我們的使命",
     "missionDescription": "我們相信透過人工智慧實現創意敘事的民主化。我們的使命是讓每個人——從有抱負的作家到經驗豐富的創作者——都能輕鬆地透過AI生成的插畫和影片將他們的科幻願景變為現實。",
     "technologyTitle": "技術",
     "technologyDescription": "科幻工作室利用最先進的AI模型，包括用於故事生成和圖像創作的Google Gemini，以及用於影片生成的Vertex AI Veo。該平台使用React、TypeScript和Firebase建構。",
     "contactTitle": "聯絡方式",
-    "contactDescription": "如有問題、回饋或合作意向，請造訪未來智能研究所網站 intofuture.org。"
+    "contactDescription": "如有問題、回饋或合作意向，請造訪<1>未來智能研究所</1>。",
+    "contactPerson": "聯絡人：Charles Xie (<1>charles@intofuture.org</1>)"
   },
   "settings": {
     "title": "設定",
