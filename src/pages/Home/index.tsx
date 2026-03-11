@@ -25,7 +25,7 @@ import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Sel
 import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined, PlayCircleOutlined, EyeOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
-import { getStorybooks, deleteStorybook, Storybook, getVideos, deleteVideo, Video } from '../../services/firestore'
+import { getStorybooks, deleteStorybook, Storybook, getVideos, deleteVideo, Video, getPublicStorybooks, getPublicVideos } from '../../services/firestore'
 
 const { Title, Paragraph } = Typography
 
@@ -42,6 +42,8 @@ function Home() {
   useEffect(() => {
     if (user) {
       loadProjects()
+    } else {
+      loadPublicProjects()
     }
   }, [user])
 
@@ -57,6 +59,22 @@ function Home() {
       setVideos(videosData)
     } catch (err) {
       console.error('Failed to load projects:', err)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const loadPublicProjects = async () => {
+    setLoading(true)
+    try {
+      const [storybooksData, videosData] = await Promise.all([
+        getPublicStorybooks(5),
+        getPublicVideos(5)
+      ])
+      setStorybooks(storybooksData)
+      setVideos(videosData)
+    } catch (err) {
+      console.error('Failed to load public projects:', err)
     } finally {
       setLoading(false)
     }
@@ -340,14 +358,112 @@ function Home() {
 
   if (!user) {
     return (
-      <div style={{ textAlign: 'center', padding: '48px 0' }}>
-        <Title level={2}>{t('home.title')}</Title>
-        <Paragraph style={{ fontSize: 16, color: '#666' }}>
-          {t('home.subtitle')}
-        </Paragraph>
-        <Paragraph style={{ color: '#999' }}>
-          {t('home.signInPrompt')}
-        </Paragraph>
+      <div>
+        <div style={{ textAlign: 'center', padding: '48px 0 24px' }}>
+          <Title level={2}>{t('home.title')}</Title>
+          <Paragraph style={{ fontSize: 16, color: '#666' }}>
+            {t('home.subtitle')}
+          </Paragraph>
+          <Paragraph style={{ color: '#999' }}>
+            {t('home.signInPrompt')}
+          </Paragraph>
+        </div>
+        {loading ? (
+          <div style={{ textAlign: 'center', padding: '48px 0' }}>
+            <Spin size="large" />
+          </div>
+        ) : (storybooks.length > 0 || videos.length > 0) && (
+          <div>
+            {storybooks.length > 0 && (
+              <div style={{ marginBottom: 24 }}>
+                <Title level={4}>{t('home.tabStories')}</Title>
+                <List
+                  grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 5 }}
+                  dataSource={storybooks}
+                  renderItem={(storybook) => (
+                    <List.Item key={storybook.id}>
+                      <Card
+                        hoverable
+                        onClick={() => window.open(`${import.meta.env.BASE_URL}view/${storybook.id}`, '_blank')}
+                        cover={
+                          storybook.frames[0]?.imageUrl ? (
+                            <div style={{ height: 150, overflow: 'hidden', position: 'relative' }}>
+                              <img src={storybook.frames[0].imageUrl} alt={storybook.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <BookOutlined style={{ position: 'absolute', top: 8, left: 8, fontSize: 16, color: '#fff', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }} />
+                            </div>
+                          ) : (
+                            <div style={{ height: 150, background: '#f5f5f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <BookOutlined style={{ fontSize: 48, color: '#ddd' }} />
+                            </div>
+                          )
+                        }
+                      >
+                        <Card.Meta
+                          title={storybook.title}
+                          description={
+                            <div>
+                              <div>{storybook.authorName}</div>
+                              <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <Rate disabled value={storybook.averageRating || 0} allowHalf style={{ fontSize: 12 }} />
+                                {storybook.averageRating != null && storybook.averageRating > 0 && (
+                                  <span style={{ fontSize: 11, color: '#999' }}>{storybook.averageRating.toFixed(1)}</span>
+                                )}
+                              </div>
+                            </div>
+                          }
+                        />
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            )}
+            {videos.length > 0 && (
+              <div>
+                <Title level={4}>{t('home.tabVideos')}</Title>
+                <List
+                  grid={{ gutter: 16, xs: 1, sm: 2, md: 3, lg: 5 }}
+                  dataSource={videos}
+                  renderItem={(video) => (
+                    <List.Item key={video.id}>
+                      <Card
+                        hoverable
+                        onClick={() => window.open(`${import.meta.env.BASE_URL}watch/${video.id}`, '_blank')}
+                        cover={
+                          video.thumbnailUrl || video.videoUrl ? (
+                            <div style={{ height: 150, overflow: 'hidden', position: 'relative' }}>
+                              <img src={video.thumbnailUrl || video.videoUrl} alt={video.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                              <PlayCircleOutlined style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', fontSize: 40, color: '#fff', textShadow: '0 2px 4px rgba(0,0,0,0.5)' }} />
+                            </div>
+                          ) : (
+                            <div style={{ height: 150, background: '#f0f5ff', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                              <VideoCameraOutlined style={{ fontSize: 48, color: '#d6e4ff' }} />
+                            </div>
+                          )
+                        }
+                      >
+                        <Card.Meta
+                          title={video.title}
+                          description={
+                            <div>
+                              <div>{video.authorName}</div>
+                              <div style={{ marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+                                <Rate disabled value={video.averageRating || 0} allowHalf style={{ fontSize: 12 }} />
+                                {video.averageRating != null && video.averageRating > 0 && (
+                                  <span style={{ fontSize: 11, color: '#999' }}>{video.averageRating.toFixed(1)}</span>
+                                )}
+                              </div>
+                            </div>
+                          }
+                        />
+                      </Card>
+                    </List.Item>
+                  )}
+                />
+              </div>
+            )}
+          </div>
+        )}
       </div>
     )
   }

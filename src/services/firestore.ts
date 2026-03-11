@@ -31,6 +31,7 @@ import {
   query,
   where,
   orderBy,
+  limit as firestoreLimit,
   Timestamp,
 } from 'firebase/firestore'
 import { db } from './firebase'
@@ -249,6 +250,37 @@ export const getVideos = async (userId: string): Promise<Video[]> => {
   )
   const snapshot = await getDocs(q)
   return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Video))
+}
+
+export const getPublicStorybooks = async (count: number = 5): Promise<Storybook[]> => {
+  const q = query(
+    storybooksCollection,
+    orderBy('createdAt', 'desc'),
+    firestoreLimit(20)
+  )
+  const snapshot = await getDocs(q)
+  const all = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Storybook))
+  // Shuffle and pick random items
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]]
+  }
+  return all.slice(0, count)
+}
+
+export const getPublicVideos = async (count: number = 5): Promise<Video[]> => {
+  const q = query(
+    videosCollection,
+    orderBy('createdAt', 'desc'),
+    firestoreLimit(20)
+  )
+  const snapshot = await getDocs(q)
+  const all = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() } as Video))
+  for (let i = all.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [all[i], all[j]] = [all[j], all[i]]
+  }
+  return all.slice(0, count)
 }
 
 export const getVideo = async (id: string): Promise<Video | null> => {
