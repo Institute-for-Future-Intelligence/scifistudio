@@ -172,9 +172,12 @@ function VideoEditor() {
   }
 
   // Load video from URL parameter
+  const lastLoadedIdRef = useRef<string | null>(null)
+
   useEffect(() => {
     const id = searchParams.get('id')
-    if (id && user) {
+    if (id && user && id !== lastLoadedIdRef.current) {
+      lastLoadedIdRef.current = id
       loadVideoById(id)
     }
   }, [searchParams, user])
@@ -393,9 +396,10 @@ function VideoEditor() {
       setUpdatedAt(null)
       setVideoId(null)
       videoIdRef.current = null
+      lastLoadedIdRef.current = null
       setHasUnsavedChanges(false)
       clearLocalDraft()
-      navigate('/video-editor')
+      navigate('/video')
     })
   }
 
@@ -429,7 +433,6 @@ function VideoEditor() {
       setHasUnsavedChanges(false)
       clearLocalDraft()
       setLoadModalOpen(false)
-      message.success(t('videoEditor.videoLoaded'))
     })
   }
 
@@ -701,48 +704,52 @@ function VideoEditor() {
         footer={null}
         width={600}
       >
-        {loadingVideos ? (
-          <div style={{ textAlign: 'center', padding: 48 }}>
-            <Spin />
-          </div>
-        ) : savedVideos.length === 0 ? (
-          <div style={{ textAlign: 'center', padding: 48, color: '#999' }}>
-            {t('videoEditor.noSavedVideos')}
-          </div>
-        ) : (
-          <List
-            dataSource={savedVideos}
-            renderItem={(video) => (
-              <List.Item
-                actions={[
-                  <Button
-                    key="load"
-                    type="link"
-                    onClick={() => handleLoadVideo(video)}
-                  >
-                    {t('storyEditor.load')}
-                  </Button>,
-                  <Button
-                    key="delete"
-                    type="link"
-                    danger
-                    icon={<DeleteOutlined />}
-                    onClick={() => handleDeleteVideo(video)}
-                  />,
-                ]}
-              >
-                <List.Item.Meta
-                  title={video.title}
-                  description={
-                    video.prompt.length > 100
-                      ? video.prompt.substring(0, 100) + '...'
-                      : video.prompt
-                  }
-                />
-              </List.Item>
-            )}
-          />
-        )}
+        <div style={{ maxHeight: 480, overflowY: 'auto' }}>
+          {loadingVideos ? (
+            <div style={{ textAlign: 'center', padding: 48 }}>
+              <Spin />
+            </div>
+          ) : (
+            <List
+              dataSource={savedVideos}
+              pagination={{
+                pageSize: 10,
+                size: 'small',
+                showSizeChanger: false,
+              }}
+              renderItem={(video) => (
+                <List.Item
+                  actions={[
+                    <Button
+                      key="load"
+                      type="link"
+                      onClick={() => handleLoadVideo(video)}
+                    >
+                      {t('storyEditor.load')}
+                    </Button>,
+                    <Button
+                      key="delete"
+                      type="link"
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => handleDeleteVideo(video)}
+                    />,
+                  ]}
+                >
+                  <List.Item.Meta
+                    title={video.title}
+                    description={
+                      video.prompt.length > 100
+                        ? video.prompt.substring(0, 100) + '...'
+                        : video.prompt
+                    }
+                  />
+                </List.Item>
+              )}
+              locale={{ emptyText: t('videoEditor.noSavedVideos') }}
+            />
+          )}
+        </div>
       </Modal>
     </div>
   )

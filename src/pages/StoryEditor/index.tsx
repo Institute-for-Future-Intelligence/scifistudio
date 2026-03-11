@@ -787,38 +787,45 @@ function StoryEditor() {
         footer={null}
         width={600}
       >
-        <List
-          loading={loadingStorybooks}
-          dataSource={savedStorybooks}
-          renderItem={(storybook) => (
-            <List.Item
-              actions={[
-                <Button
-                  type="link"
-                  onClick={() => handleLoadStorybook(storybook)}
-                >
-                  {t('storyEditor.load')}
-                </Button>,
-                <Button
-                  type="link"
-                  danger
-                  icon={<DeleteOutlined />}
-                  onClick={() => handleDeleteStorybook(storybook.id!)}
-                />,
-              ]}
-            >
-              <List.Item.Meta
-                title={storybook.title}
-                description={`${storybook.frames.length} ${t('storyEditor.pages')} • ${
-                        storybook.updatedAt.toMillis() === storybook.createdAt.toMillis()
-                          ? `${t('home.created')} ${storybook.createdAt.toDate().toLocaleDateString()}`
-                          : `${t('home.updated')} ${storybook.updatedAt.toDate().toLocaleDateString()}`
-                      }`}
-              />
-            </List.Item>
-          )}
-          locale={{ emptyText: t('storyEditor.noSavedStorybooks') }}
-        />
+        <div style={{ maxHeight: 480, overflowY: 'auto' }}>
+          <List
+            loading={loadingStorybooks}
+            dataSource={savedStorybooks}
+            pagination={{
+              pageSize: 10,
+              size: 'small',
+              showSizeChanger: false,
+            }}
+            renderItem={(storybook) => (
+              <List.Item
+                actions={[
+                  <Button
+                    type="link"
+                    onClick={() => handleLoadStorybook(storybook)}
+                  >
+                    {t('storyEditor.load')}
+                  </Button>,
+                  <Button
+                    type="link"
+                    danger
+                    icon={<DeleteOutlined />}
+                    onClick={() => handleDeleteStorybook(storybook.id!)}
+                  />,
+                ]}
+              >
+                <List.Item.Meta
+                  title={storybook.title}
+                  description={`${storybook.frames.length} ${t('storyEditor.pages')} • ${
+                          storybook.updatedAt.toMillis() === storybook.createdAt.toMillis()
+                            ? `${t('home.created')} ${storybook.createdAt.toDate().toLocaleDateString()}`
+                            : `${t('home.updated')} ${storybook.updatedAt.toDate().toLocaleDateString()}`
+                        }`}
+                />
+              </List.Item>
+            )}
+            locale={{ emptyText: t('storyEditor.noSavedStorybooks') }}
+          />
+        </div>
       </Modal>
 
           </div>
