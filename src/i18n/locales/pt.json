@@ -6,7 +6,9 @@
   "nav": {
     "home": "Inicio",
     "storyEditor": "Editor de Historias",
-    "videoEditor": "Editor de Videos"
+    "videoEditor": "Editor de Videos",
+    "about": "Sobre nós",
+    "settings": "Configurações"
   },
   "auth": {
     "signIn": "Entrar",
@@ -172,6 +174,27 @@
     "newTag": "Nova tag...",
     "generating": "Gerando tags...",
     "rememberToSave": "Lembre-se de salvar as alteracoes!"
+  },
+  "about": {
+    "title": "Sobre nós",
+    "description": "Estudio Sci-Fi é uma plataforma criativa desenvolvida pelo Institute for Future Intelligence, Inc. que permite a qualquer pessoa criar incríveis livros de histórias de ficção científica e vídeos curtos usando tecnologia de IA generativa de ponta.",
+    "missionTitle": "Nossa Missão",
+    "missionDescription": "Acreditamos na democratização da narrativa criativa por meio da inteligência artificial. Nossa missão é facilitar para todos — de escritores aspirantes a criadores experientes — dar vida às suas visões de ficção científica com ilustrações e vídeos gerados por IA.",
+    "technologyTitle": "Tecnologia",
+    "technologyDescription": "Estudio Sci-Fi utiliza modelos de IA de última geração, incluindo Google Gemini para geração de histórias e criação de imagens, e Vertex AI Veo para geração de vídeos. A plataforma é construída com React, TypeScript e Firebase.",
+    "contactTitle": "Contato",
+    "contactDescription": "Para perguntas, feedback ou consultas de colaboração, visite o Institute for Future Intelligence em intofuture.org."
+  },
+  "settings": {
+    "title": "Configurações",
+    "account": "Conta",
+    "language": "Idioma",
+    "selectLanguage": "Selecionar idioma:",
+    "languageChanged": "Idioma alterado com sucesso",
+    "notSignedIn": "Você não está conectado.",
+    "unnamed": "Usuário sem nome",
+    "userId": "ID do usuário",
+    "provider": "Provedor de login"
   },
   "audio": {
     "readAloud": "Ler em voz alta",

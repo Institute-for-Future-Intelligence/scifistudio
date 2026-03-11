@@ -6,7 +6,9 @@
   "nav": {
     "home": "Inicio",
     "storyEditor": "Editor de Historias",
-    "videoEditor": "Editor de Videos"
+    "videoEditor": "Editor de Videos",
+    "about": "Sobre nosotros",
+    "settings": "Configuración"
   },
   "auth": {
     "signIn": "Iniciar Sesión",
@@ -172,6 +174,27 @@
     "newTag": "Nueva etiqueta...",
     "generating": "Generando etiquetas...",
     "rememberToSave": "¡Recuerda guardar para conservar los cambios!"
+  },
+  "about": {
+    "title": "Sobre nosotros",
+    "description": "Estudio Sci-Fi es una plataforma creativa desarrollada por el Institute for Future Intelligence, Inc. que permite a cualquier persona crear impresionantes libros de cuentos de ciencia ficción y videos cortos utilizando tecnología de IA generativa de vanguardia.",
+    "missionTitle": "Nuestra Misión",
+    "missionDescription": "Creemos en democratizar la narrativa creativa a través de la inteligencia artificial. Nuestra misión es facilitar a todos — desde escritores aspirantes hasta creadores experimentados — dar vida a sus visiones de ciencia ficción con ilustraciones y videos generados por IA.",
+    "technologyTitle": "Tecnología",
+    "technologyDescription": "Estudio Sci-Fi aprovecha modelos de IA de última generación, incluyendo Google Gemini para la generación de historias y creación de imágenes, y Vertex AI Veo para la generación de videos. La plataforma está construida con React, TypeScript y Firebase.",
+    "contactTitle": "Contacto",
+    "contactDescription": "Para preguntas, comentarios o consultas de colaboración, visite el Institute for Future Intelligence en intofuture.org."
+  },
+  "settings": {
+    "title": "Configuración",
+    "account": "Cuenta",
+    "language": "Idioma",
+    "selectLanguage": "Seleccionar idioma:",
+    "languageChanged": "Idioma cambiado exitosamente",
+    "notSignedIn": "No has iniciado sesión.",
+    "unnamed": "Usuario sin nombre",
+    "userId": "ID de usuario",
+    "provider": "Proveedor de inicio de sesión"
   },
   "audio": {
     "readAloud": "Leer en voz alta",

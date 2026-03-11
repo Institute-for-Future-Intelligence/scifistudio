@@ -39,9 +39,9 @@ function StoryEditor() {
   const { user } = useAuth()
   const { t, i18n } = useTranslation()
   const [storybookId, setStorybookId] = useState<string | null>(null)
-  const [prompt, setPrompt] = useState('')
-  const [enhancedPrompt, setEnhancedPrompt] = useState('')
-  const [storyTitle, setStoryTitle] = useState('')
+  const [prompt, setPrompt] = useState(() => localStorage.getItem('storyEditor_prompt') || '')
+  const [enhancedPrompt, setEnhancedPrompt] = useState(() => localStorage.getItem('storyEditor_enhancedPrompt') || '')
+  const [storyTitle, setStoryTitle] = useState(() => localStorage.getItem('storyEditor_title') || '')
   const [frames, setFrames] = useState<StoryFrame[]>([])
   const [currentPage, setCurrentPage] = useState(0)
   const [loading, setLoading] = useState(false)
@@ -62,6 +62,17 @@ function StoryEditor() {
   const [updatedAt, setUpdatedAt] = useState<Timestamp | null>(null)
   const storybookIdRef = useRef<string | null>(null)
   const pendingTagsRef = useRef<string[] | null>(null)
+
+  // Persist text inputs to localStorage
+  useEffect(() => { localStorage.setItem('storyEditor_title', storyTitle) }, [storyTitle])
+  useEffect(() => { localStorage.setItem('storyEditor_prompt', prompt) }, [prompt])
+  useEffect(() => { localStorage.setItem('storyEditor_enhancedPrompt', enhancedPrompt) }, [enhancedPrompt])
+
+  const clearLocalDraft = () => {
+    localStorage.removeItem('storyEditor_title')
+    localStorage.removeItem('storyEditor_prompt')
+    localStorage.removeItem('storyEditor_enhancedPrompt')
+  }
 
   // Keep ref in sync with state
   useEffect(() => {
@@ -131,6 +142,7 @@ function StoryEditor() {
         setUpdatedAt(storybook.updatedAt)
         setCurrentPage(0)
         setHasUnsavedChanges(false)
+        clearLocalDraft()
       } else {
         message.error(t('storyEditor.storybookNotFound'))
         navigate('/story')
@@ -208,33 +220,57 @@ function StoryEditor() {
       )
       setFrames(generatedFrames)
       setCurrentPage(0)
-      setHasUnsavedChanges(true)
       message.success(t('storyEditor.storybookGenerated'))
-      // Remind user to save if this is a new storybook
-      if (!storybookId) {
-        setTimeout(() => {
-          message.warning(t('storyEditor.rememberToSave'), 5)
-        }, 1500)
+
+      // Auto-save to Firestore
+      if (user) {
+        const saveTitle = storyTitle.trim() || 'Untitled Storybook'
+        try {
+          if (storybookId) {
+            await updateStorybook(storybookId, {
+              authorName: user.displayName || (user.isAnonymous ? 'Anonymous' : 'Unknown'),
+              title: saveTitle,
+              prompt: finalPrompt,
+              frames: generatedFrames,
+              tags: [],
+            }, user.uid)
+            message.success(t('storyEditor.storybookUpdated'))
+          } else {
+            const newId = await createStorybook({
+              userId: user.uid,
+              authorName: user.displayName || (user.isAnonymous ? 'Anonymous' : 'Unknown'),
+              title: saveTitle,
+              prompt: finalPrompt,
+              frames: generatedFrames,
+              language: i18n.language,
+              tags: [],
+            })
+            setStorybookId(newId)
+            navigate(`/story/${newId}`, { replace: true })
+            message.success(t('storyEditor.storybookSaved'))
+          }
+          setHasUnsavedChanges(false)
+          clearLocalDraft()
+          await loadSavedStorybooks()
+        } catch (saveErr) {
+          console.error('Auto-save failed:', saveErr)
+          setHasUnsavedChanges(true)
+        }
       }
+
       // Generate tags (non-blocking)
       setGeneratingTags(true)
       generateStoryTags(finalPrompt, storyTitle, i18n.language)
         .then(async (generatedTags) => {
-          console.log('Generated tags:', generatedTags)
           setTags(generatedTags)
-          // Auto-save tags if storybook is already saved, otherwise mark as pending
           const currentId = storybookIdRef.current
-          console.log('Current storybookId for auto-save:', currentId)
           if (currentId && generatedTags.length > 0) {
             try {
               await updateStorybook(currentId, { tags: generatedTags })
-              console.log('Tags auto-saved to Firestore')
             } catch (err) {
               console.error('Failed to auto-save tags:', err)
             }
           } else if (generatedTags.length > 0) {
-            // Store pending tags to be saved when storybookId becomes available
-            console.log('Storing pending tags:', generatedTags)
             pendingTagsRef.current = generatedTags
           }
         })
@@ -280,6 +316,7 @@ function StoryEditor() {
           tags: tags || [],
         }, user.uid)
         setHasUnsavedChanges(false)
+        clearLocalDraft()
         message.success(t('storyEditor.storybookUpdated'))
       } else {
         // Create new
@@ -294,6 +331,7 @@ function StoryEditor() {
         })
         setStorybookId(newId)
         setHasUnsavedChanges(false)
+        clearLocalDraft()
         navigate(`/story/${newId}`, { replace: true })
         message.success(t('storyEditor.storybookSaved'))
       }
@@ -318,6 +356,7 @@ function StoryEditor() {
     setCurrentPage(0)
     setError('')
     setHasUnsavedChanges(false)
+    clearLocalDraft()
     navigate('/story')
   }
 
@@ -334,6 +373,7 @@ function StoryEditor() {
       setUpdatedAt(storybook.updatedAt)
       setCurrentPage(0)
       setHasUnsavedChanges(false)
+      clearLocalDraft()
       setShowLoadModal(false)
       navigate(`/story/${storybook.id}`, { replace: true })
       message.success(t('storyEditor.storybookLoaded'))

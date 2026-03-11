@@ -28,7 +28,8 @@
       "WebFetch(domain:ai.google.dev)",
       "Bash(GITHUB_PAGES=true npm run build 2>&1 && npx gh-pages -d dist 2>&1)",
       "Bash(git ls-tree:*)",
-      "Bash(GITHUB_PAGES=true npm run build 2>&1 && cp dist/index.html dist/404.html && npx gh-pages -d dist --dotfiles 2>&1)"
+      "Bash(GITHUB_PAGES=true npm run build 2>&1 && cp dist/index.html dist/404.html && npx gh-pages -d dist --dotfiles 2>&1)",
+      "Bash(cd C:/Users/charl/WebstormProjects/scifistudio && node -e 'var fs=require\\(\"fs\"\\);var locs=[\"zh-CN\",\"zh-TW\",\"ja\",\"ko\",\"de\",\"es\",\"fr\",\"it\",\"pt\",\"ru\",\"ar\",\"el\",\"fa\",\"id\",\"th\",\"tr\",\"uk\"];var ok=true;locs.forEach\\(function\\(loc\\){try{var d=JSON.parse\\(fs.readFileSync\\(\"src/i18n/locales/\"+loc+\".json\",\"utf8\"\\)\\);var a=d.nav&&d.nav.about;var b=d.about&&d.about.title&&d.about.contactDescription;if\\(a&&b\\){console.log\\(loc+\": OK\"\\)}else{console.log\\(loc+\": MISSING\"\\);ok=false}}catch\\(e\\){console.log\\(loc+\": ERROR \"+e.message\\);ok=false}}\\);console.log\\(ok?\"ALL OK\":\"ISSUES\"\\)')"
     ]
   }
 }

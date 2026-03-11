@@ -329,65 +329,93 @@ export const generateVideo = onCall(
     try {
       console.log('Starting video generation with prompt:', prompt.substring(0, 100), 'duration:', videoDuration)
 
-      // Use Veo 3.1 via Vertex AI for higher rate limits
       const accessToken = await getAccessToken()
       const veoModel = 'veo-3.1-generate-preview'
       const veoUrl = `${VERTEX_BASE}/projects/${GCP_PROJECT}/locations/${GCP_REGION}/publishers/google/models/${veoModel}:predictLongRunning`
 
-      console.log('Calling Veo 3.1 via Vertex AI...')
+      // Simplify prompt for Veo — strip overly detailed/cinematic language that triggers content filters
+      const simplifyPrompt = (p: string): string => {
+        // Keep it under 150 chars, remove common trigger patterns
+        let simplified = p
+          .replace(/cinematic|dramatic|intense|violent|dark|bloody|gritty|brutal|destruction|explod|attack|weapon|gun|shoot|kill|death|die|dead/gi, '')
+          .replace(/\s+/g, ' ')
+          .trim()
+        if (simplified.length > 150) {
+          simplified = simplified.substring(0, 147) + '...'
+        }
+        return simplified || p.substring(0, 150)
+      }
 
-      const veoResponse = await fetch(veoUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify({
-          instances: [{
-            prompt: prompt
-          }],
-          parameters: {
-            aspectRatio: '16:9',
-            durationSeconds: videoDuration,
+      // Try Veo with original prompt, then retry with simplified prompt if content-filtered
+      const promptsToTry = [prompt, simplifyPrompt(prompt)]
+      for (let attempt = 0; attempt < promptsToTry.length; attempt++) {
+        const currentPrompt = promptsToTry[attempt]
+        console.log(`Veo attempt ${attempt + 1} with prompt:`, currentPrompt.substring(0, 100))
+
+        const veoResponse = await fetch(veoUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${accessToken}`,
           },
-        }),
-      })
+          body: JSON.stringify({
+            instances: [{ prompt: currentPrompt }],
+            parameters: {
+              aspectRatio: '16:9',
+              durationSeconds: videoDuration,
+            },
+          }),
+        })
 
-      console.log('Veo response status:', veoResponse.status)
+        console.log('Veo response status:', veoResponse.status)
 
-      if (veoResponse.ok) {
-        const result = await veoResponse.json() as {
-          name?: string
-          done?: boolean
-          error?: { message?: string }
-        }
-        console.log('Veo result:', JSON.stringify(result).substring(0, 500))
-
-        // predictLongRunning returns an operation name for polling
-        if (result.name) {
-          console.log('Got operation:', result.name)
-          const videoResult = await pollVertexVeoOperation(result.name, accessToken, videoDuration)
-          if (videoResult) {
-            return videoResult
+        if (veoResponse.ok) {
+          const result = await veoResponse.json() as {
+            name?: string
+            done?: boolean
+            error?: { message?: string }
           }
-          // If polling returned null, fall through to image fallback
-          console.log('Veo polling completed but no video produced, falling back to image...')
+          console.log('Veo result:', JSON.stringify(result).substring(0, 500))
+
+          if (result.name) {
+            console.log('Got operation:', result.name)
+            const videoResult = await pollVertexVeoOperation(result.name, accessToken, videoDuration)
+
+            if (videoResult && 'videoUrl' in videoResult) {
+              return videoResult
+            }
+
+            // Content filtered — retry with simplified prompt
+            if (videoResult && 'contentFiltered' in videoResult) {
+              console.log('Content filtered on attempt', attempt + 1)
+              if (attempt < promptsToTry.length - 1) {
+                console.log('Retrying with simplified prompt...')
+                continue
+              }
+              // Both attempts filtered — fall through to image with error message
+              console.log('Both Veo attempts content-filtered, falling back to image...')
+            } else {
+              console.log('Veo polling returned null, falling back to image...')
+            }
+          }
+
+          if (result.error) {
+            console.log('Veo error:', result.error.message)
+          }
+        } else {
+          const errText = await veoResponse.text()
+          console.log('Veo Vertex AI error response:', errText.substring(0, 500))
+
+          if (veoResponse.status === 429) {
+            throw new HttpsError(
+              'resource-exhausted',
+              'Veo API rate limit exceeded. Please wait a few minutes and try again.'
+            )
+          }
         }
 
-        if (result.error) {
-          console.log('Veo error:', result.error.message)
-        }
-      } else {
-        const errText = await veoResponse.text()
-        console.log('Veo Vertex AI error response:', errText.substring(0, 500))
-
-        // If rate limited, tell the user directly instead of falling back silently
-        if (veoResponse.status === 429) {
-          throw new HttpsError(
-            'resource-exhausted',
-            'Veo API rate limit exceeded. Please wait a few minutes and try again.'
-          )
-        }
+        // If we got here without continue or return, break to fall through
+        break
       }
 
       // If Veo fails or returns no video, fall back to image generation
@@ -421,7 +449,7 @@ export const generateVideo = onCall(
             videoUrl: `data:image/png;base64,${imagenResult.generatedImages[0].image.imageBytes}`,
             durationSeconds: 0,
             isImage: true,
-            message: 'Video generation not available. Generated image instead.',
+            message: 'Veo content filter blocked the prompt. Try rephrasing your concept. Generated image instead.',
           }
         }
       }
@@ -475,7 +503,7 @@ export const generateVideo = onCall(
               videoUrl: `data:${part.inlineData.mimeType};base64,${part.inlineData.data}`,
               durationSeconds: 0,
               isImage: true,
-              message: 'Video generation requires Veo API access. Generated image instead.',
+              message: 'Veo video generation failed. Try a different or simpler prompt. Generated image instead.',
             }
           }
         }
@@ -498,7 +526,9 @@ export const generateVideo = onCall(
 
 // Poll Vertex AI Veo operation for video completion
 // Returns null if video generation fails (to allow fallback to image)
-async function pollVertexVeoOperation(operationName: string, accessToken: string, videoDuration: number = 8): Promise<{ videoUrl: string; durationSeconds: number } | null> {
+type VeoResult = { videoUrl: string; durationSeconds: number } | { contentFiltered: true } | null
+
+async function pollVertexVeoOperation(operationName: string, accessToken: string, videoDuration: number = 8): Promise<VeoResult> {
   const maxWaitTime = 300000 // 5 minutes
   const pollInterval = 5000 // 5 seconds
   const startTime = Date.now()
@@ -565,6 +595,9 @@ async function pollVertexVeoOperation(operationName: string, accessToken: string
 
     if (result.error) {
       console.log('Veo operation error:', result.error.message)
+      if (result.error.message?.includes('usage guidelines') || result.error.message?.includes('violate')) {
+        return { contentFiltered: true }
+      }
       return null // Return null to trigger fallback
     }
 

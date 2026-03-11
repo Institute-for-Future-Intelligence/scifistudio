@@ -6,7 +6,9 @@
   "nav": {
     "home": "首页",
     "storyEditor": "故事编辑器",
-    "videoEditor": "视频编辑器"
+    "videoEditor": "视频编辑器",
+    "about": "关于我们",
+    "settings": "设置"
   },
   "auth": {
     "signIn": "登录",
@@ -172,6 +174,27 @@
     "newTag": "新标签...",
     "generating": "生成标签中...",
     "rememberToSave": "记得保存以保留标签更改！"
+  },
+  "about": {
+    "title": "关于我们",
+    "description": "科幻工作室是由未来智能研究所开发的创意平台，利用前沿的生成式人工智能技术，让每个人都能创作出精美的科幻故事书和短视频。",
+    "missionTitle": "我们的使命",
+    "missionDescription": "我们相信通过人工智能实现创意叙事的民主化。我们的使命是让每个人——从有抱负的作家到经验丰富的创作者——都能轻松地通过AI生成的插画和视频将他们的科幻愿景变为现实。",
+    "technologyTitle": "技术",
+    "technologyDescription": "科幻工作室利用最先进的AI模型，包括用于故事生成和图像创作的Google Gemini，以及用于视频生成的Vertex AI Veo。该平台使用React、TypeScript和Firebase构建。",
+    "contactTitle": "联系方式",
+    "contactDescription": "如有问题、反馈或合作意向，请访问未来智能研究所网站 intofuture.org。"
+  },
+  "settings": {
+    "title": "设置",
+    "account": "账户",
+    "language": "语言",
+    "selectLanguage": "选择语言：",
+    "languageChanged": "语言更改成功",
+    "notSignedIn": "您尚未登录。",
+    "unnamed": "未命名用户",
+    "userId": "用户ID",
+    "provider": "登录方式"
   },
   "audio": {
     "readAloud": "朗读",

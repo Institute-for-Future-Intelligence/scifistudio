@@ -19,30 +19,34 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import { Routes, Route } from 'react-router-dom'
-import AppLayout from './components/layout/AppLayout'
-import Home from './pages/Home'
-import StoryEditor from './pages/StoryEditor'
-import VideoEditor from './pages/VideoEditor'
-import StorybookView from './pages/StorybookView'
-import VideoView from './pages/VideoView'
-import About from './pages/About'
-import Settings from './pages/Settings'
+import { Typography } from 'antd'
+import { useTranslation } from 'react-i18next'
 
-function App() {
+const { Title, Paragraph } = Typography
+
+function About() {
+  const { t } = useTranslation()
+
   return (
-    <Routes>
-      <Route path="/" element={<AppLayout />}>
-        <Route index element={<Home />} />
-        <Route path="story/:id?" element={<StoryEditor />} />
-        <Route path="video" element={<VideoEditor />} />
-        <Route path="about" element={<About />} />
-        <Route path="settings" element={<Settings />} />
-      </Route>
-      <Route path="view/:id" element={<StorybookView />} />
-      <Route path="watch/:id" element={<VideoView />} />
-    </Routes>
+    <div style={{ maxWidth: 800, margin: '0 auto' }}>
+      <Title level={2}>{t('about.title')}</Title>
+      <Paragraph style={{ fontSize: 16 }}>
+        {t('about.description')}
+      </Paragraph>
+      <Title level={4}>{t('about.missionTitle')}</Title>
+      <Paragraph>
+        {t('about.missionDescription')}
+      </Paragraph>
+      <Title level={4}>{t('about.technologyTitle')}</Title>
+      <Paragraph>
+        {t('about.technologyDescription')}
+      </Paragraph>
+      <Title level={4}>{t('about.contactTitle')}</Title>
+      <Paragraph>
+        {t('about.contactDescription')}
+      </Paragraph>
+    </div>
   )
 }
 
-export default App
+export default About

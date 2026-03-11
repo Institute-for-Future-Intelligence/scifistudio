@@ -6,7 +6,9 @@
   "nav": {
     "home": "홈",
     "storyEditor": "스토리 편집기",
-    "videoEditor": "비디오 편집기"
+    "videoEditor": "비디오 편집기",
+    "about": "소개",
+    "settings": "설정"
   },
   "auth": {
     "signIn": "로그인",
@@ -172,6 +174,27 @@
     "newTag": "새 태그...",
     "generating": "태그 생성 중...",
     "rememberToSave": "변경 사항을 저장하세요!"
+  },
+  "about": {
+    "title": "소개",
+    "description": "SF 스튜디오는 Institute for Future Intelligence, Inc.에서 개발한 창의적인 플랫폼으로, 최첨단 생성형 AI 기술을 활용하여 누구나 멋진 SF 스토리북과 짧은 비디오를 만들 수 있도록 합니다.",
+    "missionTitle": "우리의 미션",
+    "missionDescription": "우리는 인공지능을 통한 창의적 스토리텔링의 민주화를 믿습니다. 우리의 미션은 의욕적인 작가부터 숙련된 크리에이터까지 모든 사람이 AI가 생성한 일러스트와 비디오를 통해 SF 비전을 쉽게 실현할 수 있도록 하는 것입니다.",
+    "technologyTitle": "기술",
+    "technologyDescription": "SF 스튜디오는 스토리 생성 및 이미지 제작을 위한 Google Gemini, 비디오 생성을 위한 Vertex AI Veo 등 최첨단 AI 모델을 활용합니다. 플랫폼은 React, TypeScript, Firebase로 구축되었습니다.",
+    "contactTitle": "연락처",
+    "contactDescription": "질문, 피드백 또는 협업 문의는 Institute for Future Intelligence 웹사이트 intofuture.org를 방문해 주세요."
+  },
+  "settings": {
+    "title": "설정",
+    "account": "계정",
+    "language": "언어",
+    "selectLanguage": "언어 선택:",
+    "languageChanged": "언어가 성공적으로 변경되었습니다",
+    "notSignedIn": "로그인하지 않았습니다.",
+    "unnamed": "이름 없는 사용자",
+    "userId": "사용자 ID",
+    "provider": "로그인 방식"
   },
   "audio": {
     "readAloud": "소리내어 읽기",

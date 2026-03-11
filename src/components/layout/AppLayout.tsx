@@ -30,6 +30,8 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   GoogleOutlined,
+  InfoCircleOutlined,
+  SettingOutlined,
 } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
@@ -62,6 +64,16 @@ function AppLayout() {
       key: '/video',
       icon: <VideoCameraOutlined />,
       label: t('nav.videoEditor'),
+    },
+    {
+      key: '/settings',
+      icon: <SettingOutlined />,
+      label: t('nav.settings'),
+    },
+    {
+      key: '/about',
+      icon: <InfoCircleOutlined />,
+      label: t('nav.about'),
     },
   ]
 
@@ -101,6 +113,8 @@ function AppLayout() {
     if (location.pathname === '/') return '/'
     if (location.pathname.startsWith('/story')) return '/story'
     if (location.pathname.startsWith('/video')) return '/video'
+    if (location.pathname.startsWith('/about')) return '/about'
+    if (location.pathname.startsWith('/settings')) return '/settings'
     return '/'
   }
 

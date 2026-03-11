@@ -74,10 +74,10 @@ function VideoEditor() {
   const [searchParams] = useSearchParams()
 
   // Form state
-  const [title, setTitle] = useState('')
-  const [prompt, setPrompt] = useState('')
+  const [title, setTitle] = useState(() => localStorage.getItem('videoEditor_title') || '')
+  const [prompt, setPrompt] = useState(() => localStorage.getItem('videoEditor_prompt') || '')
   const [duration, setDuration] = useState(8)
-  const [enhancedPrompt, setEnhancedPrompt] = useState('')
+  const [enhancedPrompt, setEnhancedPrompt] = useState(() => localStorage.getItem('videoEditor_enhancedPrompt') || '')
 
   // Video state
   const [videoUrl, setVideoUrl] = useState('')
@@ -102,6 +102,17 @@ function VideoEditor() {
   // Refs for async operations
   const videoIdRef = useRef<string | null>(null)
   const pendingTagsRef = useRef<string[] | null>(null)
+
+  // Persist text inputs to localStorage
+  useEffect(() => { localStorage.setItem('videoEditor_title', title) }, [title])
+  useEffect(() => { localStorage.setItem('videoEditor_prompt', prompt) }, [prompt])
+  useEffect(() => { localStorage.setItem('videoEditor_enhancedPrompt', enhancedPrompt) }, [enhancedPrompt])
+
+  const clearLocalDraft = () => {
+    localStorage.removeItem('videoEditor_title')
+    localStorage.removeItem('videoEditor_prompt')
+    localStorage.removeItem('videoEditor_enhancedPrompt')
+  }
 
   // Extract thumbnail from video element
   const extractThumbnail = (videoSrc: string): Promise<string> => {
@@ -183,6 +194,7 @@ function VideoEditor() {
         setVideoId(id)
         videoIdRef.current = id
         setHasUnsavedChanges(false)
+        clearLocalDraft()
         message.success(t('videoEditor.videoLoaded'))
       } else {
         message.error(t('videoEditor.videoNotFound'))
@@ -236,24 +248,37 @@ function VideoEditor() {
 
       setVideoUrl(result.videoUrl)
       setIsImage(result.isImage || false)
-      setHasUnsavedChanges(true)
 
       // Extract thumbnail from video, or use image directly as thumbnail
+      let thumbDataUrl = ''
       if (result.isImage) {
-        setThumbnailDataUrl(result.videoUrl) // Image itself is the thumbnail
+        thumbDataUrl = result.videoUrl
+        setThumbnailDataUrl(result.videoUrl)
         message.info(result.message || 'Video generation not available. Generated image instead.')
       } else {
         message.success(t('videoEditor.videoGenerated'))
-        // Extract a frame from the video for thumbnail
-        extractThumbnail(result.videoUrl)
-          .then(thumb => setThumbnailDataUrl(thumb))
-          .catch(err => console.error('Failed to extract thumbnail:', err))
+        try {
+          thumbDataUrl = await extractThumbnail(result.videoUrl)
+          setThumbnailDataUrl(thumbDataUrl)
+        } catch (err) {
+          console.error('Failed to extract thumbnail:', err)
+        }
+      }
+
+      // Auto-save to Firestore
+      if (user) {
+        try {
+          await saveVideo(result.videoUrl, thumbDataUrl, [], videoId)
+        } catch (saveErr) {
+          console.error('Auto-save failed:', saveErr)
+          setHasUnsavedChanges(true)
+        }
       }
 
       // Generate tags (non-blocking)
       setGeneratingTags(true)
       generateVideoTags(finalPrompt, title)
-        .then((generatedTags) => {
+        .then(async (generatedTags) => {
           setTags(generatedTags)
           pendingTagsRef.current = generatedTags
 
@@ -273,6 +298,75 @@ function VideoEditor() {
     }
   }
 
+  const saveVideo = async (
+    videoData: string,
+    thumbData: string,
+    tagsData: string[],
+    currentVideoId: string | null,
+    showMessages = true,
+  ) => {
+    if (!user) return
+    if (!videoData || !title.trim()) return
+
+    const tagsToSave = tagsData
+
+    // Upload video/image to Storage if it's a base64 data URI
+    let savedUrl = videoData
+    const saveId = currentVideoId || crypto.randomUUID()
+    if (videoData.startsWith('data:')) {
+      if (currentVideoId) {
+        await deleteVideoFiles(user.uid, currentVideoId)
+      }
+      const ext = videoData.startsWith('data:video') ? 'mp4' : 'png'
+      const path = `videos/${user.uid}/${saveId}/video.${ext}`
+      savedUrl = await uploadBase64Video(videoData, path)
+    }
+
+    // Upload thumbnail to Storage
+    let savedThumbnailUrl = ''
+    if (thumbData && thumbData.startsWith('data:')) {
+      try {
+        const thumbPath = `videos/${user.uid}/${saveId}/thumbnail.jpg`
+        savedThumbnailUrl = await uploadBase64Video(thumbData, thumbPath)
+      } catch (err) {
+        console.error('Failed to upload thumbnail:', err)
+      }
+    }
+
+    if (currentVideoId) {
+      const updateData: Record<string, unknown> = {
+        title,
+        prompt: enhancedPrompt || prompt,
+        videoUrl: savedUrl,
+        durationSeconds: duration,
+        tags: tagsToSave,
+      }
+      if (savedThumbnailUrl) {
+        updateData.thumbnailUrl = savedThumbnailUrl
+      }
+      await updateVideo(currentVideoId, updateData)
+      if (showMessages) message.success(t('videoEditor.videoUpdated'))
+    } else {
+      const newId = await createVideo({
+        userId: user.uid,
+        authorName: user.displayName || t('auth.guest'),
+        title,
+        prompt: enhancedPrompt || prompt,
+        videoUrl: savedUrl,
+        thumbnailUrl: savedThumbnailUrl,
+        durationSeconds: duration,
+        tags: tagsToSave,
+        status: 'completed',
+      })
+      setVideoId(newId)
+      videoIdRef.current = newId
+      pendingTagsRef.current = null
+      if (showMessages) message.success(t('videoEditor.videoSaved'))
+    }
+    setHasUnsavedChanges(false)
+    clearLocalDraft()
+  }
+
   const handleSave = async () => {
     if (!user) return
     if (!videoUrl) {
@@ -286,63 +380,7 @@ function VideoEditor() {
 
     setSaving(true)
     try {
-      const tagsToSave = pendingTagsRef.current || tags
-
-      // Upload video/image to Storage if it's a base64 data URI
-      let savedUrl = videoUrl
-      const saveId = videoId || crypto.randomUUID()
-      if (videoUrl.startsWith('data:')) {
-        // Delete old files first when updating to avoid orphaned files
-        if (videoId) {
-          await deleteVideoFiles(user.uid, videoId)
-        }
-        const ext = videoUrl.startsWith('data:video') ? 'mp4' : 'png'
-        const path = `videos/${user.uid}/${saveId}/video.${ext}`
-        savedUrl = await uploadBase64Video(videoUrl, path)
-      }
-
-      // Upload thumbnail to Storage
-      let savedThumbnailUrl = ''
-      if (thumbnailDataUrl && thumbnailDataUrl.startsWith('data:')) {
-        try {
-          const thumbPath = `videos/${user.uid}/${saveId}/thumbnail.jpg`
-          savedThumbnailUrl = await uploadBase64Video(thumbnailDataUrl, thumbPath)
-        } catch (err) {
-          console.error('Failed to upload thumbnail:', err)
-        }
-      }
-
-      if (videoId) {
-        const updateData: Record<string, unknown> = {
-          title,
-          prompt: enhancedPrompt || prompt,
-          videoUrl: savedUrl,
-          durationSeconds: duration,
-          tags: tagsToSave,
-        }
-        if (savedThumbnailUrl) {
-          updateData.thumbnailUrl = savedThumbnailUrl
-        }
-        await updateVideo(videoId, updateData)
-        message.success(t('videoEditor.videoUpdated'))
-      } else {
-        const newId = await createVideo({
-          userId: user.uid,
-          authorName: user.displayName || t('auth.guest'),
-          title,
-          prompt: enhancedPrompt || prompt,
-          videoUrl: savedUrl,
-          thumbnailUrl: savedThumbnailUrl,
-          durationSeconds: duration,
-          tags: tagsToSave,
-          status: 'completed',
-        })
-        setVideoId(newId)
-        videoIdRef.current = newId
-        pendingTagsRef.current = null
-        message.success(t('videoEditor.videoSaved'))
-      }
-      setHasUnsavedChanges(false)
+      await saveVideo(videoUrl, thumbnailDataUrl, pendingTagsRef.current || tags, videoId)
     } catch (error) {
       console.error('Failed to save video:', error)
       message.error(t('videoEditor.failedToSave'))
@@ -364,6 +402,7 @@ function VideoEditor() {
       setVideoId(null)
       videoIdRef.current = null
       setHasUnsavedChanges(false)
+      clearLocalDraft()
       navigate('/video-editor')
     })
   }
@@ -396,6 +435,7 @@ function VideoEditor() {
       setVideoId(video.id || null)
       videoIdRef.current = video.id || null
       setHasUnsavedChanges(false)
+      clearLocalDraft()
       setLoadModalOpen(false)
       message.success(t('videoEditor.videoLoaded'))
     })
@@ -498,7 +538,7 @@ function VideoEditor() {
             <Space direction="vertical" style={{ width: '100%' }} size="large">
               {/* Title */}
               <div>
-                <Text strong>{t('videoEditor.videoTitle')}</Text>
+                <Text strong>{t('videoEditor.videoTitle')} <span style={{ color: '#ff4d4f' }}>*</span></Text>
                 <Input
                   placeholder={t('videoEditor.videoTitlePlaceholder')}
                   value={title}
@@ -510,7 +550,7 @@ function VideoEditor() {
 
               {/* Prompt */}
               <div>
-                <Text strong>{t('videoEditor.videoIdea')}</Text>
+                <Text strong>{t('videoEditor.videoIdea')} <span style={{ color: '#ff4d4f' }}>*</span></Text>
                 <TextArea
                   placeholder={t('videoEditor.videoIdeaPlaceholder')}
                   value={prompt}
@@ -571,6 +611,7 @@ function VideoEditor() {
                 icon={<PlayCircleOutlined />}
                 onClick={handleGenerateVideo}
                 loading={generating}
+                disabled={!title.trim() || !prompt.trim()}
                 block
               >
                 {generating

@@ -6,7 +6,9 @@
   "nav": {
     "home": "Home",
     "storyEditor": "Editor di Storie",
-    "videoEditor": "Editor Video"
+    "videoEditor": "Editor Video",
+    "about": "Chi siamo",
+    "settings": "Impostazioni"
   },
   "auth": {
     "signIn": "Accedi",
@@ -172,6 +174,27 @@
     "newTag": "Nuovo tag...",
     "generating": "Generazione tag...",
     "rememberToSave": "Ricorda di salvare le modifiche!"
+  },
+  "about": {
+    "title": "Chi siamo",
+    "description": "Studio Sci-Fi è una piattaforma creativa sviluppata dall'Institute for Future Intelligence, Inc. che consente a chiunque di creare straordinari libri di storie di fantascienza e brevi video utilizzando la tecnologia di IA generativa all'avanguardia.",
+    "missionTitle": "La Nostra Missione",
+    "missionDescription": "Crediamo nella democratizzazione della narrazione creativa attraverso l'intelligenza artificiale. La nostra missione è rendere facile per tutti — dagli scrittori in erba ai creatori esperti — dare vita alle proprie visioni di fantascienza con illustrazioni e video generati dall'IA.",
+    "technologyTitle": "Tecnologia",
+    "technologyDescription": "Studio Sci-Fi sfrutta modelli di IA all'avanguardia, tra cui Google Gemini per la generazione di storie e la creazione di immagini, e Vertex AI Veo per la generazione di video. La piattaforma è costruita con React, TypeScript e Firebase.",
+    "contactTitle": "Contatti",
+    "contactDescription": "Per domande, feedback o richieste di collaborazione, visitate l'Institute for Future Intelligence su intofuture.org."
+  },
+  "settings": {
+    "title": "Impostazioni",
+    "account": "Account",
+    "language": "Lingua",
+    "selectLanguage": "Seleziona lingua:",
+    "languageChanged": "Lingua cambiata con successo",
+    "notSignedIn": "Non hai effettuato l'accesso.",
+    "unnamed": "Utente senza nome",
+    "userId": "ID utente",
+    "provider": "Provider di accesso"
   },
   "audio": {
     "readAloud": "Leggi ad alta voce",
