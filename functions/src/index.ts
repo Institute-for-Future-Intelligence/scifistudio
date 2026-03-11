@@ -327,7 +327,25 @@ export const generateVideo = onCall(
     )
 
     try {
-      console.log('Starting video generation with prompt:', prompt.substring(0, 100), 'duration:', videoDuration)
+      // Sanitize prompt: replace real person names with generic descriptions
+      // to avoid Veo content filter rejections
+      const sanitizePrompt = `Rewrite the following video prompt, replacing any real person names (living or historical) with generic descriptions of their role or appearance. Do NOT add any new content — only replace names. If there are no real person names, return the prompt unchanged. Return ONLY the rewritten prompt, nothing else.
+
+Prompt: ${prompt}`
+
+      let sanitizedPrompt = prompt
+      try {
+        const sanitizeResult = await fetchGemini(
+          `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${apiKey}`,
+          { contents: [{ parts: [{ text: sanitizePrompt }] }] }
+        )
+        const result = sanitizeResult.candidates?.[0]?.content?.parts?.[0]?.text?.trim()
+        if (result) sanitizedPrompt = result
+      } catch (err) {
+        console.log('Prompt sanitization failed, using original:', err)
+      }
+
+      console.log('Starting video generation with prompt:', sanitizedPrompt.substring(0, 100), 'duration:', videoDuration)
 
       const accessToken = await getAccessToken()
       const veoModel = 'veo-3.1-generate-preview'
@@ -346,8 +364,8 @@ export const generateVideo = onCall(
         return simplified || p.substring(0, 150)
       }
 
-      // Try Veo with original prompt, then retry with simplified prompt if content-filtered
-      const promptsToTry = [prompt, simplifyPrompt(prompt)]
+      // Try Veo with sanitized prompt, then retry with simplified version if content-filtered
+      const promptsToTry = [sanitizedPrompt, simplifyPrompt(sanitizedPrompt)]
       for (let attempt = 0; attempt < promptsToTry.length; attempt++) {
         const currentPrompt = promptsToTry[attempt]
         console.log(`Veo attempt ${attempt + 1} with prompt:`, currentPrompt.substring(0, 100))
@@ -428,7 +446,7 @@ export const generateVideo = onCall(
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           contents: [{
-            parts: [{ text: `A cinematic sci-fi scene: ${prompt}` }]
+            parts: [{ text: `A cinematic sci-fi scene: ${sanitizedPrompt}` }]
           }],
           generationConfig: {
             numberOfImages: 1,
@@ -473,7 +491,7 @@ export const generateVideo = onCall(
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             contents: [{
-              parts: [{ text: `Generate an image: A cinematic sci-fi scene - ${prompt}` }]
+              parts: [{ text: `Generate an image: A cinematic sci-fi scene - ${sanitizedPrompt}` }]
             }],
             generationConfig: {
               responseModalities: ['image', 'text'],
@@ -686,6 +704,8 @@ export const enhanceVideoPrompt = onCall(
     }
 
     const enhancePrompt = `You are a video prompt engineer. Enhance the following video concept into a detailed, cinematic prompt suitable for AI video generation. Include visual details, camera movements, lighting, and atmosphere. Keep it under 200 words.
+
+IMPORTANT: AI video generators cannot depict real people (living or historical). Replace any real person names with generic descriptions of their role or appearance. For example, replace "Einstein" with "a wild-haired elderly physicist", replace "Neil Armstrong" with "an astronaut in a white spacesuit". Never include real person names in the output.
 
 User's concept: ${prompt}
 

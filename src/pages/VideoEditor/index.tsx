@@ -265,15 +265,7 @@ function VideoEditor() {
         }
       }
 
-      // Auto-save to Firestore
-      if (user) {
-        try {
-          await saveVideo(result.videoUrl, thumbDataUrl, [], videoId)
-        } catch (saveErr) {
-          console.error('Auto-save failed:', saveErr)
-          setHasUnsavedChanges(true)
-        }
-      }
+      setHasUnsavedChanges(true)
 
       // Generate tags (non-blocking)
       setGeneratingTags(true)
