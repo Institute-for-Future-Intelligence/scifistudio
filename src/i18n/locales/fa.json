@@ -39,7 +39,8 @@
     "tabVideos": "ویدیوها",
     "sortByUpdated": "مرتب‌سازی بر اساس به‌روزرسانی",
     "sortByCreated": "مرتب‌سازی بر اساس ایجاد",
-    "sortByRating": "مرتب‌سازی بر اساس امتیاز"
+    "sortByRating": "مرتب‌سازی بر اساس امتیاز",
+    "searchPlaceholder": "...جستجوی پروژه‌ها"
   },
   "storyEditor": {
     "title": "ویرایشگر داستان",

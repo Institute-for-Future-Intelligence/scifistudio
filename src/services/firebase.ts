@@ -27,7 +27,7 @@ import { getStorage } from 'firebase/storage'
 // Firebase config - public client-side values (protected by security rules)
 const firebaseConfig = {
   apiKey: "AIzaSyAhY7pFGcL8GJM8auu4TTQGFs3TlBV2oS8",
-  authDomain: "sci-fi-studio.firebaseapp.com",
+  authDomain: "sci-fi-studio.web.app",
   projectId: "sci-fi-studio",
   storageBucket: "sci-fi-studio.firebasestorage.app",
   messagingSenderId: "231343877943",

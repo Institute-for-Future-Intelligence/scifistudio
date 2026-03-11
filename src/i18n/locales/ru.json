@@ -39,7 +39,8 @@
     "tabVideos": "Видео",
     "sortByUpdated": "По дате обновления",
     "sortByCreated": "По дате создания",
-    "sortByRating": "По рейтингу"
+    "sortByRating": "По рейтингу",
+    "searchPlaceholder": "Поиск проектов..."
   },
   "storyEditor": {
     "title": "Редактор Историй",

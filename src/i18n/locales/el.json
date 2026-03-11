@@ -39,7 +39,8 @@
     "tabVideos": "Βίντεο",
     "sortByUpdated": "Ταξινόμηση κατά ενημέρωση",
     "sortByCreated": "Ταξινόμηση κατά δημιουργία",
-    "sortByRating": "Ταξινόμηση κατά βαθμολογία"
+    "sortByRating": "Ταξινόμηση κατά βαθμολογία",
+    "searchPlaceholder": "Αναζήτηση έργων..."
   },
   "storyEditor": {
     "title": "Επεξεργαστής Ιστοριών",

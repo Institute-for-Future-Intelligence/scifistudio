@@ -39,7 +39,8 @@
     "tabVideos": "Vídeos",
     "sortByUpdated": "Ordenar por atualização",
     "sortByCreated": "Ordenar por criação",
-    "sortByRating": "Ordenar por classificação"
+    "sortByRating": "Ordenar por classificação",
+    "searchPlaceholder": "Pesquisar projetos..."
   },
   "storyEditor": {
     "title": "Editor de Historias",

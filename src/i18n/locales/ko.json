@@ -39,7 +39,8 @@
     "tabVideos": "비디오",
     "sortByUpdated": "수정일순",
     "sortByCreated": "생성일순",
-    "sortByRating": "평점순"
+    "sortByRating": "평점순",
+    "searchPlaceholder": "프로젝트 검색..."
   },
   "storyEditor": {
     "title": "스토리 편집기",

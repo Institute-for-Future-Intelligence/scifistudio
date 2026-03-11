@@ -39,7 +39,8 @@
     "tabVideos": "Відео",
     "sortByUpdated": "За датою оновлення",
     "sortByCreated": "За датою створення",
-    "sortByRating": "За рейтингом"
+    "sortByRating": "За рейтингом",
+    "searchPlaceholder": "Пошук проєктів..."
   },
   "storyEditor": {
     "title": "Редактор Історій",

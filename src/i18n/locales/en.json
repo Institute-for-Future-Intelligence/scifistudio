@@ -39,7 +39,8 @@
     "tabVideos": "Videos",
     "sortByUpdated": "Sort by Updated",
     "sortByCreated": "Sort by Created",
-    "sortByRating": "Sort by Rating"
+    "sortByRating": "Sort by Rating",
+    "searchPlaceholder": "Search projects..."
   },
   "storyEditor": {
     "title": "Story Editor",

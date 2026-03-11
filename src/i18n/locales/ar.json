@@ -39,7 +39,8 @@
     "tabVideos": "الفيديوهات",
     "sortByUpdated": "ترتيب حسب التحديث",
     "sortByCreated": "ترتيب حسب الإنشاء",
-    "sortByRating": "ترتيب حسب التقييم"
+    "sortByRating": "ترتيب حسب التقييم",
+    "searchPlaceholder": "...البحث عن المشاريع"
   },
   "storyEditor": {
     "title": "محرر القصص",

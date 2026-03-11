@@ -21,8 +21,8 @@
  */
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Select, Rate } from 'antd'
-import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined, PlayCircleOutlined, EyeOutlined } from '@ant-design/icons'
+import { Typography, Button, Empty, Card, List, Spin, Popconfirm, Tag, Tabs, Select, Rate, Input } from 'antd'
+import { PlusOutlined, BookOutlined, VideoCameraOutlined, DeleteOutlined, PlayCircleOutlined, EyeOutlined, SearchOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
 import { getStorybooks, deleteStorybook, Storybook, getVideos, deleteVideo, Video, getPublicStorybooks, getPublicVideos } from '../../services/firestore'
@@ -38,6 +38,7 @@ function Home() {
   const [loading, setLoading] = useState(false)
   const [activeTab, setActiveTab] = useState('all')
   const [sortBy, setSortBy] = useState<'updatedAt' | 'createdAt' | 'averageRating'>('updatedAt')
+  const [searchQuery, setSearchQuery] = useState('')
 
   useEffect(() => {
     if (user) {
@@ -334,8 +335,18 @@ function Home() {
     return [...items].sort((a, b) => b[sortBy].toDate().getTime() - a[sortBy].toDate().getTime())
   }
 
-  const sortedStorybooks = sortItems(storybooks)
-  const sortedVideos = sortItems(videos)
+  const filterBySearch = <T extends { title: string; prompt: string; tags?: string[] }>(items: T[]): T[] => {
+    const q = searchQuery.trim().toLowerCase()
+    if (!q) return items
+    const keywords = q.split(/\s+/)
+    return items.filter(item => {
+      const text = `${item.title} ${item.prompt} ${(item.tags || []).join(' ')}`.toLowerCase()
+      return keywords.every(kw => text.includes(kw))
+    })
+  }
+
+  const sortedStorybooks = sortItems(filterBySearch(storybooks))
+  const sortedVideos = sortItems(filterBySearch(videos))
 
   const renderAllProjects = () => {
     const allProjects = [
@@ -473,6 +484,14 @@ function Home() {
       <div style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <Title level={3} style={{ margin: 0 }}>{t('home.myProjects')}</Title>
+          <Input
+            placeholder={t('home.searchPlaceholder')}
+            prefix={<SearchOutlined style={{ color: '#bbb' }} />}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            allowClear
+            style={{ width: 240 }}
+          />
           <Select
             value={sortBy}
             onChange={setSortBy}

@@ -39,7 +39,8 @@
     "tabVideos": "ビデオ",
     "sortByUpdated": "更新日順",
     "sortByCreated": "作成日順",
-    "sortByRating": "評価順"
+    "sortByRating": "評価順",
+    "searchPlaceholder": "プロジェクトを検索..."
   },
   "storyEditor": {
     "title": "ストーリーエディター",

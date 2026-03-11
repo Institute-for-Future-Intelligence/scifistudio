@@ -39,7 +39,8 @@
     "tabVideos": "วิดีโอ",
     "sortByUpdated": "เรียงตามวันที่อัปเดต",
     "sortByCreated": "เรียงตามวันที่สร้าง",
-    "sortByRating": "เรียงตามคะแนน"
+    "sortByRating": "เรียงตามคะแนน",
+    "searchPlaceholder": "ค้นหาโครงการ..."
   },
   "storyEditor": {
     "title": "เครื่องมือแต่งเรื่อง",

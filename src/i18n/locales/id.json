@@ -39,7 +39,8 @@
     "tabVideos": "Video",
     "sortByUpdated": "Urutkan berdasarkan diperbarui",
     "sortByCreated": "Urutkan berdasarkan dibuat",
-    "sortByRating": "Urutkan berdasarkan penilaian"
+    "sortByRating": "Urutkan berdasarkan penilaian",
+    "searchPlaceholder": "Cari proyek..."
   },
   "storyEditor": {
     "title": "Editor Cerita",

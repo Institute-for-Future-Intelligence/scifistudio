@@ -39,7 +39,8 @@
     "tabVideos": "Videolar",
     "sortByUpdated": "Güncellemeye göre sırala",
     "sortByCreated": "Oluşturmaya göre sırala",
-    "sortByRating": "Puana göre sırala"
+    "sortByRating": "Puana göre sırala",
+    "searchPlaceholder": "Proje ara..."
   },
   "storyEditor": {
     "title": "Hikaye Editörü",
