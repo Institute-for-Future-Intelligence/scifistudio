@@ -1,29 +1,11 @@
 <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <!-- Outer ring - planet orbit -->
-  <ellipse cx="32" cy="32" rx="28" ry="10" stroke="url(#gradient1)" stroke-width="2" transform="rotate(-20 32 32)"/>
-  <!-- Planet/Star core -->
-  <circle cx="32" cy="32" r="16" fill="url(#gradient2)"/>
-  <!-- Inner glow -->
-  <circle cx="32" cy="32" r="10" fill="url(#gradient3)"/>
-  <!-- Sparkle/star points -->
-  <path d="M32 8L34 18L32 16L30 18L32 8Z" fill="#fff" opacity="0.8"/>
-  <path d="M32 56L34 46L32 48L30 46L32 56Z" fill="#fff" opacity="0.8"/>
-  <path d="M8 32L18 34L16 32L18 30L8 32Z" fill="#fff" opacity="0.8"/>
-  <path d="M56 32L46 34L48 32L46 30L56 32Z" fill="#fff" opacity="0.8"/>
-  <!-- Center highlight -->
-  <circle cx="28" cy="28" r="4" fill="#fff" opacity="0.6"/>
-  <defs>
-    <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#818cf8"/>
-      <stop offset="100%" stop-color="#6366f1"/>
-    </linearGradient>
-    <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#6366f1"/>
-      <stop offset="100%" stop-color="#4f46e5"/>
-    </linearGradient>
-    <radialGradient id="gradient3" cx="40%" cy="40%" r="50%">
-      <stop offset="0%" stop-color="#a5b4fc"/>
-      <stop offset="100%" stop-color="#6366f1"/>
-    </radialGradient>
-  </defs>
+  <g transform="rotate(-45 32 32)">
+    <path d="M24 12 C24 6 28 2 32 2 C36 2 40 6 40 12 L40 46 L24 46 Z" fill="#6b7280"/>
+    <path d="M24 12 C24 6 28 2 32 2 L32 46 L24 46 Z" fill="#9ca3af"/>
+    <circle cx="32" cy="18" r="3.5" fill="#4c1d95"/>
+    <circle cx="32" cy="18" r="2" fill="#a78bfa"/>
+    <path d="M24 36 L16 48 L24 46 Z" fill="#4b5563"/>
+    <path d="M40 36 L48 48 L40 46 Z" fill="#374151"/>
+    <path d="M26 46 L32 58 L38 46 Z" fill="#3b82f6"/>
+  </g>
 </svg>

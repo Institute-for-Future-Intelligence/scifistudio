@@ -32,78 +32,54 @@ function Logo({ size = 32 }: LogoProps) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
     >
-      {/* Outer ring - planet orbit */}
-      <ellipse
-        cx="32"
-        cy="32"
-        rx="28"
-        ry="10"
-        stroke="url(#gradient1)"
-        strokeWidth="2"
-        transform="rotate(-20 32 32)"
-      />
+      <g transform="rotate(-45 32 32)">
+        {/* Starship body — tall, cylindrical with rounded nose */}
+        <path
+          d="M24 14 C24 8 28 2 32 2 C36 2 40 8 40 14 L40 46 L24 46 Z"
+          fill="#d1d5db"
+        />
 
-      {/* Planet/Star core */}
-      <circle
-        cx="32"
-        cy="32"
-        r="16"
-        fill="url(#gradient2)"
-      />
+        {/* Lighter panel — left half highlight */}
+        <path
+          d="M24 14 C24 8 28 2 32 2 L32 46 L24 46 Z"
+          fill="#e5e7eb"
+        />
 
-      {/* Inner glow */}
-      <circle
-        cx="32"
-        cy="32"
-        r="10"
-        fill="url(#gradient3)"
-      />
+        {/* Nose tip accent */}
+        <path
+          d="M28 8 C28 5 30 2 32 2 C34 2 36 5 36 8 Z"
+          fill="#9ca3af"
+        />
 
-      {/* Sparkle/star points */}
-      <path
-        d="M32 8L34 18L32 16L30 18L32 8Z"
-        fill="#fff"
-        opacity="0.8"
-      />
-      <path
-        d="M32 56L34 46L32 48L30 46L32 56Z"
-        fill="#fff"
-        opacity="0.8"
-      />
-      <path
-        d="M8 32L18 34L16 32L18 30L8 32Z"
-        fill="#fff"
-        opacity="0.8"
-      />
-      <path
-        d="M56 32L46 34L48 32L46 30L56 32Z"
-        fill="#fff"
-        opacity="0.8"
-      />
+        {/* Heat shield band */}
+        <rect x="24" y="38" width="16" height="4" fill="#374151" />
 
-      {/* Center highlight */}
-      <circle
-        cx="28"
-        cy="28"
-        r="4"
-        fill="#fff"
-        opacity="0.6"
-      />
+        {/* Window row */}
+        <circle cx="32" cy="18" r="2.5" fill="#6d28d9" />
+        <circle cx="32" cy="18" r="1.5" fill="#a5b4fc" />
 
-      <defs>
-        <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#818cf8" />
-          <stop offset="100%" stopColor="#6366f1" />
-        </linearGradient>
-        <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#6366f1" />
-          <stop offset="100%" stopColor="#4f46e5" />
-        </linearGradient>
-        <radialGradient id="gradient3" cx="40%" cy="40%" r="50%">
-          <stop offset="0%" stopColor="#a5b4fc" />
-          <stop offset="100%" stopColor="#6366f1" />
-        </radialGradient>
-      </defs>
+        {/* Body seam lines */}
+        <line x1="32" y1="10" x2="32" y2="38" stroke="#9ca3af" strokeWidth="0.5" />
+
+        {/* Forward flap — left */}
+        <path d="M24 16 L18 22 L18 30 L24 28 Z" fill="#9ca3af" />
+
+        {/* Forward flap — right */}
+        <path d="M40 16 L46 22 L46 30 L40 28 Z" fill="#6b7280" />
+
+        {/* Aft flap — left */}
+        <path d="M24 38 L16 46 L16 52 L24 48 Z" fill="#9ca3af" />
+
+        {/* Aft flap — right */}
+        <path d="M40 38 L48 46 L48 52 L40 48 Z" fill="#6b7280" />
+
+        {/* Engine section */}
+        <rect x="24" y="46" width="16" height="4" rx="1" fill="#4b5563" />
+
+        {/* Raptor flames */}
+        <path d="M26 50 L24 60 L28 56 L32 62 L36 56 L40 60 L38 50 Z" fill="#60a5fa" />
+        <path d="M28 50 L27 57 L30 54 L32 58 L34 54 L37 57 L36 50 Z" fill="#93c5fd" />
+      </g>
     </svg>
   )
 }
