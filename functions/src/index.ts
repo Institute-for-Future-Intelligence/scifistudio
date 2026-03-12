@@ -784,6 +784,68 @@ const languageNames: Record<string, string> = {
   'uk': 'Ukrainian',
 }
 
+// Generate STEM concept map for a storybook
+export const generateConceptMap = onCall(
+  { secrets: [geminiApiKey], cors: true },
+  async (request) => {
+    const { prompt, title, language = 'en' } = request.data as { prompt?: string; title?: string; language?: string }
+
+    if (!prompt && !title) {
+      throw new HttpsError('invalid-argument', 'Prompt or title is required')
+    }
+
+    const langName = languageNames[language] || 'English'
+
+    const conceptMapPrompt = `Analyze this sci-fi story and create a concept map of STEM (Science, Technology, Engineering, Mathematics) concepts.
+
+Title: ${title || 'Untitled'}
+Story concept: ${prompt || 'No description'}
+
+Generate a concept map with:
+1. 6-10 STEM concept nodes relevant to the story
+2. Connections (edges) between related concepts, each with a short relationship label
+
+IMPORTANT: Write ALL concept names and relationship labels in ${langName} language.
+
+Return the result as a JSON object with this exact format:
+{
+  "nodes": [
+    {"id": "1", "label": "concept name in ${langName}", "category": "science|technology|engineering|mathematics"}
+  ],
+  "edges": [
+    {"source": "1", "target": "2", "label": "relationship in ${langName}"}
+  ]
+}
+
+Return ONLY the JSON object, no other text.`
+
+    const data = await fetchGemini(
+      `${API_BASE}/models/${TEXT_MODEL}:generateContent?key=${geminiApiKey.value()}`,
+      { contents: [{ parts: [{ text: conceptMapPrompt }] }] }
+    )
+
+    const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text ?? ''
+
+    // Parse JSON from response (handle markdown code blocks)
+    let jsonStr = responseText.trim()
+    if (jsonStr.startsWith('```')) {
+      jsonStr = jsonStr.replace(/^```(?:json)?\n?/, '').replace(/\n?```$/, '')
+    }
+
+    try {
+      const conceptMap = JSON.parse(jsonStr)
+      // Validate structure
+      if (!conceptMap.nodes || !Array.isArray(conceptMap.nodes) || !conceptMap.edges || !Array.isArray(conceptMap.edges)) {
+        throw new Error('Invalid concept map structure')
+      }
+      return { conceptMap }
+    } catch (err) {
+      console.error('Failed to parse concept map JSON:', err, 'Response:', responseText.substring(0, 200))
+      throw new HttpsError('internal', 'Failed to generate concept map')
+    }
+  }
+)
+
 // Enhance story prompt
 export const enhanceStoryPrompt = onCall(
   { secrets: [geminiApiKey], cors: true },

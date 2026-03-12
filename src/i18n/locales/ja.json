@@ -177,6 +177,18 @@
     "generating": "タグを生成中...",
     "rememberToSave": "保存を忘れずに！"
   },
+  "conceptMap": {
+    "title": "STEM概念マップ",
+    "generating": "概念マップを生成中...",
+    "generate": "生成",
+    "regenerate": "再生成",
+    "failedToGenerate": "概念マップの生成に失敗しました",
+    "clickGenerate": "「生成」をクリックして、この物語のSTEM概念マップを作成します。",
+    "science": "科学",
+    "technology": "テクノロジー",
+    "engineering": "工学",
+    "mathematics": "数学"
+  },
   "about": {
     "title": "私たちについて",
     "description": "SF スタジオは、<1>Institute for Future Intelligence, Inc.</1>が開発した創造的なプラットフォームで、最先端の生成AI技術を使用して、誰でも素晴らしいSFストーリーブックや短編動画を作成できるようにします。",

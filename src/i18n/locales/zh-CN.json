@@ -177,6 +177,18 @@
     "generating": "生成标签中...",
     "rememberToSave": "记得保存以保留标签更改！"
   },
+  "conceptMap": {
+    "title": "STEM概念图",
+    "generating": "正在生成概念图...",
+    "generate": "生成",
+    "regenerate": "重新生成",
+    "failedToGenerate": "生成概念图失败",
+    "clickGenerate": "点击\"生成\"为这个故事创建STEM概念图。",
+    "science": "科学",
+    "technology": "技术",
+    "engineering": "工程",
+    "mathematics": "数学"
+  },
   "about": {
     "title": "关于我们",
     "description": "科幻工作室是由<1>未来智能研究所</1>开发的创意平台，利用前沿的生成式人工智能技术，让每个人都能创作出精美的科幻故事书和短视频。",

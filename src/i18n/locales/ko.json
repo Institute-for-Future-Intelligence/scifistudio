@@ -177,6 +177,18 @@
     "generating": "태그 생성 중...",
     "rememberToSave": "변경 사항을 저장하세요!"
   },
+  "conceptMap": {
+    "title": "STEM 개념도",
+    "generating": "개념도 생성 중...",
+    "generate": "생성",
+    "regenerate": "재생성",
+    "failedToGenerate": "개념도 생성 실패",
+    "clickGenerate": "\"생성\"을 클릭하여 이 이야기의 STEM 개념도를 만드세요.",
+    "science": "과학",
+    "technology": "기술",
+    "engineering": "공학",
+    "mathematics": "수학"
+  },
   "about": {
     "title": "소개",
     "description": "SF 스튜디오는 <1>Institute for Future Intelligence, Inc.</1>에서 개발한 창의적인 플랫폼으로, 최첨단 생성형 AI 기술을 활용하여 누구나 멋진 SF 스토리북과 짧은 비디오를 만들 수 있도록 합니다.",

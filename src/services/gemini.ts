@@ -213,6 +213,20 @@ export const generateStoryTags = async (prompt: string, title: string, language:
   return result.data.tags
 }
 
+export interface ConceptMapData {
+  nodes: Array<{ id: string; label: string; category: 'science' | 'technology' | 'engineering' | 'mathematics' }>
+  edges: Array<{ source: string; target: string; label: string }>
+}
+
+export const generateConceptMap = async (prompt: string, title: string, language: string = 'en'): Promise<ConceptMapData> => {
+  const generateMapFn = httpsCallable<{ prompt: string; title: string; language: string }, { conceptMap: ConceptMapData }>(
+    functions,
+    'generateConceptMap'
+  )
+  const result = await generateMapFn({ prompt, title, language })
+  return result.data.conceptMap
+}
+
 export interface SpeechResult {
   audioUrl: string
   voice: string

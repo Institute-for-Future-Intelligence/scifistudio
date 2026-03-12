@@ -177,6 +177,18 @@
     "generating": "Etiketler oluşturuluyor...",
     "rememberToSave": "Değişiklikleri kaydetmeyi unutmayın!"
   },
+  "conceptMap": {
+    "title": "STEM Kavram Haritası",
+    "generating": "Kavram haritası oluşturuluyor...",
+    "generate": "Oluştur",
+    "regenerate": "Yeniden oluştur",
+    "failedToGenerate": "Kavram haritası oluşturulamadı",
+    "clickGenerate": "Bu hikaye için bir STEM kavram haritası oluşturmak için \"Oluştur\"a tıklayın.",
+    "science": "Bilim",
+    "technology": "Teknoloji",
+    "engineering": "Mühendislik",
+    "mathematics": "Matematik"
+  },
   "about": {
     "title": "Hakkımızda",
     "description": "Sci-Fi Stüdyo, <1>Institute for Future Intelligence, Inc.</1> tarafından geliştirilen, en son üretken yapay zeka teknolojisini kullanarak herkesin etkileyici bilim kurgu hikaye kitapları ve kısa videolar oluşturmasını sağlayan yaratıcı bir platformdur.",

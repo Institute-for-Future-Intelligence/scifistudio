@@ -25,10 +25,11 @@ import { Typography, Card, Button, Input, Space, message, Spin, Alert, Image, Mo
 import { RobotOutlined, ThunderboltOutlined, LeftOutlined, RightOutlined, BookOutlined, SaveOutlined, FolderOpenOutlined, DeleteOutlined, HomeOutlined, PlusOutlined, EyeOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../../hooks/useAuth'
-import { generateStorybook, enhanceStoryPrompt, generateStoryTags, StoryFrame } from '../../services/gemini'
-import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook } from '../../services/firestore'
+import { generateStorybook, enhanceStoryPrompt, generateStoryTags, generateConceptMap, StoryFrame } from '../../services/gemini'
+import { createStorybook, getStorybooks, getStorybook, updateStorybook, deleteStorybook, Storybook, ConceptMap as ConceptMapType } from '../../services/firestore'
 import { Timestamp } from 'firebase/firestore'
 import TagEditor from '../../components/common/TagEditor'
+import ConceptMapComponent from '../../components/common/ConceptMap'
 
 const { Title, Paragraph } = Typography
 const { TextArea } = Input
@@ -58,6 +59,8 @@ function StoryEditor() {
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false)
   const [tags, setTags] = useState<string[]>([])
   const [generatingTags, setGeneratingTags] = useState(false)
+  const [conceptMap, setConceptMap] = useState<ConceptMapType | null>(null)
+  const [generatingConceptMap, setGeneratingConceptMap] = useState(false)
   const [createdAt, setCreatedAt] = useState<Timestamp | null>(null)
   const [updatedAt, setUpdatedAt] = useState<Timestamp | null>(null)
   const storybookIdRef = useRef<string | null>(null)
@@ -138,6 +141,7 @@ function StoryEditor() {
         setFrames(storybook.frames)
         setFrameCount(storybook.frames.length)
         setTags(storybook.tags || [])
+        setConceptMap(storybook.conceptMap || null)
         setCreatedAt(storybook.createdAt)
         setUpdatedAt(storybook.updatedAt)
         setCurrentPage(0)
@@ -204,6 +208,7 @@ function StoryEditor() {
     setError('')
     setFrames([])
     setTags([])
+    setConceptMap(null)
     setCurrentPage(0)
     setGenerationProgress(0)
 
@@ -280,6 +285,27 @@ function StoryEditor() {
         .finally(() => {
           setGeneratingTags(false)
         })
+
+      // Generate concept map (non-blocking)
+      setGeneratingConceptMap(true)
+      generateConceptMap(finalPrompt, storyTitle, i18n.language)
+        .then(async (map) => {
+          setConceptMap(map)
+          const currentId = storybookIdRef.current
+          if (currentId) {
+            try {
+              await updateStorybook(currentId, { conceptMap: map })
+            } catch (err) {
+              console.error('Failed to auto-save concept map:', err)
+            }
+          }
+        })
+        .catch((err) => {
+          console.error('Failed to generate concept map:', err)
+        })
+        .finally(() => {
+          setGeneratingConceptMap(false)
+        })
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : t('storyEditor.failedToGenerate')
       setError(errorMessage)
@@ -314,6 +340,7 @@ function StoryEditor() {
           prompt: enhancedPrompt || prompt,
           frames,
           tags: tags || [],
+          ...(conceptMap ? { conceptMap } : {}),
         }, user.uid)
         setHasUnsavedChanges(false)
         clearLocalDraft()
@@ -328,6 +355,7 @@ function StoryEditor() {
           frames,
           language: i18n.language,
           tags: tags || [],
+          ...(conceptMap ? { conceptMap } : {}),
         })
         setStorybookId(newId)
         setHasUnsavedChanges(false)
@@ -351,6 +379,7 @@ function StoryEditor() {
     setStoryTitle('')
     setFrames([])
     setTags([])
+    setConceptMap(null)
     setCreatedAt(null)
     setUpdatedAt(null)
     setCurrentPage(0)
@@ -369,6 +398,7 @@ function StoryEditor() {
       setFrames(storybook.frames)
       setFrameCount(storybook.frames.length)
       setTags(storybook.tags || [])
+      setConceptMap(storybook.conceptMap || null)
       setCreatedAt(storybook.createdAt)
       setUpdatedAt(storybook.updatedAt)
       setCurrentPage(0)
@@ -391,6 +421,28 @@ function StoryEditor() {
       }
     } catch (err) {
       message.error(t('storyEditor.failedToDelete'))
+    }
+  }
+
+  const handleGenerateConceptMap = async () => {
+    const finalPrompt = enhancedPrompt || prompt
+    if (!finalPrompt.trim()) {
+      message.warning(t('storyEditor.enterIdeaFirst'))
+      return
+    }
+    setGeneratingConceptMap(true)
+    try {
+      const map = await generateConceptMap(finalPrompt, storyTitle, i18n.language)
+      setConceptMap(map)
+      if (storybookId) {
+        await updateStorybook(storybookId, { conceptMap: map })
+      }
+      setHasUnsavedChanges(!storybookId)
+    } catch (err) {
+      console.error('Failed to generate concept map:', err)
+      message.error(t('conceptMap.failedToGenerate'))
+    } finally {
+      setGeneratingConceptMap(false)
     }
   }
 
@@ -767,6 +819,26 @@ function StoryEditor() {
                 }}
                 loading={generatingTags}
                 editable={true}
+              />
+            </div>
+
+            {/* Concept Map Section */}
+            <div style={{ marginTop: 24 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 8 }}>
+                <label style={{ fontWeight: 500 }}>{t('conceptMap.title')}</label>
+                {!generatingConceptMap && (
+                  <Button
+                    size="small"
+                    onClick={handleGenerateConceptMap}
+                    loading={generatingConceptMap}
+                  >
+                    {conceptMap ? t('conceptMap.regenerate') : t('conceptMap.generate')}
+                  </Button>
+                )}
+              </div>
+              <ConceptMapComponent
+                conceptMap={conceptMap || { nodes: [], edges: [] }}
+                loading={generatingConceptMap}
               />
             </div>
           </div>

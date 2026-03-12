@@ -177,6 +177,18 @@
     "generating": "Tags werden generiert...",
     "rememberToSave": "Vergessen Sie nicht zu speichern!"
   },
+  "conceptMap": {
+    "title": "STEM-Konzeptkarte",
+    "generating": "Konzeptkarte wird erstellt...",
+    "generate": "Generieren",
+    "regenerate": "Neu generieren",
+    "failedToGenerate": "Konzeptkarte konnte nicht erstellt werden",
+    "clickGenerate": "Klicken Sie auf \"Generieren\", um eine STEM-Konzeptkarte für diese Geschichte zu erstellen.",
+    "science": "Wissenschaft",
+    "technology": "Technologie",
+    "engineering": "Ingenieurwesen",
+    "mathematics": "Mathematik"
+  },
   "about": {
     "title": "Über uns",
     "description": "Sci-Fi Studio ist eine kreative Plattform, die vom <1>Institute for Future Intelligence, Inc.</1> entwickelt wurde und es jedem ermöglicht, mit modernster generativer KI-Technologie beeindruckende Sci-Fi-Geschichtenbücher und Kurzvideos zu erstellen.",

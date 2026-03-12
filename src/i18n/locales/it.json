@@ -177,6 +177,18 @@
     "generating": "Generazione tag...",
     "rememberToSave": "Ricorda di salvare le modifiche!"
   },
+  "conceptMap": {
+    "title": "Mappa concettuale STEM",
+    "generating": "Generazione mappa concettuale...",
+    "generate": "Genera",
+    "regenerate": "Rigenera",
+    "failedToGenerate": "Generazione mappa concettuale fallita",
+    "clickGenerate": "Clicca \"Genera\" per creare una mappa concettuale STEM per questa storia.",
+    "science": "Scienza",
+    "technology": "Tecnologia",
+    "engineering": "Ingegneria",
+    "mathematics": "Matematica"
+  },
   "about": {
     "title": "Chi siamo",
     "description": "Studio Sci-Fi è una piattaforma creativa sviluppata dall'<1>Institute for Future Intelligence, Inc.</1> che consente a chiunque di creare straordinari libri di storie di fantascienza e brevi video utilizzando la tecnologia di IA generativa all'avanguardia.",

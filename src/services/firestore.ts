@@ -54,6 +54,23 @@ export interface StorybookRating {
   createdAt: Timestamp
 }
 
+export interface ConceptMapNode {
+  id: string
+  label: string
+  category: 'science' | 'technology' | 'engineering' | 'mathematics'
+}
+
+export interface ConceptMapEdge {
+  source: string
+  target: string
+  label: string
+}
+
+export interface ConceptMap {
+  nodes: ConceptMapNode[]
+  edges: ConceptMapEdge[]
+}
+
 export interface Storybook {
   id?: string
   userId: string
@@ -63,6 +80,7 @@ export interface Storybook {
   frames: StoryFrame[]
   language?: string
   tags?: string[]
+  conceptMap?: ConceptMap
   ratings?: StorybookRating[]
   averageRating?: number
   ratingCount?: number

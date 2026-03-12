@@ -24,9 +24,10 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { Typography, Card, Button, Spin, Image, Rate, message, Space, Tag, Select } from 'antd'
 import { LeftOutlined, RightOutlined, BookOutlined, HomeOutlined, UserOutlined, ShareAltOutlined, SoundOutlined, PauseCircleOutlined } from '@ant-design/icons'
 import { useTranslation } from 'react-i18next'
-import { getStorybook, rateStorybook, Storybook } from '../../services/firestore'
-import { StoryFrame } from '../../services/gemini'
+import { getStorybook, rateStorybook, updateStorybook, Storybook, ConceptMap as ConceptMapType } from '../../services/firestore'
+import { StoryFrame, generateConceptMap } from '../../services/gemini'
 import LanguageSelector from '../../components/common/LanguageSelector'
+import ConceptMapComponent from '../../components/common/ConceptMap'
 
 const { Title, Paragraph, Text } = Typography
 
@@ -114,6 +115,8 @@ function StorybookView() {
   const [error, setError] = useState('')
   const [userRating, setUserRating] = useState(0)
   const [submittingRating, setSubmittingRating] = useState(false)
+  const [localConceptMap, setLocalConceptMap] = useState<ConceptMapType | null>(null)
+  const [generatingConceptMap, setGeneratingConceptMap] = useState(false)
 
   // Audio state (using Web Speech API)
   const [voice, setVoice] = useState<'mom' | 'dad'>('mom')
@@ -377,6 +380,21 @@ function StorybookView() {
     window.speechSynthesis.cancel()
     setIsPlaying(false)
     utteranceRef.current = null
+  }
+
+  const handleGenerateConceptMap = async () => {
+    if (!storybook || !id) return
+    setGeneratingConceptMap(true)
+    try {
+      const map = await generateConceptMap(storybook.prompt, storybook.title, storybook.language || 'en')
+      setLocalConceptMap(map)
+      await updateStorybook(id, { conceptMap: map })
+    } catch (err) {
+      console.error('Failed to generate concept map:', err)
+      message.error(t('conceptMap.failedToGenerate'))
+    } finally {
+      setGeneratingConceptMap(false)
+    }
   }
 
   // Cleanup audio on unmount
@@ -693,6 +711,34 @@ function StorybookView() {
             </div>
           )}
         </Card>
+
+        {/* Concept Map Section */}
+        {(() => {
+          const map = localConceptMap || storybook.conceptMap
+          return (
+            <Card
+              title={t('conceptMap.title')}
+              style={{ marginTop: 24 }}
+              extra={
+                !generatingConceptMap && (
+                  <Button size="small" onClick={handleGenerateConceptMap}>
+                    {map && map.nodes.length > 0 ? t('conceptMap.regenerate') : t('conceptMap.generate')}
+                  </Button>
+                )
+              }
+            >
+              {map && map.nodes.length > 0 ? (
+                <ConceptMapComponent conceptMap={map} loading={generatingConceptMap} />
+              ) : generatingConceptMap ? (
+                <ConceptMapComponent conceptMap={{ nodes: [], edges: [] }} loading={true} />
+              ) : (
+                <div style={{ textAlign: 'center', padding: '24px 0', color: '#999' }}>
+                  {t('conceptMap.clickGenerate')}
+                </div>
+              )}
+            </Card>
+          )
+        })()}
 
         {/* Rating Section */}
         <Card style={{ marginTop: 24 }}>

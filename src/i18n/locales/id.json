@@ -177,6 +177,18 @@
     "generating": "Membuat tag...",
     "rememberToSave": "Ingat untuk menyimpan perubahan!"
   },
+  "conceptMap": {
+    "title": "Peta Konsep STEM",
+    "generating": "Membuat peta konsep...",
+    "generate": "Buat",
+    "regenerate": "Buat ulang",
+    "failedToGenerate": "Gagal membuat peta konsep",
+    "clickGenerate": "Klik \"Buat\" untuk membuat peta konsep STEM untuk cerita ini.",
+    "science": "Sains",
+    "technology": "Teknologi",
+    "engineering": "Teknik",
+    "mathematics": "Matematika"
+  },
   "about": {
     "title": "Tentang Kami",
     "description": "Studio Sci-Fi adalah platform kreatif yang dikembangkan oleh <1>Institute for Future Intelligence, Inc.</1> yang memungkinkan siapa saja membuat buku cerita fiksi ilmiah yang menakjubkan dan video pendek menggunakan teknologi AI generatif mutakhir.",

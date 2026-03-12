@@ -177,6 +177,18 @@
     "generating": "Génération des tags...",
     "rememberToSave": "N'oubliez pas de sauvegarder!"
   },
+  "conceptMap": {
+    "title": "Carte conceptuelle STEM",
+    "generating": "Génération de la carte conceptuelle...",
+    "generate": "Générer",
+    "regenerate": "Régénérer",
+    "failedToGenerate": "Échec de la génération de la carte conceptuelle",
+    "clickGenerate": "Cliquez sur \"Générer\" pour créer une carte conceptuelle STEM pour cette histoire.",
+    "science": "Science",
+    "technology": "Technologie",
+    "engineering": "Ingénierie",
+    "mathematics": "Mathématiques"
+  },
   "about": {
     "title": "À propos",
     "description": "Studio Sci-Fi est une plateforme créative développée par <1>l'Institute for Future Intelligence, Inc.</1> qui permet à chacun de créer de superbes livres d'histoires de science-fiction et de courtes vidéos grâce à une technologie d'IA générative de pointe.",

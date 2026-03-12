@@ -177,6 +177,18 @@
     "generating": "Gerando tags...",
     "rememberToSave": "Lembre-se de salvar as alteracoes!"
   },
+  "conceptMap": {
+    "title": "Mapa conceitual STEM",
+    "generating": "Gerando mapa conceitual...",
+    "generate": "Gerar",
+    "regenerate": "Regenerar",
+    "failedToGenerate": "Falha ao gerar mapa conceitual",
+    "clickGenerate": "Clique em \"Gerar\" para criar um mapa conceitual STEM para esta história.",
+    "science": "Ciência",
+    "technology": "Tecnologia",
+    "engineering": "Engenharia",
+    "mathematics": "Matemática"
+  },
   "about": {
     "title": "Sobre nós",
     "description": "Estudio Sci-Fi é uma plataforma criativa desenvolvida pelo <1>Institute for Future Intelligence, Inc.</1> que permite a qualquer pessoa criar incríveis livros de histórias de ficção científica e vídeos curtos usando tecnologia de IA generativa de ponta.",

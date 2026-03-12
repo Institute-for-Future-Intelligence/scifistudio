@@ -177,6 +177,18 @@
     "generating": "Generating tags...",
     "rememberToSave": "Remember to save to keep your tag changes!"
   },
+  "conceptMap": {
+    "title": "STEM Concept Map",
+    "generating": "Generating concept map...",
+    "generate": "Generate",
+    "regenerate": "Regenerate",
+    "failedToGenerate": "Failed to generate concept map",
+    "clickGenerate": "Click \"Generate\" to create a STEM concept map for this story.",
+    "science": "Science",
+    "technology": "Technology",
+    "engineering": "Engineering",
+    "mathematics": "Mathematics"
+  },
   "about": {
     "title": "About Us",
     "description": "Sci-Fi Studio is a creative platform developed by <1>the Institute for Future Intelligence, Inc.</1> that empowers anyone to create stunning sci-fi storybooks and short videos using cutting-edge generative AI technology.",
